@@ -85,7 +85,7 @@ class _PaymentCardPageState extends State<PaymentCardPage> {
       }
 
 
-      cardId = cardList?.first.id ?? 0;
+      // cardId = cardList?.first.id ?? 0;
     });
 
     super.initState();

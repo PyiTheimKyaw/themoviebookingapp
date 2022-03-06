@@ -43,6 +43,7 @@ void main() async {
   Hive.registerAdapter(MovieSeatVOAdapter());
   Hive.registerAdapter(TimeslotVOAdapter());
   Hive.registerAdapter(PaymentVOAdapter());
+  Hive.registerAdapter(CreditVOAdapter());
 
   await Hive.openBox<UserVO>(BOX_NAME_USER_VO);
   await Hive.openBox<MovieVO>(BOX_NAME_MOVIE_VO);
@@ -54,6 +55,7 @@ void main() async {
   await Hive.openBox<MovieSeatVO>(BOX_NAME_MOVIE_SEAT_VO);
   await Hive.openBox<CardVO>(BOX_NAME_CARD_VO);
   await Hive.openBox<PaymentMethodVO>(BOX_NAME_PAYMENT_VO);
+  await Hive.openBox<CreditVO>(BOX_NAME_CREDIT_VO);
 
   runApp(MyApp());
 }

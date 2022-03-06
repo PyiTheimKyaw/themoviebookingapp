@@ -27,16 +27,16 @@ class _AddPaymentCardPageState extends State<AddPaymentCardPage> {
 
   @override
   void initState() {
-    // mMovieModel.getLoginUserIfoDatabase().listen((userInfo) {
-    //   if(mounted) {
-    //     setState(() {
-    //       user = userInfo;
-    //     });
-    //   }
-    //   print('user at neww card ${user?.first.token}');
-    // }).onError((error){
-    //   print("Error at user data from database ${error.toString()}");
-    // });
+    mMovieModel.getLoginUserIfoDatabase().listen((userInfo) {
+      if(mounted) {
+        setState(() {
+          user = userInfo;
+        });
+      }
+      print('user at neww card ${user?.first.token}');
+    }).onError((error){
+      print("Error at user data from database ${error.toString()}");
+    });
     super.initState();
   }
 
@@ -49,7 +49,7 @@ class _AddPaymentCardPageState extends State<AddPaymentCardPage> {
         height: FLOATING_ACTION_BUTTON_HEIGHT,
         child: FloatingActionButton.extended(
           backgroundColor: PRIMARY_COLOR,
-          onPressed: () async{
+          onPressed: () {
             mMovieModel
                 .postCreateCard(
                     user?[0].Authorization() ?? "",

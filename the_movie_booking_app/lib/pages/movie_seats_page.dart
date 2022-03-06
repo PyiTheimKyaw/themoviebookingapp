@@ -56,10 +56,11 @@ class _MovieSeatsPageState extends State<MovieSeatsPage> {
   void initState() {
     ///User From database
     mMovieModel.getLoginUserIfoDatabase().listen((user) {
-      setState(() {
-        userInfo = user;
-      });
-
+      if(mounted) {
+        setState(() {
+          userInfo = user;
+        });
+      }
 
     }).onError((error){
       print("Userdata error at seat page ${error.toString()}");

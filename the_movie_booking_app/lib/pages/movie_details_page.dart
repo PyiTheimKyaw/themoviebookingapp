@@ -65,9 +65,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
     ///CreditsByMovie
     mMovieModel.getCredisFromDatabase(widget.movieId).listen((cast) {
-      setState(() {
-        this.cast = cast;
-      });
+      if(mounted) {
+        setState(() {
+          this.cast = cast;
+        });
+      }
     }).onError((error) {
       debugPrint(error.toString());
     });

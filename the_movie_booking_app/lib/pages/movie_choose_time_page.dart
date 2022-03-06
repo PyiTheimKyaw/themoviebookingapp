@@ -42,10 +42,11 @@ class _MovieChooseTimePageState extends State<MovieChooseTimePage> {
   void initState() {
     ///Get login userInfo From Database
     movieModel.getLoginUserIfoDatabase().listen((userInfo) {
-      setState(() {
-        userData = userInfo;
-      });
-
+      if(mounted) {
+        setState(() {
+          userData = userInfo;
+        });
+      }
       // movieModel
       //     .getCinemaDayTimeslot(
       //         userData?.first.Authorization() ?? "",

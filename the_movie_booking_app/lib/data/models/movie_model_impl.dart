@@ -237,7 +237,7 @@ class MovieModelImpl extends MovieModel {
   Future<List<CardVO>?> postCreateCard(String authorization, String number,
       String holder, String date, String cvc) {
     print("Create card token $authorization");
-    return _dataAgent.postCreateCard(getUserToken(), number, holder, date, cvc);
+    return _dataAgent.postCreateCard(authorization, number, holder, date, cvc);
   }
 
   @override
@@ -309,7 +309,7 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Stream<List<SnackListVO>?> getSnackListFromDatabase(String authorization) {
-    getSnackList(authorization);
+    getSnackList(getUserToken());
     return mSnackListDao
         .getAllSnackEventStream()
         .startWith(mSnackListDao.getSnackStream())
