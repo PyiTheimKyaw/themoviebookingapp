@@ -71,14 +71,14 @@ class _SnackListPageState extends State<SnackListPage> {
       }).onError((error) {
         print("Snack list error at home page ${error.toString()}");
       });
-      // mMovieModel
-      //     .getPaymentMethodFromDatabase(user?.first.Authorization() ?? "")
-      //     .listen((payment) {
-      //   setState(() {
-      //     paymentMethod = payment;
-      //   });
-      //   print('Succes payment method api ');
-      // });
+      mMovieModel
+          .getPaymentMethodFromDatabase(user?.first.Authorization() ?? "")
+          .listen((payment) {
+        setState(() {
+          paymentMethod = payment;
+        });
+        print('Succes payment method api ');
+      });
     }).onError((error) {
       print("User data error at snack page ${error.toString()}");
     });
