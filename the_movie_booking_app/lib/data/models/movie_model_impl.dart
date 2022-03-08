@@ -164,7 +164,7 @@ class MovieModelImpl extends MovieModel {
   @override
   Future<void> logoutUser(String authorization) {
     debugPrint("UserCode =========> $authorization");
-    return Future.value(_dataAgent.logoutUser(authorization));
+    return Future.value(_dataAgent.logoutUser(getUserToken()));
   }
 
   @override
@@ -172,7 +172,7 @@ class MovieModelImpl extends MovieModel {
     print(
         '"Cinema day time Slot data layer ======> $authorization $movieId $date');
     _dataAgent
-        .getCinemaDayTimeslot(authorization, movieId.toString(), date)
+        .getCinemaDayTimeslot(getUserToken(), movieId.toString(), date)
         .then((result) {
       CinemaListForHiveVO cListHiveVO = CinemaListForHiveVO(result);
       List<CinemaDayTimeSlotVO> getTimeSlot = result?.map((time) {
@@ -207,14 +207,14 @@ class MovieModelImpl extends MovieModel {
 
   @override
   void getSnackList(String authorization) {
-    _dataAgent.getSnackList(authorization).then((value) async {
+    _dataAgent.getSnackList(getUserToken()).then((value) async {
       mSnackListDao.saveSnacks(value!);
     });
   }
 
   @override
   void getPaymentMethodList(String authorization) {
-    _dataAgent.getPaymentMethodList(authorization).then((value) {
+    _dataAgent.getPaymentMethodList(getUserToken()).then((value) {
       mPaymentDao.savePayment(value!);
     });
   }
@@ -237,7 +237,7 @@ class MovieModelImpl extends MovieModel {
   Future<List<CardVO>?> postCreateCard(String authorization, String number,
       String holder, String date, String cvc) {
     print("Create card token $authorization");
-    return _dataAgent.postCreateCard(authorization, number, holder, date, cvc);
+    return _dataAgent.postCreateCard(getUserToken(), number, holder, date, cvc);
   }
 
   @override
@@ -245,7 +245,7 @@ class MovieModelImpl extends MovieModel {
       String authorization, CheckOutRequest checkOutRequest) {
     print(
         'Checkout request ======> $authorization ${checkOutRequest.snacks} ${checkOutRequest.cardId} ${checkOutRequest.cinemaId} ${checkOutRequest.movieId}  ${checkOutRequest.cinemaDayTimeSlotId} ${checkOutRequest.bookingDate} ${checkOutRequest.seatNumber}');
-    return _dataAgent.checkout(authorization, checkOutRequest);
+    return _dataAgent.checkout(getUserToken(), checkOutRequest);
   }
 
   ///Database
@@ -352,7 +352,7 @@ class MovieModelImpl extends MovieModel {
   @override
   Stream<List<PaymentMethodVO>?> getPaymentMethodFromDatabase(
       String authorization) {
-    getPaymentMethodList(authorization);
+    getPaymentMethodList(getUserToken());
     return mPaymentDao
         .getAllPaymentEventStream()
         .startWith(mPaymentDao.getPaymentStream())

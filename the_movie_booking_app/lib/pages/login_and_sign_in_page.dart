@@ -135,7 +135,7 @@ class _LoginAndSignInPageState extends State<LoginAndSignInPage>
               }
               if (_tabController?.index == 1) {
                 setState(() {
-                  // mMovieModel.logoutUserFromDatabase();
+                   mMovieModel.logoutUserFromDatabase();
                   if (isFacebook == true) {
                     mMovieModel
                         .registerWithEmail(
@@ -156,7 +156,7 @@ class _LoginAndSignInPageState extends State<LoginAndSignInPage>
                                   googleId: googleId ?? "",
                                 )),
                       );
-                      mMovieModel.getRegisterUserInfoDatabase();
+                      //mMovieModel.getRegisterUserInfoDatabase();
                     }).catchError((errorr) {
                       showAlertBox();
                     });
@@ -180,7 +180,7 @@ class _LoginAndSignInPageState extends State<LoginAndSignInPage>
                                   googleId: googleId ?? "",
                                 )),
                       );
-                      mMovieModel.getRegisterUserInfoDatabase();
+                    //  mMovieModel.getRegisterUserInfoDatabase();
                     }).catchError((error) {
                       showAlertBox();
                     });
@@ -204,7 +204,7 @@ class _LoginAndSignInPageState extends State<LoginAndSignInPage>
                                   googleId: googleId ?? "",
                                 )),
                       );
-                      mMovieModel.getRegisterUserInfoDatabase();
+                     // mMovieModel.getRegisterUserInfoDatabase();
                     }).catchError((errorr) {
                       showAlertBox();
                     });

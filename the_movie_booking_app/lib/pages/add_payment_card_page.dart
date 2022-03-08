@@ -25,20 +25,20 @@ class _AddPaymentCardPageState extends State<AddPaymentCardPage> {
   List<UserVO>? user;
   List<CardVO>? cardInfo;
 
-  @override
-  void initState() {
-    mMovieModel.getLoginUserIfoDatabase().listen((userInfo) {
-      if(mounted) {
-        setState(() {
-          user = userInfo;
-        });
-      }
-      print('user at neww card ${user?.first.token}');
-    }).onError((error){
-      print("Error at user data from database ${error.toString()}");
-    });
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   // mMovieModel.getLoginUserIfoDatabase().listen((userInfo) {
+  //   //   if(mounted) {
+  //   //     setState(() {
+  //   //       user = userInfo;
+  //   //     });
+  //   //   }
+  //   //   print('user at neww card ${user?.first.token}');
+  //   // }).onError((error){
+  //   //   print("Error at user data from database ${error.toString()}");
+  //   // });
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {

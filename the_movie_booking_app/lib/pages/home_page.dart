@@ -53,6 +53,28 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    ///User from database
+    mMovieModel.getLoginUserIfoDatabase().listen((user) {
+      if(mounted) {
+        setState(() {
+          userInfo = user;
+        });
+      }
+      // mMovieModel
+      //     .getSnackList(userInfo?[0].Authorization() ?? "")
+      //     .then((value) {
+      //   snackLis = value;
+      // });
+      mMovieModel.getSnackListFromDatabase(userInfo?.first.Authorization() ?? "").listen((snack) {
+        setState(() {
+          snackList=snack;
+        });
+      }).onError((error){
+        print("Snack list error at home page ${error.toString()}");
+      });
+    }).onError((error) {
+      debugPrint('Error ======> ${error.toString()}');
+    });
     // ///Now Playing Movies
     // mMovieModel.getNowPlayingMovies().then((movieList) {
     //   setState(() {
@@ -93,28 +115,7 @@ class _HomePageState extends State<HomePage> {
       debugPrint('Error ======> ${error.toString()}');
     });
 
-    ///User from database
-    mMovieModel.getLoginUserIfoDatabase().listen((user) {
-      if(mounted) {
-        setState(() {
-          userInfo = user;
-        });
-      }
-      // mMovieModel
-      //     .getSnackList(userInfo?[0].Authorization() ?? "")
-      //     .then((value) {
-      //   snackLis = value;
-      // });
-      // mMovieModel.getSnackListFromDatabase(userInfo?.first.Authorization() ?? "").listen((snack) {
-      //   setState(() {
-      //     snackList=snack;
-      //   });
-      // }).onError((error){
-      //   print("Snack list error at home page ${error.toString()}");
-      // });
-    }).onError((error) {
-      debugPrint('Error ======> ${error.toString()}');
-    });
+
 
     super.initState();
   }
