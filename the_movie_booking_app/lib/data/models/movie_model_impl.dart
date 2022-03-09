@@ -220,7 +220,7 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Future<void> getProfile() {
+  Future<UserVO> getProfile() {
     return _dataAgent.getProfile(getUserToken()).then((value) {
 
       if (value != null) {
@@ -237,7 +237,7 @@ class MovieModelImpl extends MovieModel {
   Future<List<CardVO>?> postCreateCard(String authorization, String number,
       String holder, String date, String cvc) {
     print("Create card token $authorization");
-    return _dataAgent.postCreateCard(getUserToken(), number, holder, date, cvc);
+    return _dataAgent.postCreateCard(authorization, number, holder, date, cvc);
   }
 
   @override

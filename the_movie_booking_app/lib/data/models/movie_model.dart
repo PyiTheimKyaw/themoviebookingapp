@@ -49,7 +49,7 @@ abstract class MovieModel {
 
   void getPaymentMethodList(String authorization);
 
-  Future<void> getProfile();
+  Future<UserVO> getProfile();
 
   Future<List<CardVO>?> postCreateCard(String authorization, String number,
       String holder, String date, String cvc);

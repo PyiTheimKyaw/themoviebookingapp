@@ -58,6 +58,16 @@ class _SnackListPageState extends State<SnackListPage> {
           user = userInfo;
         });
       }
+      mMovieModel
+          .getPaymentMethodFromDatabase(user?.first.Authorization() ?? "")
+          .listen((payment) {
+        if (mounted) {
+          setState(() {
+            paymentMethod = payment;
+          });
+        }
+        print('Succes payment method api ');
+      });
 
       ///Snack from database
       mMovieModel
@@ -70,14 +80,6 @@ class _SnackListPageState extends State<SnackListPage> {
         }
       }).onError((error) {
         print("Snack list error at home page ${error.toString()}");
-      });
-      mMovieModel
-          .getPaymentMethodFromDatabase(user?.first.Authorization() ?? "")
-          .listen((payment) {
-        setState(() {
-          paymentMethod = payment;
-        });
-        print('Succes payment method api ');
       });
     }).onError((error) {
       print("User data error at snack page ${error.toString()}");
@@ -258,7 +260,7 @@ class PaymentMethodSectionView extends StatelessWidget {
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           scrollDirection: Axis.vertical,
-          itemCount: 3,
+          itemCount: payment?.length ?? 0,
           itemBuilder: (BuildContext context, int index) {
             return PaymentTypeView(
               payment: payment,
