@@ -13,19 +13,21 @@ class PaymentDao{
     await getPaymentBox().putAll(allPayments);
   }
 
-  List<PaymentMethodVO>? getPayment(){
+  List<PaymentMethodVO> getPayment(){
     return getPaymentBox().values.toList();
   }
   ///Reactive Programming
   Stream<void> getAllPaymentEventStream(){
     return getPaymentBox().watch();
   }
-  List<PaymentMethodVO>? getPaymentMethod( ){
-    if(getPayment()!= null){
+  List<PaymentMethodVO> getPaymentMethod( ){
+    if(getPayment()!= null &&(getPayment().isNotEmpty ?? false)){
       return getPayment();
+    }else{
+      return [];
     }
   }
-  Stream<List<PaymentMethodVO>?> getPaymentStream( ){
+  Stream<List<PaymentMethodVO>> getPaymentStream( ){
     return Stream.value(getPayment());
   }
   Box<PaymentMethodVO> getPaymentBox(){

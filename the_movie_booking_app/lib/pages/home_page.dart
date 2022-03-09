@@ -55,23 +55,11 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     ///User from database
     mMovieModel.getLoginUserIfoDatabase().listen((user) {
-      if(mounted) {
+      if (mounted) {
         setState(() {
           userInfo = user;
         });
       }
-      // mMovieModel
-      //     .getSnackList(userInfo?[0].Authorization() ?? "")
-      //     .then((value) {
-      //   snackLis = value;
-      // });
-      mMovieModel.getSnackListFromDatabase(userInfo?.first.Authorization() ?? "").listen((snack) {
-        setState(() {
-          snackList=snack;
-        });
-      }).onError((error){
-        print("Snack list error at home page ${error.toString()}");
-      });
     }).onError((error) {
       debugPrint('Error ======> ${error.toString()}');
     });
@@ -83,10 +71,11 @@ class _HomePageState extends State<HomePage> {
     // }).catchError((error) {
     //   debugPrint('Error ======> ${error.toString()}');
     // });
+    mMovieModel.getSnackList(userInfo?[0].Authorization() ?? "");
 
     ///Now Playing Movies Database
     mMovieModel.getNowPlayingMoviesFromDatabase().listen((movieList) {
-      if(mounted) {
+      if (mounted) {
         setState(() {
           nowPlayingMovies = movieList;
         });
@@ -106,7 +95,7 @@ class _HomePageState extends State<HomePage> {
 
     ///Coming Soon Movies Database
     mMovieModel.getComingSoonMoviesFromDatabase().listen((movieList) {
-      if(mounted) {
+      if (mounted) {
         setState(() {
           comingSoonMovies = movieList;
         });
@@ -114,8 +103,6 @@ class _HomePageState extends State<HomePage> {
     }).onError((error) {
       debugPrint('Error ======> ${error.toString()}');
     });
-
-
 
     super.initState();
   }

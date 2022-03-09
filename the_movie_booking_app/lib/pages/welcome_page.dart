@@ -27,11 +27,12 @@ class _WelcomePageState extends State<WelcomePage> {
   void initState() {
     ///User from database
     mMovieModel.getLoginUserIfoDatabase().listen((value) {
-      setState(() {
-        userList = value;
-      });
-
-      if (userList?[0].token != null) {
+      if(mounted) {
+        setState(() {
+          userList = value;
+        });
+      }
+      if (userList?.first.token != null) {
         Navigator.push(
           context,
           MaterialPageRoute(
