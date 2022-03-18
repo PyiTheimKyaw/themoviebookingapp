@@ -38,4 +38,29 @@ class SnackListVO{
       _$SnackListVOFromJson(json);
 
   Map<String, dynamic> toJson() => _$SnackListVOToJson(this);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SnackListVO &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name &&
+          description == other.description &&
+          price == other.price &&
+          image == other.image &&
+          unitPrice == other.unitPrice &&
+          totalPrice == other.totalPrice &&
+          quantity == other.quantity;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      name.hashCode ^
+      description.hashCode ^
+      price.hashCode ^
+      image.hashCode ^
+      unitPrice.hashCode ^
+      totalPrice.hashCode ^
+      quantity.hashCode;
 }

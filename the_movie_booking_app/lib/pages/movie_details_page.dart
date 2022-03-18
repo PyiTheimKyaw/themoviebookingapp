@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors,prefer_const_literals_to_create_immutables, sized_box_for_whitespace, prefer_final_fields
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:the_movie_booking_app/blocs/movie_details_bloc.dart';
 import 'package:the_movie_booking_app/data/models/movie_model.dart';
 import 'package:the_movie_booking_app/data/models/movie_model_impl.dart';
 import 'package:the_movie_booking_app/data/vos/credit_vo.dart';
@@ -15,160 +17,123 @@ import 'package:the_movie_booking_app/widgets/floating_action_button_view.dart';
 import 'package:the_movie_booking_app/widgets/title_text_view.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class MovieDetailsPage extends StatefulWidget {
+class MovieDetailsPage extends StatelessWidget {
   final int movieId;
-  String token;
+
+  // String token;
 
   MovieDetailsPage({
     required this.movieId,
-    required this.token,
+    // required this.token,
   });
 
   @override
-  State<MovieDetailsPage> createState() => _MovieDetailsPageState();
-}
-
-class _MovieDetailsPageState extends State<MovieDetailsPage> {
-  final List<String> genreList = [
-    'Mystery',
-    'Adventure',
-    'Action',
-    'Comedy',
-    'Thriller'
-  ];
-
-  ///Model
-  MovieModel mMovieModel = MovieModelImpl();
-  MovieVO? movieDetails;
-  List<CreditVO>? cast;
-  List<GenreVO>? genres;
-  List<MovieVO>? imdb;
-
-  @override
-  void initState() {
-    // ///Movie Details
-    // mMovieModel.getMovieDetails(widget.movieId).then((movieDetails) {
-    //   this.movieDetails = movieDetails;
-    // }).catchError((error) {
-    //   debugPrint(error.toString());
-    // });
-
-    ///Movie Details Database
-    mMovieModel
-        .getMovieDetailsFromDatabase(widget.movieId)
-        .listen((movieDetails) {
-      this.movieDetails = movieDetails;
-      print('Movie id ${movieDetails?.releaseDate ?? ""}');
-    }).onError((error) {
-      print("Movie details error at voucher page ${error.toString()}");
-    });
-
-    ///CreditsByMovie
-    mMovieModel.getCredisFromDatabase(widget.movieId).listen((cast) {
-      if(mounted) {
-        setState(() {
-          this.cast = cast;
-        });
-      }
-    }).onError((error) {
-      debugPrint(error.toString());
-    });
-    print('Token at movie details page: ${widget.token}');
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: Container(
-        margin: EdgeInsets.only(bottom: MARGIN_MEDIUM_2),
-        width: MediaQuery.of(context).size.width * 0.93,
-        height: FLOATING_ACTION_BUTTON_HEIGHT,
-        child: FloatingActionButton.extended(
-          backgroundColor: PRIMARY_COLOR,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MovieChooseTimePage(
-                        movieId: widget.movieId,
-                        token: widget.token,
-                        movieName: movieDetails?.title ?? "",
-                      )),
-            );
-            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => widget));
-          },
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          label: Text(
-            'Get Your Ticket',
-            style: TextStyle(
-              fontSize: TEXT_REGULAR,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ),
-      body: CustomScrollView(
-        slivers: [
-          MovieDetailsSliverAppBarView(
-            movie: movieDetails,
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.only(
-                    left: MARGIN_MEDIUM_2,
+    return ChangeNotifierProvider(
+      create:(context)=>MovieDetailsBloc(movieId),
+      child: Scaffold(
+        floatingActionButton: Container(
+          margin: EdgeInsets.only(bottom: MARGIN_MEDIUM_2),
+          width: MediaQuery.of(context).size.width * 0.93,
+          height: FLOATING_ACTION_BUTTON_HEIGHT,
+          child: Selector<MovieDetailsBloc, MovieVO?>(
+            selector: (context, bloc) => bloc.mMovieDetails,
+            builder: (context, movieDetails, child) =>
+                FloatingActionButton.extended(
+                  backgroundColor: PRIMARY_COLOR,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MovieChooseTimePage(
+                            movieId: movieId,
+                            // token: widget.token,
+                            movieName: movieDetails?.title ?? "",
+                          )),
+                    );
+                    // Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => widget));
+                  },
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      MovieTitleVieww(
-                        title: movieDetails?.title ?? "",
-                      ),
-                      SizedBox(
-                        height: MARGIN_MEDIUM_2,
-                      ),
-                      DurationAndRatingView(
-                        rating: movieDetails?.voteAverage.toString() ?? "",
-                      ),
-                      SizedBox(
-                        height: MARGIN_MEDIUM_2,
-                      ),
-                      GenreSectionView(
-                          genreList:
-                              movieDetails?.getGenreListAsStringList() ?? []),
-                      SizedBox(
-                        height: MARGIN_MEDIUM,
-                      ),
-                      PlotSummarySectionView(
-                        plot: movieDetails?.overView ?? "",
-                      ),
-                      SizedBox(
-                        height: MARGIN_LARGE,
-                      ),
-                      CastSectionView(
-                        castList: cast,
-                      ),
-                      SizedBox(
-                        height: 100,
-                      ),
-                    ],
+                  label: Text(
+                    'Get Your Ticket',
+                    style: TextStyle(
+                      fontSize: TEXT_REGULAR,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-              ],
-            ),
           ),
-        ],
+        ),
+        body: Selector<MovieDetailsBloc, MovieVO?>(
+          selector: (context, bloc) => bloc.mMovieDetails,
+          builder: (context, movieDetails, child) => CustomScrollView(
+            slivers: [
+              MovieDetailsSliverAppBarView(
+                movie: movieDetails,
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.only(
+                        left: MARGIN_MEDIUM_2,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          MovieTitleVieww(
+                            title: movieDetails?.title ?? "",
+                          ),
+                          SizedBox(
+                            height: MARGIN_MEDIUM_2,
+                          ),
+                          DurationAndRatingView(
+                            rating: movieDetails?.voteAverage.toString() ?? "",
+                          ),
+                          SizedBox(
+                            height: MARGIN_MEDIUM_2,
+                          ),
+                          GenreSectionView(
+                              genreList:
+                              movieDetails?.getGenreListAsStringList() ??
+                                  []),
+                          SizedBox(
+                            height: MARGIN_MEDIUM,
+                          ),
+                          PlotSummarySectionView(
+                            plot: movieDetails?.overView ?? "",
+                          ),
+                          SizedBox(
+                            height: MARGIN_LARGE,
+                          ),
+                          Selector<MovieDetailsBloc, List<CreditVO>?>(
+                            selector: (context, bloc) => bloc.mCast,
+                            builder: (context, cast, child) => CastSectionView(
+                              castList: cast,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 100,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
+
+
 
 class MovieTitleVieww extends StatelessWidget {
   String title;

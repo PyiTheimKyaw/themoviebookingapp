@@ -8,7 +8,6 @@ import 'package:the_movie_booking_app/data/vos/logout_vo.dart';
 import 'package:the_movie_booking_app/data/vos/movie_seat_vo.dart';
 import 'package:the_movie_booking_app/data/vos/movie_vo.dart';
 import 'package:the_movie_booking_app/data/vos/payment_method_vo.dart';
-import 'package:the_movie_booking_app/data/vos/profile_vo.dart';
 import 'package:the_movie_booking_app/data/vos/snack_list_vo.dart';
 import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 import 'package:the_movie_booking_app/network/responses/user_response.dart';

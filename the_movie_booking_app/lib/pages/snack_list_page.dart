@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors,prefer_const_literals_to_create_immutables, sized_box_for_whitespace, prefer_final_fields
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:the_movie_booking_app/blocs/snack_list_bloc.dart';
 import 'package:the_movie_booking_app/data/models/movie_model.dart';
 import 'package:the_movie_booking_app/data/models/movie_model_impl.dart';
 import 'package:the_movie_booking_app/data/models/snack_request.dart';
@@ -14,7 +16,7 @@ import 'package:the_movie_booking_app/rescources/dimens.dart';
 import 'package:the_movie_booking_app/widgets/floating_action_button_view.dart';
 import 'package:the_movie_booking_app/widgets/title_text_view.dart';
 
-class SnackListPage extends StatefulWidget {
+class SnackListPage extends StatelessWidget {
   final double price;
   final String dateData;
   final String userChooseTime;
@@ -39,204 +41,141 @@ class SnackListPage extends StatefulWidget {
       required this.seatNo});
 
   @override
-  State<SnackListPage> createState() => _SnackListPageState();
-}
-
-class _SnackListPageState extends State<SnackListPage> {
-  MovieModel mMovieModel = MovieModelImpl();
-  List<SnackListVO>? snacks;
-  List<PaymentMethodVO>? paymentMethod;
-  List<UserVO>? user;
-  List<SnackRequest>? snackList = [];
-  double subTotal = 0;
-
-  @override
-  void initState() {
-    mMovieModel.getLoginUserIfoDatabase().listen((userInfo) {
-      if (mounted) {
-        setState(() {
-          user = userInfo;
-        });
-      }
-      mMovieModel
-          .getPaymentMethodFromDatabase(user?.first.Authorization() ?? "")
-          .listen((payment) {
-        if (mounted) {
-          setState(() {
-            paymentMethod = payment;
-          });
-        }
-        print('Succes payment method api ');
-      });
-
-      ///Snack from database
-      mMovieModel
-          .getSnackListFromDatabase(user?.first.Authorization() ?? "")
-          .listen((snack) {
-        if (mounted) {
-          setState(() {
-            snacks = snack;
-          });
-        }
-      }).onError((error) {
-        print("Snack list error at home page ${error.toString()}");
-      });
-    }).onError((error) {
-      print("User data error at snack page ${error.toString()}");
-    });
-
-    subTotal = widget.price;
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: Container(
-        margin: EdgeInsets.only(bottom: MARGIN_MEDIUM_2),
-        width: MediaQuery.of(context).size.width * 0.93,
-        height: FLOATING_ACTION_BUTTON_HEIGHT,
-        child: FloatingActionButton.extended(
-          backgroundColor: PRIMARY_COLOR,
-          onPressed: () {
-            setState(() {
-              // snacks?.map((snack) {
-              //   if(snack.quantity == 0){
-              //     snackList.add(SnackRequest(snack.id ?? 0, snack.quantity ?? 0));
-              //   }
-              // });
-              List<SnackListVO>? temp =
-                  snacks?.where((element) => element.quantity != 0).toList();
-              snackList = temp
-                  ?.map((e) => SnackRequest(e.id ?? 0, e.quantity ?? 0))
-                  .toList();
-              // temp?.map((snack) {
-              //   snackList.add(SnackRequest(snack.id ?? 1, snack.quantity ?? 1));
-              // });
-              print(
-                  'Snack list where quantity is greater than 0 => ${temp?[0].name}');
-              print('Snack List after condition ==> $snackList');
-            });
+    return ChangeNotifierProvider(
+      create: (context) => SnackListBloc(price),
+      child: Scaffold(
+        floatingActionButton: Selector<SnackListBloc, double>(
+          selector: (context, bloc) => bloc.subTotal,
+          builder: (context, subTotal, child) => Container(
+            margin: EdgeInsets.only(bottom: MARGIN_MEDIUM_2),
+            width: MediaQuery.of(context).size.width * 0.93,
+            height: FLOATING_ACTION_BUTTON_HEIGHT,
+            child: FloatingActionButton.extended(
+              backgroundColor: PRIMARY_COLOR,
+              onPressed: () {
+                SnackListBloc bloc =
+                Provider.of<SnackListBloc>(context, listen: false);
+                bloc.onPressedPayment();
 
-            // snackList?.add(SnackRequest(id, quantity));
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PaymentCardPage(
-                  totalPrice: subTotal,
-                  cinemaId: widget.cinemaId,
-                  userChooseCinema: widget.userChooseCinema,
-                  userChooseDayTimeslotId: widget.userChooseDayTimeslotId,
-                  userChooseTime: widget.userChooseTime,
-                  dateData: widget.dateData,
-                  movieName: widget.movieName,
-                  movieId: widget.movieId,
-                  token: widget.token,
-                  seatNo: widget.seatNo,
-                  snack: snackList,
+                // snackList?.add(SnackRequest(id, quantity));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PaymentCardPage(
+                      totalPrice: subTotal,
+                      cinemaId: cinemaId,
+                      userChooseCinema: userChooseCinema,
+                      userChooseDayTimeslotId: userChooseDayTimeslotId,
+                      userChooseTime: userChooseTime,
+                      dateData: dateData,
+                      movieName: movieName,
+                      movieId: movieId,
+                      token: token,
+                      seatNo: seatNo,
+                      snack: bloc.snackList,
+                    ),
+                  ),
+                );
+                // Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => widget));
+              },
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              label: Text(
+                'Pay \$$subTotal',
+                style: TextStyle(
+                  fontSize: TEXT_REGULAR,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-            );
-            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => widget));
-          },
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          label: Text(
-            'Pay \$$subTotal',
-            style: TextStyle(
-              fontSize: TEXT_REGULAR,
-              fontWeight: FontWeight.w500,
             ),
           ),
         ),
-      ),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Icon(
-            Icons.chevron_left,
-            size: MARGIN_LARGE,
-            color: Colors.black,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Icon(
+              Icons.chevron_left,
+              size: MARGIN_LARGE,
+              color: Colors.black,
+            ),
           ),
         ),
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        padding: EdgeInsets.symmetric(
-          horizontal: MARGIN_MEDIUM_4,
-          vertical: MARGIN_MEDIUM,
-        ),
-        color: Colors.white,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SnackItemListAndCountSectionView(
-                snack: snacks,
-                decrease: (snack) {
-                  setState(() {
-                    if ((snack?.quantity ?? 0) > 0) {
-                      subTotal -= snack?.price ?? 0;
-                    }
-                    snacks?.forEach((element) {
-                      if (element.id == snack?.id) {
-                        if ((element.quantity ?? 0) > 0) {
-                          element.quantity = (element.quantity ?? 0) - 1;
-                        }
-                      }
-                    });
-                  });
-                },
-                increase: (snack) {
-                  setState(() {
-                    snacks?.forEach((element) {
-                      if (element.id == snack?.id) {
-                        element.quantity = (element.quantity ?? 0) + 1;
-                      }
-                    });
-                    subTotal += snack?.price ?? 0;
-                  });
-                },
-              ),
-              SizedBox(
-                height: MARGIN_MEDIUM,
-              ),
-              PromoCodeAndSubTotalSectionView(
-                total: subTotal,
-              ),
-              SizedBox(
-                height: MARGIN_MEDIUM_3,
-              ),
-              PaymentMethodSectionView(
-                payment: paymentMethod,
-                onTapPayment: (pay) {
-                  setState(() {
-                    // paymentMethod?.forEach((element) {
-                    //   if(element.id==pay?.id){
-                    //     element.isSelected=true;
-                    //   }else{
-                    //     element.isSelected=false;
-                    //   }
-                    // });
-                    paymentMethod?.forEach((element) {
-                      element.isSelected = false;
-                    });
-                    paymentMethod?[pay!].isSelected = true;
-                  });
-                },
-              ),
-            ],
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          padding: EdgeInsets.symmetric(
+            horizontal: MARGIN_MEDIUM_4,
+            vertical: MARGIN_MEDIUM,
+          ),
+          color: Colors.white,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Selector<SnackListBloc, List<SnackListVO>?>(
+                  selector: (context, bloc) => bloc.mSnacksList,
+                  builder: (context, snacks, child) =>
+                      Selector<SnackListBloc, double>(
+                        selector: (context, bloc) => bloc.subTotal,
+                        builder: (context, subTotal, child) =>
+                            SnackItemListAndCountSectionView(
+                              snack: snacks,
+                              decrease: (snack) {
+                                SnackListBloc bloc =
+                                Provider.of<SnackListBloc>(context, listen: false);
+                                bloc.onTapDecreaseSnack(snack);
+                              },
+                              increase: (snack) {
+                                SnackListBloc bloc =
+                                Provider.of<SnackListBloc>(context, listen: false);
+                                bloc.onTapIncreaseSnack(snack);
+                              },
+                            ),
+                      ),
+                ),
+                SizedBox(
+                  height: MARGIN_MEDIUM,
+                ),
+                Selector<SnackListBloc, double>(
+                  selector: (context, bloc) => bloc.subTotal,
+                  builder: (context, subTotal, child) =>
+                      PromoCodeAndSubTotalSectionView(
+                        total: subTotal,
+                      ),
+                ),
+                SizedBox(
+                  height: MARGIN_MEDIUM_3,
+                ),
+                Selector<SnackListBloc, List<PaymentMethodVO>?>(
+                  selector: (context, bloc) => bloc.mPaymentMethod,
+                  builder: (context, paymentMethod, child) =>
+                      Selector<SnackListBloc, int>(
+                        selector: (context, bloc) => bloc.notify,
+                        builder: (context, notify, child) =>
+                            PaymentMethodSectionView(
+                              payment: paymentMethod,
+                              onTapPayment: (pay) {
+                                SnackListBloc bloc =
+                                Provider.of<SnackListBloc>(context, listen: false);
+                                bloc.selectPayment(pay);
+                              },
+                            ),
+                      ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
+
+
 
 class PaymentMethodSectionView extends StatelessWidget {
   final List<PaymentMethodVO>? payment;

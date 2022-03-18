@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors,prefer_const_literals_to_create_immutables, sized_box_for_whitespace, prefer_final_fields
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:the_movie_booking_app/blocs/voucher_bloc.dart';
 import 'package:the_movie_booking_app/data/models/movie_model.dart';
 import 'package:the_movie_booking_app/data/models/movie_model_impl.dart';
 import 'package:the_movie_booking_app/data/vos/checkout_vo.dart';
@@ -19,7 +21,7 @@ import 'package:dotted_border/dotted_border.dart';
 // import 'package:qr_flutter/qr_flutter.dart';
 import 'package:syncfusion_flutter_barcodes/barcodes.dart';
 
-class VoucherPage extends StatefulWidget {
+class VoucherPage extends StatelessWidget {
   final double price;
   String dateData;
   final String userChooseTime;
@@ -46,134 +48,100 @@ class VoucherPage extends StatefulWidget {
       required this.checkoutVO});
 
   @override
-  State<VoucherPage> createState() => _VoucherPageState();
-}
-
-class _VoucherPageState extends State<VoucherPage> {
-  MovieVO? movie;
-  MovieModel mMovieModel = MovieModelImpl();
-  CheckoutVO? finalCheckout;
-  String? finalDate;
-
-  @override
-  void initState() {
-    DateTime dateTime = DateTime.parse(widget.dateData);
-    String date = '${dateTime.year}-${dateTime.month}-${dateTime.day}';
-    finalDate = date;
-    // ///Movie Details
-    // mMovieModel.getMovieDetails(widget.movieId).then((movieDetails) {
-    //   setState(() {
-    //     movie = movieDetails;
-    //   });
-    //   finalCheckout=widget.checkoutVO;
-    // }).catchError((error) {
-    //   debugPrint(error.toString());
-    // });
-
-    ///Movie Details Database
-    mMovieModel
-        .getMovieDetailsFromDatabase(widget.movieId)
-        .listen((movieDetails) {
-      if (mounted) {
-        setState(() {
-          movie = movieDetails;
-          print('Movie id at voucher page ${movieDetails?.releaseDate ?? ""}');
-        });
-        finalCheckout = widget.checkoutVO;
-      }
-    }).onError((error) {
-      print("Movie details error at voucher page ${error.toString()}");
-    });
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: GestureDetector(
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) => HomePage(
-                      userData: null,
-                      googleId: "",
-                    )),
-          ),
-          child: Center(
-            child: Image(
-              image: AssetImage('images/cancel.png'),
-              fit: BoxFit.cover,
-              height: VOUCHER_LEADING_SIZE,
+    return ChangeNotifierProvider(
+      create:(context) =>  VoucherBloc(movieId),
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          leading: GestureDetector(
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) => HomePage(
+                    userData: null,
+                    googleId: "",
+                  )),
+            ),
+            child: Center(
+              child: Image(
+                image: AssetImage('images/cancel.png'),
+                fit: BoxFit.cover,
+                height: VOUCHER_LEADING_SIZE,
+              ),
             ),
           ),
         ),
-      ),
-      body: Container(
-        color: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            VoucherHeadingTitleSectionView(),
-            SizedBox(
-              height: MARGIN_MEDIUM_2,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12, //color of shadow
-                    spreadRadius: 5, //spread radius
-                    blurRadius: 20, // blur radius
-                    offset: Offset(0, 2), // changes position of shadow
-                    //first paramerter of offset is left-right
-                    //second parameter is top to down
-                  ),
-                  //you can set more BoxShadow() here
-                ],
+        body: Container(
+          color: Colors.white,
+          padding: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_4),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              VoucherHeadingTitleSectionView(),
+              SizedBox(
+                height: MARGIN_MEDIUM_2,
               ),
-              child: Column(
-                children: [
-                  MovieVoucherItemSectionView(
-                    movieImage: movie?.posterPath ?? "",
-                    movieName: movie?.title ?? "",
-                  ),
-                  SizedBox(
-                    height: MARGIN_MEDIUM_2,
-                  ),
-                  DottedLineSectionView(),
-                  SizedBox(
-                    height: MARGIN_MEDIUM_2,
-                  ),
-                  MovieVoucherInfoDetailsSectionView(
-                    check: finalCheckout,
-                    theatre: widget.userChooseCinema,
-                  ),
-                  DottedLineSectionView(),
-                  SizedBox(
-                    height: MARGIN_MEDIUM_2,
-                  ),
-                  BarCodeSectionView(),
-                ],
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12, //color of shadow
+                      spreadRadius: 5, //spread radius
+                      blurRadius: 20, // blur radius
+                      offset: Offset(0, 2), // changes position of shadow
+                      //first paramerter of offset is left-right
+                      //second parameter is top to down
+                    ),
+                    //you can set more BoxShadow() here
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Selector<VoucherBloc, MovieVO?>(
+                      selector: (context, bloc) => bloc.mMovieDetails,
+                      builder: (context, movie, child) =>
+                          MovieVoucherItemSectionView(
+                            movieImage: movie?.posterPath ?? "",
+                            movieName: movie?.title ?? "",
+                          ),
+                    ),
+                    SizedBox(
+                      height: MARGIN_MEDIUM_2,
+                    ),
+                    DottedLineSectionView(),
+                    SizedBox(
+                      height: MARGIN_MEDIUM_2,
+                    ),
+                    MovieVoucherInfoDetailsSectionView(
+                      check: checkoutVO,
+                      theatre: userChooseCinema,
+                    ),
+                    DottedLineSectionView(),
+                    SizedBox(
+                      height: MARGIN_MEDIUM_2,
+                    ),
+                    BarCodeSectionView(),
+                  ],
+                ),
               ),
-            ),
 
-            // QrImage(
-            //   data: "1234567890",
-            //   version: QrVersions.auto,
-            //   size: 70.0,
-            // ),
-          ],
+              // QrImage(
+              //   data: "1234567890",
+              //   version: QrVersions.auto,
+              //   size: 70.0,
+              // ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+
 
 class VoucherHeadingTitleSectionView extends StatelessWidget {
   const VoucherHeadingTitleSectionView({

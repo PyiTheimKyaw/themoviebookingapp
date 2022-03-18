@@ -62,4 +62,37 @@ class CreditVO {
       _$CreditVOFromJson(json);
 
   Map<String, dynamic> toJson() => _$CreditVOToJson(this);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CreditVO &&
+          runtimeType == other.runtimeType &&
+          adult == other.adult &&
+          gender == other.gender &&
+          id == other.id &&
+          knownForDepartment == other.knownForDepartment &&
+          name == other.name &&
+          originalName == other.originalName &&
+          popularity == other.popularity &&
+          profilePath == other.profilePath &&
+          castId == other.castId &&
+          character == other.character &&
+          creditId == other.creditId &&
+          order == other.order;
+
+  @override
+  int get hashCode =>
+      adult.hashCode ^
+      gender.hashCode ^
+      id.hashCode ^
+      knownForDepartment.hashCode ^
+      name.hashCode ^
+      originalName.hashCode ^
+      popularity.hashCode ^
+      profilePath.hashCode ^
+      castId.hashCode ^
+      character.hashCode ^
+      creditId.hashCode ^
+      order.hashCode;
 }

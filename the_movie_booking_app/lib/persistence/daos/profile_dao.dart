@@ -1,46 +1,39 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hive/hive.dart';
-import 'package:the_movie_booking_app/data/vos/profile_vo.dart';
 import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 import 'package:the_movie_booking_app/persistence/hive_constants.dart';
 
-class ProfileDao {
-  static final ProfileDao _singelton = ProfileDao.internal();
+class ProfileDao{
+  static final ProfileDao _singleton=ProfileDao._internal();
+  factory ProfileDao(){
+    return _singleton;
+  }
+  ProfileDao._internal();
 
-  factory ProfileDao() {
-    return _singelton;
+  void saveProfileFromDatabase(UserVO userInfo) async{
+    await getProfileBox().put(userInfo.token, userInfo);
   }
 
-  ProfileDao.internal();
-
-  void saveAllProfile(UserVO profileInfo) async {
-    // Map<int,UserVO> profile=Map.fromIterable(profileInfo,key: (profilekey)=> profilekey.id,value: (profileValue) => profileValue);
-    // await getProfileBox().putAll(profile);
-    await getProfileBox().put(profileInfo.id, profileInfo);
+  UserVO? getProfile(String tokenData){
+      return getProfileBox().get(tokenData);
   }
-
-  List<UserVO> getAllProfile() {
-    return getProfileBox().values.toList();
-  }
-
-  ///Reactive Programming
-  Stream<void> getAllProfileEventStream() {
+  ///Reactive
+  Stream<void> getAllProfileEventStream(){
     return getProfileBox().watch();
   }
 
-  List<UserVO>? getProfile() {
-    if (getAllProfile() != null && (getAllProfile().isNotEmpty ?? false)) {
-      return getAllProfile();
+  UserVO? getAllProfileData(String tokenData){
+    if(getProfile(tokenData)!= null){
+      return getProfile(tokenData);
     }else{
-      return [];
+      return null;
     }
   }
 
-  Stream<List<UserVO>> getProfileStream() {
-    return Stream.value(getAllProfile());
+  Stream<UserVO?> getAllProfileStream(String tokenData){
+    return Stream.value(getProfile(tokenData));
   }
 
   Box<UserVO> getProfileBox() {
-    return Hive.box<UserVO>(BOX_NAME_USER_VO);
+    return Hive.box<UserVO>(BOX_NAME_PROFILE_VO);
   }
 }

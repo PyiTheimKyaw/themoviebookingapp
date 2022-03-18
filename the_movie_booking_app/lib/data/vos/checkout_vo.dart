@@ -47,4 +47,37 @@ class CheckoutVO{
       _$CheckoutVOFromJson(json);
 
   Map<String, dynamic> toJson() => _$CheckoutVOToJson(this);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CheckoutVO &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          bookingNo == other.bookingNo &&
+          bookingDate == other.bookingDate &&
+          row == other.row &&
+          seat == other.seat &&
+          totalSeat == other.totalSeat &&
+          total == other.total &&
+          movieId == other.movieId &&
+          cinemaId == other.cinemaId &&
+          userName == other.userName &&
+          timeslot == other.timeslot &&
+          snacks == other.snacks;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      bookingNo.hashCode ^
+      bookingDate.hashCode ^
+      row.hashCode ^
+      seat.hashCode ^
+      totalSeat.hashCode ^
+      total.hashCode ^
+      movieId.hashCode ^
+      cinemaId.hashCode ^
+      userName.hashCode ^
+      timeslot.hashCode ^
+      snacks.hashCode;
 }

@@ -13,4 +13,15 @@ class LogOutVO{
       _$LogOutVOFromJson(json);
 
   Map<String, dynamic> toJson() => _$LogOutVOToJson(this);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LogOutVO &&
+          runtimeType == other.runtimeType &&
+          code == other.code &&
+          message == other.message;
+
+  @override
+  int get hashCode => code.hashCode ^ message.hashCode;
 }

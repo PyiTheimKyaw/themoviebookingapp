@@ -19,20 +19,15 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  List<UserVO>? userList;
-  List<SnackListVO>? snackLis;
+  // List<UserVO>? userList;
   MovieModel mMovieModel = MovieModelImpl();
 
   @override
   void initState() {
     ///User from database
     mMovieModel.getLoginUserIfoDatabase().listen((value) {
-      if(mounted) {
-        setState(() {
-          userList = value;
-        });
-      }
-      if (userList?.first.token != null) {
+
+      if (value[0].token != null) {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -42,11 +37,9 @@ class _WelcomePageState extends State<WelcomePage> {
                   )),
         );
       }
-    }).onError((error){
+    }).onError((error) {
       print("User data error at welcome page ${error.toString()}");
     });
-
-    ///Snack list from database
 
     super.initState();
   }

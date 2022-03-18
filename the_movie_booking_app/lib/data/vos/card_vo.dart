@@ -27,4 +27,22 @@ class CardVO{
   factory CardVO.fromJson(Map<String,dynamic> json) => _$CardVOFromJson(json);
   Map<String,dynamic> toJson() => _$CardVOToJson(this);
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CardVO &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          cardHolder == other.cardHolder &&
+          cardNumber == other.cardNumber &&
+          expirationDate == other.expirationDate &&
+          cardType == other.cardType;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      cardHolder.hashCode ^
+      cardNumber.hashCode ^
+      expirationDate.hashCode ^
+      cardType.hashCode;
 }

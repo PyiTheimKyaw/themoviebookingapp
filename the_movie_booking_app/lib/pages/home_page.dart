@@ -1,15 +1,14 @@
 // ignore_for_file: prefer_const_constructors,prefer_const_literals_to_create_immutables, sized_box_for_whitespace, prefer_final_fields
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:the_movie_booking_app/blocs/home_bloc.dart';
 import 'package:the_movie_booking_app/data/models/movie_model.dart';
 import 'package:the_movie_booking_app/data/models/movie_model_impl.dart';
 import 'package:the_movie_booking_app/data/vos/movie_vo.dart';
 import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 import 'package:the_movie_booking_app/pages/login_and_sign_in_page.dart';
 import 'package:the_movie_booking_app/pages/movie_details_page.dart';
-import 'package:the_movie_booking_app/pages/welcome_page.dart';
 import 'package:the_movie_booking_app/rescources/colors.dart';
 import 'package:the_movie_booking_app/rescources/dimens.dart';
 import 'package:the_movie_booking_app/rescources/strings.dart';
@@ -23,19 +22,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../data/vos/snack_list_vo.dart';
 
-import 'package:google_sign_in/google_sign_in.dart';
-
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   Map<String, dynamic>? userData;
   String googleId;
-
-  HomePage({required this.userData, required this.googleId});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   List<String> menuItem = [
     "Promotion Code",
     "Select a Language",
@@ -43,232 +32,313 @@ class _HomePageState extends State<HomePage> {
     "Help",
     "Rate us"
   ];
-  MovieModel mMovieModel = MovieModelImpl();
-  List<MovieVO>? nowPlayingMovies;
-  List<MovieVO>? comingSoonMovies;
-  List<UserVO>? userInfo;
-  List<SnackListVO>? snackList;
 
-  AccessToken? _accessToken;
-
-  @override
-  void initState() {
-    ///User from database
-    mMovieModel.getLoginUserIfoDatabase().listen((user) {
-      if (mounted) {
-        setState(() {
-          userInfo = user;
-        });
-      }
-    }).onError((error) {
-      debugPrint('Error ======> ${error.toString()}');
-    });
-    // ///Now Playing Movies
-    // mMovieModel.getNowPlayingMovies().then((movieList) {
-    //   setState(() {
-    //     nowPlayingMovies = movieList;
-    //   });
-    // }).catchError((error) {
-    //   debugPrint('Error ======> ${error.toString()}');
-    // });
-    mMovieModel.getSnackList(userInfo?[0].Authorization() ?? "");
-
-    ///Now Playing Movies Database
-    mMovieModel.getNowPlayingMoviesFromDatabase().listen((movieList) {
-      if (mounted) {
-        setState(() {
-          nowPlayingMovies = movieList;
-        });
-      }
-    }).onError((error) {
-      debugPrint('Error ======> ${error.toString()}');
-    });
-
-    // ///Coming Soon Movies
-    // mMovieModel.getComingSoonMovies().then((movieList) {
-    //   setState(() {
-    //     comingSoonMovies = movieList;
-    //   });
-    // }).catchError((error) {
-    //   debugPrint('Error ======> ${error.toString()}');
-    // });
-
-    ///Coming Soon Movies Database
-    mMovieModel.getComingSoonMoviesFromDatabase().listen((movieList) {
-      if (mounted) {
-        setState(() {
-          comingSoonMovies = movieList;
-        });
-      }
-    }).onError((error) {
-      debugPrint('Error ======> ${error.toString()}');
-    });
-
-    super.initState();
-  }
-
-  Future<void> _logOut() async {
-    await FacebookAuth.instance.logOut();
-    _accessToken = null;
-    widget.userData = null;
-    setState(() {});
-  }
+  HomePage({required this.userData, required this.googleId});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: Container(
-        width: MediaQuery.of(context).size.width * 0.8,
-        child: Drawer(
-          backgroundColor: PRIMARY_COLOR,
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2),
+    return ChangeNotifierProvider(
+      create: (context) => HomeBloc(),
+      child: Scaffold(
+        drawer: Container(
+          width: MediaQuery.of(context).size.width * 0.8,
+          child: Drawer(
+            backgroundColor: PRIMARY_COLOR,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: MARGIN_XXLARGE,
+                  ),
+                  // Selector<HomeBloc, List<UserVO>?>(
+                  //   selector: (context, bloc) => bloc.mUserInfo,
+                  //   builder: (context, user, child) => DrawerHeaderSectionView(
+                  //     user: user?.first,
+                  //   ),
+                  // ),
+                  Selector<HomeBloc, List<UserVO>?>(
+                    selector: (context, bloc) => bloc.mUserInfo,
+                    builder: (context, user, child) => DrawerHeaderSectionView(
+                      user: user,
+                    ),
+                  ),
+                  SizedBox(
+                    height: MARGIN_LARGE,
+                  ),
+                  MenuItemSectionView(menuItem: menuItem),
+                  Spacer(),
+
+                  LogOutButtonSectionView(
+                    onTapButton: () {
+                      HomeBloc bloc = Provider.of<HomeBloc>(context,listen: false);
+                      if (userData != null) {
+                        print('User data is not null');
+                        bloc.logOutFacebook().then((value) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    LoginAndSignInPage()),
+                          );
+                        });
+                        // mMovieModel.logoutUser(
+                        //     userInfo?.first.Authorization() ?? "");
+                        // debugPrint(
+                        //     'token in tap ${userInfo?[0].token}');
+                        // mMovieModel.logoutUserFromDatabase();
+
+                      }
+                      if (googleId != null) {
+                        bloc.onTapGoogleLogOut().then((googleSignIn) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    LoginAndSignInPage()),
+                          );
+                        });
+                      }
+                      bloc.onTapLogoutUser().then((value) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  LoginAndSignInPage()),
+                        );
+                      });
+                      // showDialog(
+                      //   context: context,
+                      //   builder: (context) => AlertDialog(
+                      //     title: Text("Confirm"),
+                      //     content: Text("Are you sure to log out"),
+                      //     actions: [
+                      //       FlatButton(
+                      //         onPressed: () {
+                      //           HomeBloc bloc = Provider.of<HomeBloc>(context,listen: false);
+                      //           if (userData != null) {
+                      //             print('User data is not null');
+                      //             bloc.logOutFacebook().then((value) {
+                      //               Navigator.of(context).push(
+                      //                 MaterialPageRoute(
+                      //                     builder: (context) =>
+                      //                         LoginAndSignInPage()),
+                      //               );
+                      //             });
+                      //             // mMovieModel.logoutUser(
+                      //             //     userInfo?.first.Authorization() ?? "");
+                      //             // debugPrint(
+                      //             //     'token in tap ${userInfo?[0].token}');
+                      //             // mMovieModel.logoutUserFromDatabase();
+                      //
+                      //           }
+                      //           if (googleId != null) {
+                      //             bloc.onTapGoogleLogOut().then((googleSignIn) {
+                      //               Navigator.of(context).push(
+                      //                 MaterialPageRoute(
+                      //                     builder: (context) =>
+                      //                         LoginAndSignInPage()),
+                      //               );
+                      //             });
+                      //           }
+                      //           bloc.onTapLogoutUser().then((value) {
+                      //             Navigator.of(context).push(
+                      //               MaterialPageRoute(
+                      //                   builder: (context) =>
+                      //                       LoginAndSignInPage()),
+                      //             );
+                      //           });
+                      //         },
+                      //         child: Text("Okay"),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // );
+                    },
+                  ),
+
+                  SizedBox(
+                    height: MARGIN_XLARGE,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.black),
+          // leading: Icon(
+          //   Icons.menu,
+          //   color: Colors.black,
+          //   size: MARGIN_LARGE,
+          // ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: MARGIN_MEDIUM_2),
+              child: Icon(
+                Icons.search,
+                color: Colors.black,
+                size: MARGIN_LARGE,
+              ),
+            ),
+          ],
+        ),
+        body: Container(
+          padding: EdgeInsets.symmetric(vertical: MARGIN_MEDIUM_2),
+          color: Colors.white,
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 SizedBox(
-                  height: MARGIN_XXLARGE,
+                  height: MARGIN_MEDIUM,
                 ),
-                DrawerHeaderSectionView(
-                  user: userInfo?.first,
+                Selector<HomeBloc, List<UserVO>?>(
+                  selector: (context, bloc) => bloc.mUserInfo,
+                  builder: (context, user, child) =>
+                      ProfileImageAndNameSectionView(
+                    name: user,
+                  ),
                 ),
                 SizedBox(
                   height: MARGIN_LARGE,
                 ),
-                MenuItemSectionView(menuItem: menuItem),
-                Spacer(),
-                LogOutButtonSectionView(
-                  onTapButton: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text("Confirm"),
-                        content: Text("Are you sure to log out"),
-                        actions: [
-                          FlatButton(
-                            onPressed: () {
-                              if (widget.userData != null) {
-                                print('User data is not null');
-                                _logOut();
-                                mMovieModel.logoutUser(
-                                    userInfo?.first.Authorization() ?? "");
-                                debugPrint(
-                                    'token in tap ${userInfo?[0].token}');
-                                mMovieModel.logoutUserFromDatabase();
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            LoginAndSignInPage()),
-                                    (Route<dynamic> route) => false);
-                              }
-                              if (widget.googleId != null) {
-                                GoogleSignIn _googleSignIn = GoogleSignIn(
-                                  scopes: [
-                                    'email',
-                                    'https://www.googleapis.com/auth/contacts.readonly',
-                                  ],
-                                );
-                                _googleSignIn.signOut().then((value) {
-                                  print('Google logout successfully');
-                                }).catchError((error) {
-                                  print(
-                                      'Google logout failed ${error.toString()}');
-                                });
-                              }
-                              mMovieModel.logoutUser(
-                                  userInfo?.first.Authorization() ?? "");
-                              debugPrint('token in tap ${userInfo?[0].token}');
-                              mMovieModel.logoutUserFromDatabase();
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          LoginAndSignInPage()),
-                                  (Route<dynamic> route) => false);
-                            },
-                            child: Text("Okay"),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                Selector<HomeBloc, List<MovieVO>?>(
+                  selector: (context, bloc) => bloc.mNowPlayingMovies,
+                  builder: (context, nowPlayingMovies, child) =>
+                      NowShowingAndComingSoonMovieSectionView(
+                    title: HOME_PAGE_NOW_SHOWING_TEXT,
+                    onTapMovie: (movieId) {
+                      _navigateToMovieDetailsScreen(context, movieId);
+                    },
+                    movie: nowPlayingMovies,
+                  ),
                 ),
-                SizedBox(
-                  height: MARGIN_XLARGE,
+                Selector<HomeBloc, List<MovieVO>?>(
+                  selector: (context, bloc) => bloc.mComingSoonMovies,
+                  builder: (context, comingSoonMovies, child) =>
+                      NowShowingAndComingSoonMovieSectionView(
+                    title: HOME_PAGE_COMING_SOON_TEXT,
+                    onTapMovie: (movieId) {
+                      _navigateToMovieDetailsScreen(context, movieId);
+                    },
+                    movie: comingSoonMovies,
+                  ),
                 ),
               ],
             ),
           ),
         ),
       ),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
-        // leading: Icon(
-        //   Icons.menu,
-        //   color: Colors.black,
-        //   size: MARGIN_LARGE,
-        // ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: MARGIN_MEDIUM_2),
-            child: Icon(
-              Icons.search,
-              color: Colors.black,
-              size: MARGIN_LARGE,
-            ),
-          ),
-        ],
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(vertical: MARGIN_MEDIUM_2),
-        color: Colors.white,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: MARGIN_MEDIUM,
-              ),
-              ProfileImageAndNameSectionView(
-                name: userInfo?[0],
-              ),
-              SizedBox(
-                height: MARGIN_LARGE,
-              ),
-              NowShowingAndComingSoonMovieSectionView(
-                title: HOME_PAGE_NOW_SHOWING_TEXT,
-                onTapMovie: (movieId) {
-                  _navigateToMovieDetailsScreen(context, movieId);
-                },
-                movie: nowPlayingMovies,
-              ),
-              NowShowingAndComingSoonMovieSectionView(
-                title: HOME_PAGE_COMING_SOON_TEXT,
-                onTapMovie: (movieId) {
-                  _navigateToMovieDetailsScreen(context, movieId);
-                },
-                movie: comingSoonMovies,
-              ),
-            ],
-          ),
+    );
+  }
+}
+
+void _navigateToMovieDetailsScreen(BuildContext context, int? movieId) {
+  if (movieId != null) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MovieDetailsPage(
+          movieId: movieId,
+          // token: userInfo?[0].token ?? "",
         ),
       ),
     );
   }
-
-  void _navigateToMovieDetailsScreen(BuildContext context, int? movieId) {
-    if (movieId != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MovieDetailsPage(
-            movieId: movieId,
-            token: userInfo?[0].token ?? "",
-          ),
-        ),
-      );
-    }
-  }
 }
+// class _HomePageState extends State<HomePage> {
+//   List<String> menuItem = [
+//     "Promotion Code",
+//     "Select a Language",
+//     "Terms of Services",
+//     "Help",
+//     "Rate us"
+//   ];
+//   // MovieModel mMovieModel = MovieModelImpl();
+//   // List<MovieVO>? nowPlayingMovies;
+//   // List<MovieVO>? comingSoonMovies;
+//   // List<UserVO>? userInfo;
+//   // List<SnackListVO>? snackList;
+//   //
+//   // // AccessToken? _accessToken;
+//   //
+//   // @override
+//   // void initState() {
+//   //   ///User from database
+//   //   mMovieModel.getLoginUserIfoDatabase().listen((user) {
+//   //     if (mounted) {
+//   //       setState(() {
+//   //         userInfo = user;
+//   //       });
+//   //     }
+//   //   }).onError((error) {
+//   //     debugPrint('Error ======> ${error.toString()}');
+//   //   });
+//   //   // ///Now Playing Movies
+//   //   // mMovieModel.getNowPlayingMovies().then((movieList) {
+//   //   //   setState(() {
+//   //   //     nowPlayingMovies = movieList;
+//   //   //   });
+//   //   // }).catchError((error) {
+//   //   //   debugPrint('Error ======> ${error.toString()}');
+//   //   // });
+//   //   mMovieModel.getSnackList(userInfo?[0].Authorization() ?? "");
+//   //
+//   //   ///Now Playing Movies Database
+//   //   mMovieModel.getNowPlayingMoviesFromDatabase().listen((movieList) {
+//   //     if (mounted) {
+//   //       setState(() {
+//   //         nowPlayingMovies = movieList;
+//   //       });
+//   //     }
+//   //   }).onError((error) {
+//   //     debugPrint('Error ======> ${error.toString()}');
+//   //   });
+//   //
+//   //   // ///Coming Soon Movies
+//   //   // mMovieModel.getComingSoonMovies().then((movieList) {
+//   //   //   setState(() {
+//   //   //     comingSoonMovies = movieList;
+//   //   //   });
+//   //   // }).catchError((error) {
+//   //   //   debugPrint('Error ======> ${error.toString()}');
+//   //   // });
+//   //
+//   //   ///Coming Soon Movies Database
+//   //   mMovieModel.getComingSoonMoviesFromDatabase().listen((movieList) {
+//   //     if (mounted) {
+//   //       setState(() {
+//   //         comingSoonMovies = movieList;
+//   //       });
+//   //     }
+//   //   }).onError((error) {
+//   //     debugPrint('Error ======> ${error.toString()}');
+//   //   });
+//   //
+//   //   super.initState();
+//   // }
+//
+//   Future<void> _logOut() async {
+//     await FacebookAuth.instance.logOut();
+//     // _accessToken = null;
+//     // widget.userData = null;
+//   }
+//
+//
+//
+//   void _navigateToMovieDetailsScreen(BuildContext context, int? movieId) {
+//     if (movieId != null) {
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(
+//           builder: (context) => MovieDetailsPage(
+//             movieId: movieId,
+//             // token: userInfo?[0].token ?? "",
+//           ),
+//         ),
+//       );
+//     }
+//   }
+// }
 
 class LogOutButtonSectionView extends StatelessWidget {
   final Function onTapButton;
@@ -336,7 +406,7 @@ class MenuItemSectionView extends StatelessWidget {
 }
 
 class DrawerHeaderSectionView extends StatelessWidget {
-  final UserVO? user;
+  final List<UserVO>? user;
 
   DrawerHeaderSectionView({required this.user});
 
@@ -363,7 +433,7 @@ class DrawerHeaderSectionView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                user?.name ?? "",
+                user?[0].name ?? "",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: TEXT_REGULAR_2X,
@@ -377,7 +447,7 @@ class DrawerHeaderSectionView extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      user?.email ?? "",
+                      user?[0].email ?? "",
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -465,7 +535,7 @@ class HorizontalMovieListView extends StatelessWidget {
 class ProfileImageAndNameSectionView extends StatelessWidget {
   ProfileImageAndNameSectionView({required this.name});
 
-  final UserVO? name;
+  final List<UserVO>? name;
 
   @override
   Widget build(BuildContext context) {
@@ -487,9 +557,11 @@ class ProfileImageAndNameSectionView extends StatelessWidget {
           SizedBox(
             width: MARGIN_MEDIUM,
           ),
-          TitleText(
-            'Hi ${name?.name ?? ""}!',
-            textColor: Colors.black,
+          Flexible(
+            child: TitleText(
+              'Hi ${name?[0].name ?? ""}!',
+              textColor: Colors.black,
+            ),
           ),
         ],
       ),

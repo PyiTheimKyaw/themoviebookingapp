@@ -28,4 +28,21 @@ class ProductionCompanyVO{
   factory ProductionCompanyVO.fromJson(Map<String,dynamic> json) => _$ProductionCompanyVOFromJson(json);
 
   Map<String,dynamic> toJson() => _$ProductionCompanyVOToJson(this);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ProductionCompanyVO &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          logoPath == other.logoPath &&
+          name == other.name &&
+          originalCountry == other.originalCountry;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      logoPath.hashCode ^
+      name.hashCode ^
+      originalCountry.hashCode;
 }

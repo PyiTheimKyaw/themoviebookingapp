@@ -28,4 +28,25 @@ class MovieSeatVO{
   factory MovieSeatVO.fromJson(Map<String,dynamic> json) => _$MovieSeatVOFromJson(json);
   Map<String,dynamic> toJson() => _$MovieSeatVOToJson(this);
   MovieSeatVO(this.id, this.type, this.seatName, this.symbol, this.price,this.isSelected);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MovieSeatVO &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          type == other.type &&
+          seatName == other.seatName &&
+          symbol == other.symbol &&
+          price == other.price &&
+          isSelected == other.isSelected;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      type.hashCode ^
+      seatName.hashCode ^
+      symbol.hashCode ^
+      price.hashCode ^
+      isSelected.hashCode;
 }

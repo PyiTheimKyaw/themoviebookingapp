@@ -9,7 +9,6 @@ import 'package:the_movie_booking_app/data/vos/logout_vo.dart';
 import 'package:the_movie_booking_app/data/vos/movie_seat_vo.dart';
 import 'package:the_movie_booking_app/data/vos/movie_vo.dart';
 import 'package:the_movie_booking_app/data/vos/payment_method_vo.dart';
-import 'package:the_movie_booking_app/data/vos/profile_vo.dart';
 import 'package:the_movie_booking_app/data/vos/snack_list_vo.dart';
 import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 
@@ -36,26 +35,25 @@ abstract class MovieModel {
 
   void getMovieDetails(int movieId);
 
- void getCreditsByMovie(int movieId);
+  void getCreditsByMovie(int movieId);
 
   Future<List<MovieVO>?> getImdbRating(String externalId);
 
   void getCinemaDayTimeslot(String authorization, String movieId, String date);
 
   Future<List<MovieSeatVO>?> getCinemaSeatingPlan(
-      String authorization, int timeslotId, String bookingDate);
+      int timeslotId, String bookingDate);
 
-  void getSnackList(String authorization);
+  void getSnackList();
 
   void getPaymentMethodList(String authorization);
 
   Future<UserVO> getProfile();
 
-  Future<List<CardVO>?> postCreateCard(String authorization, String number,
+  Future<List<CardVO>?> postCreateCard(String number,
       String holder, String date, String cvc);
 
-  Future<CheckoutVO?> checkout(
-      String authorization, CheckOutRequest checkOutRequest);
+  Future<CheckoutVO?> checkout(CheckOutRequest checkOutRequest);
 
   ///Database
   Stream<List<UserVO>> getRegisterUserInfoDatabase();
@@ -71,9 +69,9 @@ abstract class MovieModel {
   Stream<MovieVO?> getMovieDetailsFromDatabase(int movieId);
 
   // Future<void> logOutUser();
-  Future<void> logoutUserFromDatabase();
+  Future<void> logoutUserFromDatabase(String authorization);
 
-  Stream<List<SnackListVO>?> getSnackListFromDatabase(String authorization);
+  Stream<List<SnackListVO>?> getSnackListFromDatabase();
 
   Stream<CinemaListForHiveVO?> getCinemaDayTimeslotFromDatabase(
       String authorization, String movieId, String date);
@@ -82,9 +80,9 @@ abstract class MovieModel {
 
   Stream<List<CardVO>> getCardsFromDatabase();
 
-  Stream<List<UserVO>?> getProfileFromDatabase();
+  Stream<UserVO?> getProfileFromDatabase();
 
-  Stream<List<PaymentMethodVO>?> getPaymentMethodFromDatabase(String authorization);
+  Stream<List<PaymentMethodVO>?> getPaymentMethodFromDatabase();
 
-  Stream<List<CreditVO>> getCredisFromDatabase(int movieId);
+  Stream<List<CreditVO>> getCreditsFromDatabase(int movieId);
 }

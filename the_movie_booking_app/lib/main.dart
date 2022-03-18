@@ -46,6 +46,7 @@ void main() async {
   Hive.registerAdapter(CreditVOAdapter());
 
   await Hive.openBox<UserVO>(BOX_NAME_USER_VO);
+  await Hive.openBox<UserVO>(BOX_NAME_PROFILE_VO);
   await Hive.openBox<MovieVO>(BOX_NAME_MOVIE_VO);
   await Hive.openBox<CreditVO>(BOX_NAME_CREDIT_VO);
   await Hive.openBox<GenreVO>(BOX_NAME_GENRE_VO);
@@ -60,32 +61,9 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  MovieModel mMovieModel = MovieModelImpl();
-  List<UserVO>? userList;
-  Widget? page;
-
-  @override
-  void initState() {
-    mMovieModel.getLoginUserIfoDatabase().listen((user) {
-      setState(() {
-        userList = user;
-      });
-    }).onError((error) {
-      debugPrint("User data error at main ${error.toString()}");
-    });
-
-    super.initState();
-  }
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -100,3 +78,5 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+

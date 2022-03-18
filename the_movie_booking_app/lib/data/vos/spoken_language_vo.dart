@@ -24,4 +24,16 @@ class SpokenLanguageVO{
   factory SpokenLanguageVO.fromJson(Map<String,dynamic> json) => _$SpokenLanguageVOFromJson(json);
 
   Map<String,dynamic> toJson() => _$SpokenLanguageVOToJson(this);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SpokenLanguageVO &&
+          runtimeType == other.runtimeType &&
+          englishName == other.englishName &&
+          iso6391 == other.iso6391 &&
+          name == other.name;
+
+  @override
+  int get hashCode => englishName.hashCode ^ iso6391.hashCode ^ name.hashCode;
 }

@@ -20,4 +20,15 @@ class GenreVO{
   factory GenreVO.fromJson(Map<String,dynamic> json) => _$GenreVOFromJson(json);
 
   Map<String,dynamic> toJson() => _$GenreVOToJson(this);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GenreVO &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name;
+
+  @override
+  int get hashCode => id.hashCode ^ name.hashCode;
 }

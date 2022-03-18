@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors,prefer_const_literals_to_create_immutables, sized_box_for_whitespace, prefer_final_fields
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:the_movie_booking_app/blocs/add_payment_card_bloc.dart';
 import 'package:the_movie_booking_app/data/models/movie_model.dart';
 import 'package:the_movie_booking_app/data/models/movie_model_impl.dart';
 import 'package:the_movie_booking_app/data/vos/card_vo.dart';
@@ -13,99 +15,100 @@ TextEditingController holderController = TextEditingController();
 TextEditingController dateController = TextEditingController();
 TextEditingController cvcController = TextEditingController();
 
-class AddPaymentCardPage extends StatefulWidget {
+class AddPaymentCardPage extends StatelessWidget {
   const AddPaymentCardPage({Key? key}) : super(key: key);
 
   @override
-  State<AddPaymentCardPage> createState() => _AddPaymentCardPageState();
-}
-
-class _AddPaymentCardPageState extends State<AddPaymentCardPage> {
-  MovieModel mMovieModel = MovieModelImpl();
-  List<UserVO>? user;
-  List<CardVO>? cardInfo;
-
-  @override
-  void initState() {
-    mMovieModel.getLoginUserIfoDatabase().listen((userInfo) {
-      if(mounted) {
-        setState(() {
-          user = userInfo;
-        });
-      }
-      print('user at neww card ${user?.first.token}');
-    }).onError((error){
-      print("Error at user data from database ${error.toString()}");
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: Container(
-        margin: EdgeInsets.only(bottom: MARGIN_MEDIUM_2),
-        width: MediaQuery.of(context).size.width * 0.93,
-        height: FLOATING_ACTION_BUTTON_HEIGHT,
-        child: FloatingActionButton.extended(
-          backgroundColor: PRIMARY_COLOR,
-          onPressed: () {
-            mMovieModel
-                .postCreateCard(
-                    user?[0].Authorization() ?? "",
-                    numController.text,
-                    holderController.text,
-                    dateController.text,
-                    cvcController.text)
-                .then((value) {
-                 mMovieModel.getProfile().then((event) {
-                   Navigator.of(context).pop(false);
+    return ChangeNotifierProvider(
+      create: (context) => AddPaymentCardBloc(),
+      child: Scaffold(
+        floatingActionButton: Container(
+          margin: EdgeInsets.only(bottom: MARGIN_MEDIUM_2),
+          width: MediaQuery.of(context).size.width * 0.93,
+          height: FLOATING_ACTION_BUTTON_HEIGHT,
+          child: Builder(
+            builder: (context) => FloatingActionButton.extended(
+              backgroundColor: PRIMARY_COLOR,
+              onPressed: () {
+                // Navigator.of(context).pop(false);
+                // });
+                AddPaymentCardBloc bloc = Provider.of(context, listen: false);
+                // bloc.getProfile().then((value) {
+                //   Navigator.of(context).pop(false);
+                // });
+                // bloc.getProfile();
+                bloc
+                    .createUserCard(numController.text, holderController.text,
+                        dateController.text, cvcController.text)
+                    .then((value) {
+                      // bloc.getProfile().then((value) {
+                      //   print("User Vo at card page ${value.token}");
+                        Navigator.of(context).pop(false);
+                        // bloc.getProfile();
+                      // }).catchError((error){
+                      //   print("Profile error ${error.toString()}");
+                      // });
 
-                 });
-            });
-            print('user at tap card ${user?.first.token}');
+                }).catchError((error){
+                  print("Create card error ${error.toString()}");
+                });
+                // mMovieModel
+                //     .postCreateCard(
+                //         numController.text,
+                //         holderController.text,
+                //         dateController.text,
+                //         cvcController.text)
+                //     .then((value) {
+                //      mMovieModel.getProfile().then((event) {
+                //        Navigator.of(context).pop(false);
+                //
+                //      });
+                // });
 
-            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => widget));
-          },
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          label: Text(
-            'Confirm',
-            style: TextStyle(
-              fontSize: TEXT_REGULAR,
-              fontWeight: FontWeight.w500,
+                // Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => widget));
+              },
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              label: Text(
+                'Confirm',
+                style: TextStyle(
+                  fontSize: TEXT_REGULAR,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
           ),
         ),
-      ),
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        iconTheme: IconThemeData(color: Colors.black),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop(false);
-          },
-          icon: Icon(
-            Icons.chevron_left,
-            size: 34,
-            color: Colors.black,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          iconTheme: IconThemeData(color: Colors.black),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            icon: Icon(
+              Icons.chevron_left,
+              size: 34,
+              color: Colors.black,
+            ),
           ),
+          elevation: 0,
+          backgroundColor: Colors.white,
         ),
-        elevation: 0,
-        backgroundColor: Colors.white,
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          color: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2),
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CardInfoSectionView(),
-              ],
+        body: SingleChildScrollView(
+          child: Container(
+            color: Colors.white,
+            padding: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2),
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CardInfoSectionView(),
+                ],
+              ),
             ),
           ),
         ),

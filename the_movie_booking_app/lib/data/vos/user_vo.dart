@@ -56,4 +56,29 @@ class UserVO {
   String? Authorization() {
     return 'Bearer $token';
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserVO &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name &&
+          email == other.email &&
+          phone == other.phone &&
+          totalExpense == other.totalExpense &&
+          profileImage == other.profileImage &&
+          cards == other.cards &&
+          token == other.token;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      name.hashCode ^
+      email.hashCode ^
+      phone.hashCode ^
+      totalExpense.hashCode ^
+      profileImage.hashCode ^
+      cards.hashCode ^
+      token.hashCode;
 }

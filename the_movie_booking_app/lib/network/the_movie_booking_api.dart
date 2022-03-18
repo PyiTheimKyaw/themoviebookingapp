@@ -9,7 +9,6 @@ import 'package:the_movie_booking_app/network/responses/create_card_response.dar
 import 'package:the_movie_booking_app/network/responses/get_cinema_day_timeslot_response.dart';
 import 'package:the_movie_booking_app/network/responses/get_cinema_seating_plan_response.dart';
 import 'package:the_movie_booking_app/network/responses/get_payment_method_list_response.dart';
-import 'package:the_movie_booking_app/network/responses/get_profile_response.dart';
 import 'package:the_movie_booking_app/network/responses/get_snack_list_response.dart';
 import 'package:the_movie_booking_app/network/responses/movie_list_response.dart';
 import 'package:the_movie_booking_app/network/responses/user_response.dart';

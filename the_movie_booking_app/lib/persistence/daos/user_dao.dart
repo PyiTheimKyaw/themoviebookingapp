@@ -12,7 +12,9 @@ class UserDao {
   UserDao._internal();
 
   void saveUserInfo(UserVO userInfo) async {
+    // Map<int,UserVO>  allCards=Map.fromIterable(userInfo,key: (cardId)=> cardId.id,value: (cardValue) => cardValue);
     await getUserBox().put(userInfo.id, userInfo);
+    // await getUserBox().putAll(allCards);
   }
 
   List<UserVO> getAllUsers() {

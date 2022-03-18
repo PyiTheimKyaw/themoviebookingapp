@@ -10,7 +10,6 @@ import 'package:the_movie_booking_app/data/vos/logout_vo.dart';
 import 'package:the_movie_booking_app/data/vos/movie_seat_vo.dart';
 import 'package:the_movie_booking_app/data/vos/movie_vo.dart';
 import 'package:the_movie_booking_app/data/vos/payment_method_vo.dart';
-import 'package:the_movie_booking_app/data/vos/profile_vo.dart';
 import 'package:the_movie_booking_app/data/vos/snack_list_vo.dart';
 import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 import 'package:the_movie_booking_app/network/dataagents/movie_data_agent.dart';
@@ -49,14 +48,20 @@ class MovieModelImpl extends MovieModel {
   CinemaDayTimeslotDao mCinemaDayTimeslotDao = CinemaDayTimeslotDao();
   MovieSeatDao mMovieSeatDao = MovieSeatDao();
 
-  // ProfileDao mProfileDao = ProfileDao();
+  ProfileDao mProfileDao = ProfileDao();
   CardDao mCardDao = CardDao();
   PaymentDao mPaymentDao = PaymentDao();
 
   String getUserToken() {
     List<UserVO> userToken = mUserDao.getUserBox().values.toList();
-    var token = userToken[0].token;
+    String token = userToken[0].token ?? "";
     return "Bearer $token";
+  }
+
+  String getUserTokenForProfile(){
+    List<UserVO> userToken = mUserDao.getUserBox().values.toList();
+    String token = userToken[0].token ?? "";
+    return token;
   }
 
   @override
@@ -134,11 +139,11 @@ class MovieModelImpl extends MovieModel {
 
   @override
   void getCreditsByMovie(int movieId) {
-     _dataAgent.getCreditsByMovie(movieId).then((value) {
-       if(value != null) {
-         mCreditDao.saveAllCasts(value);
-       }
-     });
+    _dataAgent.getCreditsByMovie(movieId).then((value) {
+      if (value != null) {
+        mCreditDao.saveAllCasts(value);
+      }
+    });
   }
 
   @override
@@ -152,7 +157,9 @@ class MovieModelImpl extends MovieModel {
   @override
   void getMovieDetails(int movieId) {
     _dataAgent.getMovieDetails(movieId).then((movie) async {
-      mMovieDao.saveSingleMovie(movie!);
+      if (movie != null) {
+        mMovieDao.saveSingleMovie(movie);
+      }
     });
   }
 
@@ -190,7 +197,7 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Future<List<MovieSeatVO>?> getCinemaSeatingPlan(
-      String authorization, int timeslotId, String bookingDate) {
+      int timeslotId, String bookingDate) {
     return _dataAgent
         .getCinemaSeatingPlan(getUserToken(), timeslotId, bookingDate)
         .then((data) {
@@ -206,7 +213,7 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  void getSnackList(String authorization) {
+  void getSnackList() {
     _dataAgent.getSnackList(getUserToken()).then((value) async {
       mSnackListDao.saveSnacks(value!);
     });
@@ -221,30 +228,40 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Future<UserVO> getProfile() {
-    return _dataAgent.getProfile(getUserToken()).then((value) {
-
-      if (value != null) {
-        var user = mUserDao.getUser().first;
-        value.token = user.token;
-        print('get profile data at impl ${value.token}');
-        mUserDao.saveUserInfo(value);
-      }
+    // return _dataAgent.getProfile(getUserToken()).then((value) async{
+    //   if (value != null) {
+    //     var user = mUserDao.getUser().first;
+    //     value.token = user.token;
+    //     print('get profile data at impl ${value.token}');
+    //     mUserDao.saveUserInfo(user);
+    //     // mCardDao.saveAllCards(user.cards ?? []);
+    //   }
+    //   return Future.value(value);
+    // });
+    return _dataAgent.getProfile(getUserToken())
+        .then((value) {
+      print("User token at imppl ${getUserToken()}");
+      var user=mUserDao.getUserBox().values.toList();
+      String tokenData=user.first.token ?? "";
+      var profileUserData=value as UserVO;
+      profileUserData.token=tokenData;
+      mProfileDao.saveProfileFromDatabase(profileUserData);
+      // mCardDao.saveAllCards(value?.cards ?? []);
       return Future.value(value);
     });
   }
 
   @override
-  Future<List<CardVO>?> postCreateCard(String authorization, String number,
-      String holder, String date, String cvc) {
-    print("Create card token $authorization");
-    return _dataAgent.postCreateCard(authorization, number, holder, date, cvc);
+  Future<List<CardVO>?> postCreateCard(
+      String number, String holder, String date, String cvc) {
+    print("Create card token ");
+    return _dataAgent.postCreateCard(getUserToken(), number, holder, date, cvc);
   }
 
   @override
-  Future<CheckoutVO?> checkout(
-      String authorization, CheckOutRequest checkOutRequest) {
+  Future<CheckoutVO?> checkout(CheckOutRequest checkOutRequest) {
     print(
-        'Checkout request ======> $authorization ${checkOutRequest.snacks} ${checkOutRequest.cardId} ${checkOutRequest.cinemaId} ${checkOutRequest.movieId}  ${checkOutRequest.cinemaDayTimeSlotId} ${checkOutRequest.bookingDate} ${checkOutRequest.seatNumber}');
+        'Checkout request ======>  ${checkOutRequest.snacks} ${checkOutRequest.cardId} ${checkOutRequest.cinemaId} ${checkOutRequest.movieId}  ${checkOutRequest.cinemaDayTimeSlotId} ${checkOutRequest.bookingDate} ${checkOutRequest.seatNumber}');
     return _dataAgent.checkout(getUserToken(), checkOutRequest);
   }
 
@@ -303,13 +320,14 @@ class MovieModelImpl extends MovieModel {
   // }
 
   @override
-  Future<void> logoutUserFromDatabase() {
+  Future<void> logoutUserFromDatabase(String authorization) {
+    logoutUser(getUserToken());
     return Future.value(mUserDao.deleteUserBox());
   }
 
   @override
-  Stream<List<SnackListVO>?> getSnackListFromDatabase(String authorization) {
-    getSnackList(getUserToken());
+  Stream<List<SnackListVO>?> getSnackListFromDatabase() {
+    // getSnackList(getUserToken());
     return mSnackListDao
         .getAllSnackEventStream()
         .startWith(mSnackListDao.getSnackStream())
@@ -342,16 +360,15 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Stream<List<UserVO>?> getProfileFromDatabase() {
-    return mUserDao
-        .getAllUsersEventStream()
-        .startWith(mUserDao.getUserStream())
-        .map((event) => mUserDao.getUser());
+  Stream<UserVO?> getProfileFromDatabase() {
+    getProfile();
+    return mProfileDao.getAllProfileEventStream()
+        .startWith(mProfileDao.getAllProfileStream(getUserTokenForProfile()))
+        .map((event) => mProfileDao.getProfile(getUserTokenForProfile()));
   }
 
   @override
-  Stream<List<PaymentMethodVO>?> getPaymentMethodFromDatabase(
-      String authorization) {
+  Stream<List<PaymentMethodVO>?> getPaymentMethodFromDatabase() {
     getPaymentMethodList(getUserToken());
     return mPaymentDao
         .getAllPaymentEventStream()
@@ -360,10 +377,11 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Stream<List<CreditVO>> getCredisFromDatabase(int movieId) {
+  Stream<List<CreditVO>> getCreditsFromDatabase(int movieId) {
     getCreditsByMovie(movieId);
-    return mCreditDao.getAllCastEventStream()
-    .startWith(mCreditDao.getCastStream())
-    .map((event) => mCreditDao.getCast());
+    return mCreditDao
+        .getAllCastEventStream()
+        .startWith(mCreditDao.getCastStream())
+        .map((event) => mCreditDao.getCast());
   }
 }

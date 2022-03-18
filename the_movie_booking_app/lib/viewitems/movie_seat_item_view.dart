@@ -40,10 +40,10 @@ class MovieSeatItemView extends StatelessWidget {
                   mMovieSeatVO?.symbol ?? "",
                   style: TextStyle(fontSize: 13),
                 )
-              : Text(
-                  mMovieSeatVO?.seatName ?? "",
-                  style: TextStyle(fontSize: 11),
-                ),
+              : (mMovieSeatVO?.isSelected==true)?Text(
+             mMovieSeatVO?.seatName ?? "",
+                  style: TextStyle(fontSize: 11,color: Colors.white),
+                ): Text("",style: TextStyle(fontSize: 11),),
         ),
       ),
     );
