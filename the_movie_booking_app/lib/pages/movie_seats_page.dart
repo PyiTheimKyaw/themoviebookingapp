@@ -113,20 +113,33 @@ class MovieSeatsPage extends StatelessWidget {
                 SizedBox(
                   height: MARGIN_LARGE,
                 ),
+                // Selector<MovieSeatsBloc, List<MovieSeatVO>?>(
+                //   selector: (context, bloc) => bloc.mMovieSeats,
+                //   builder: (context, movieSeats, child) =>
+                //       Selector<MovieSeatsBloc, int>(
+                //     selector: (context, bloc) => bloc.tickets,
+                //     builder: (context, tickets, child) => MovieSeatsSectionView(
+                //       movieSeats: movieSeats,
+                //       onTapSeats: (seat) {
+                //         MovieSeatsBloc bloc =
+                //             Provider.of<MovieSeatsBloc>(context, listen: false);
+                //         bloc.onChooseSeat(seat);
+                //       },
+                //     ),
+                //   ),
+                // ),
                 Selector<MovieSeatsBloc, List<MovieSeatVO>?>(
                   selector: (context, bloc) => bloc.mMovieSeats,
+                  shouldRebuild: (previous,next) => previous != next,
                   builder: (context, movieSeats, child) =>
-                      Selector<MovieSeatsBloc, int>(
-                    selector: (context, bloc) => bloc.tickets,
-                    builder: (context, tickets, child) => MovieSeatsSectionView(
-                      movieSeats: movieSeats,
-                      onTapSeats: (seat) {
-                        MovieSeatsBloc bloc =
-                            Provider.of<MovieSeatsBloc>(context, listen: false);
-                        bloc.onChooseSeat(seat);
-                      },
-                    ),
-                  ),
+                      MovieSeatsSectionView(
+                        movieSeats: movieSeats,
+                        onTapSeats: (seat) {
+                          MovieSeatsBloc bloc =
+                          Provider.of<MovieSeatsBloc>(context, listen: false);
+                          bloc.onChooseSeat(seat);
+                        },
+                      ),
                 ),
                 SizedBox(
                   height: MARGIN_MEDIUM_2,

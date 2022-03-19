@@ -29,16 +29,16 @@ class MovieDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create:(context)=>MovieDetailsBloc(movieId),
+    return ChangeNotifierProvider<MovieDetailsBloc>.value(
+      value:MovieDetailsBloc(movieId),
       child: Scaffold(
         floatingActionButton: Container(
           margin: EdgeInsets.only(bottom: MARGIN_MEDIUM_2),
           width: MediaQuery.of(context).size.width * 0.93,
           height: FLOATING_ACTION_BUTTON_HEIGHT,
           child: Selector<MovieDetailsBloc, MovieVO?>(
-            selector: (context, bloc) => bloc.mMovieDetails,
-            builder: (context, movieDetails, child) =>
+            selector: (_, bloc) => bloc.mMovieDetails,
+            builder: (_, movieDetails, child) =>
                 FloatingActionButton.extended(
                   backgroundColor: PRIMARY_COLOR,
                   onPressed: () {

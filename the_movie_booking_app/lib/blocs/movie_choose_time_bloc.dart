@@ -18,7 +18,8 @@ class MovieChooseTimeBloc extends ChangeNotifier {
   MovieModel mMovieModel = MovieModelImpl();
 
   MovieChooseTimeBloc(String movieId) {
-    dateData=DateTime.now().toString().split(" ")[0];
+    dateData = DateTime.now().toString().split(" ")[0];
+
     ///Get User
     mMovieModel.getLoginUserIfoDatabase().listen((userInfo) {
       mUserData = userInfo ?? [];
@@ -30,7 +31,9 @@ class MovieChooseTimeBloc extends ChangeNotifier {
     ///Get Cinema Day Time Slot
     mMovieModel
         .getCinemaDayTimeslotFromDatabase(
-            mUserData?.first.Authorization() ?? "", movieId, dateData?.split("")[0] ?? DateTime.now().toString().split(" ")[0])
+            mUserData?.first.Authorization() ?? "",
+            movieId,
+            dateData?.split("")[0] ?? DateTime.now().toString().split(" ")[0])
         .listen((value) {
       mCinemaInfo = value?.cinemaList ?? [];
       notifyListeners();
@@ -39,15 +42,19 @@ class MovieChooseTimeBloc extends ChangeNotifier {
           "Cinema dau time slot error default date at choose time page ${error.toString()}");
     });
   }
-  void getSelectedDate(String movieId,String? date){
-    dateData=date;
+
+  void getSelectedDate(String movieId, String? date) {
+    dateData = date;
     notifyListeners();
     getNewTimeslots(movieId);
   }
+
   void getNewTimeslots(String movieId) {
     mMovieModel
         .getCinemaDayTimeslotFromDatabase(
-            mUserData?.first.Authorization() ?? "", movieId, dateData?.split("")[0] ?? DateTime.now().toString().split(" ")[0])
+            mUserData?.first.Authorization() ?? "",
+            movieId,
+            dateData?.split("")[0] ?? DateTime.now().toString().split(" ")[0])
         .listen((value) {
       mCinemaInfo = value?.cinemaList ?? [];
       notifyListeners();
@@ -56,25 +63,32 @@ class MovieChooseTimeBloc extends ChangeNotifier {
           "Cinema dau time slot error choose date at choose time page ${error.toString()}");
     });
   }
-  void onTapChooseTime(int firstIndex,int secIndex){
-    mCinemaInfo?.forEach((outer) {
+
+  void onTapChooseTime(int firstIndex, int secIndex) {
+    // mCinemaInfo?.forEach((outer) {
+    //   outer.timeSlots?.forEach((inner) {
+    //     inner.isSelected = false;
+    //   });
+    // });
+
+   mCinemaInfo= mCinemaInfo?.map((outer) {
       outer.timeSlots?.forEach((inner) {
         inner.isSelected = false;
+
       });
-    });
-    notifyListeners();
+      return outer;
+    }).toList();
+   notifyListeners();
 
     mCinemaInfo?[firstIndex].timeSlots?[secIndex].isSelected = true;
-    notifyListeners();
-    userChooseTime =
-        mCinemaInfo?[firstIndex].timeSlots?[secIndex].startTime;
-    notifyListeners();
+
+    userChooseTime = mCinemaInfo?[firstIndex].timeSlots?[secIndex].startTime;
+
     userChooseCinema = mCinemaInfo?[firstIndex].cinema;
-    notifyListeners();
-    userChoosedayTimeslotId = mCinemaInfo?[firstIndex]
-        .timeSlots?[secIndex]
-        .cinemaDayTimeSlotId;
-    notifyListeners();
+
+    userChoosedayTimeslotId =
+        mCinemaInfo?[firstIndex].timeSlots?[secIndex].cinemaDayTimeSlotId;
+
     cinemaId = mCinemaInfo?[firstIndex].cinemaId;
     notifyListeners();
   }

@@ -94,26 +94,44 @@ class MovieChooseTimePage extends StatelessWidget {
                   },
                 ),
               ),
+              // Selector<MovieChooseTimeBloc, List<CinemaDayTimeSlotVO>?>(
+              //   selector: (context, bloc) => bloc.mCinemaInfo,
+              //   builder: (context, cinemaInfo, child) =>
+              //       Selector<MovieChooseTimeBloc, String?>(
+              //     selector: (context, bloc) => bloc.userChooseTime,
+              //     builder: (context, chooseTime, child) =>
+              //         ChooseItemGridSectionView(
+              //       cinemaInfo: cinemaInfo,
+              //       onTap: (cIndex, index) {
+              //         MovieChooseTimeBloc bloc =
+              //             Provider.of<MovieChooseTimeBloc>(context,
+              //                 listen: false);
+              //         bloc.onTapChooseTime(cIndex, index);
+              //         print("UserChoose time ${bloc.userChooseTime}");
+              //         print("UserChoose cinema ${bloc.userChooseCinema}");
+              //         print("UserChoose day ${bloc.userChoosedayTimeslotId}");
+              //         print("UserChoose dte ${bloc.dateData}");
+              //       },
+              //     ),
+              //   ),
+              // ),
               Selector<MovieChooseTimeBloc, List<CinemaDayTimeSlotVO>?>(
                 selector: (context, bloc) => bloc.mCinemaInfo,
+                shouldRebuild: (previous,next) => previous != next,
                 builder: (context, cinemaInfo, child) =>
-                    Selector<MovieChooseTimeBloc, String?>(
-                  selector: (context, bloc) => bloc.userChooseTime,
-                  builder: (context, chooseTime, child) =>
-                      ChooseItemGridSectionView(
-                    cinemaInfo: cinemaInfo,
-                    onTap: (cIndex, index) {
-                      MovieChooseTimeBloc bloc =
-                          Provider.of<MovieChooseTimeBloc>(context,
-                              listen: false);
-                      bloc.onTapChooseTime(cIndex, index);
-                      print("UserChoose time ${bloc.userChooseTime}");
-                      print("UserChoose cinema ${bloc.userChooseCinema}");
-                      print("UserChoose day ${bloc.userChoosedayTimeslotId}");
-                      print("UserChoose dte ${bloc.dateData}");
-                    },
-                  ),
-                ),
+                    ChooseItemGridSectionView(
+                      cinemaInfo: cinemaInfo,
+                      onTap: (cIndex, index) {
+                        MovieChooseTimeBloc bloc =
+                        Provider.of<MovieChooseTimeBloc>(context,
+                            listen: false);
+                        bloc.onTapChooseTime(cIndex, index);
+                        print("UserChoose time ${bloc.userChooseTime}");
+                        print("UserChoose cinema ${bloc.userChooseCinema}");
+                        print("UserChoose day ${bloc.userChoosedayTimeslotId}");
+                        print("UserChoose dte ${bloc.dateData}");
+                      },
+                    ),
               ),
             ],
           ),

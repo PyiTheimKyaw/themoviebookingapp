@@ -152,18 +152,15 @@ class SnackListPage extends StatelessWidget {
                 ),
                 Selector<SnackListBloc, List<PaymentMethodVO>?>(
                   selector: (context, bloc) => bloc.mPaymentMethod,
+                  shouldRebuild: (previous,next) => previous != next,
                   builder: (context, paymentMethod, child) =>
-                      Selector<SnackListBloc, bool>(
-                        selector: (context, bloc) => bloc.notify,
-                        builder: (context, notify, child) =>
-                            PaymentMethodSectionView(
-                              payment: paymentMethod,
-                              onTapPayment: (pay) {
-                                SnackListBloc bloc =
-                                Provider.of<SnackListBloc>(context, listen: false);
-                                bloc.selectPayment(pay);
-                              },
-                            ),
+                      PaymentMethodSectionView(
+                        payment: paymentMethod,
+                        onTapPayment: (pay) {
+                          SnackListBloc bloc =
+                          Provider.of<SnackListBloc>(context, listen: false);
+                          bloc.selectPayment(pay);
+                        },
                       ),
                 ),
               ],

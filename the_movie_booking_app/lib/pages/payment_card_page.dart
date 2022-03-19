@@ -68,7 +68,7 @@ class PaymentCardPage extends StatelessWidget {
                 PaymentCardBloc bloc =
                     Provider.of<PaymentCardBloc>(context, listen: false);
                 bloc
-                    .checkoutUser(userChooseDayTimeslotId, seatNo,
+                    .onTpCheckoutUser(userChooseDayTimeslotId, seatNo,
                         dateData.split(" ")[0], movieId, cinemaId, snack)
                     .then((value) {
                   print("Checkout at paymentCard ${checkOutVO}");
@@ -136,6 +136,8 @@ class PaymentCardPage extends StatelessWidget {
                   builder: (context, cardList, child) => PaymentCardSectionView(
                     profile: cardList ?? [],
                     swap: (index) {
+                      PaymentCardBloc bloc=Provider.of(context,listen: false);
+                      bloc.chooseCard=cardList?[index];
                       // setState(() {
                       //   cardId = cardList?[index].id;
                       // });

@@ -26,7 +26,7 @@ class PaymentCardBloc extends ChangeNotifier {
       notifyListeners();
     });
   }
-  Future<CheckoutVO?> checkoutUser(int userChooseDayTimeslotId,String seatNo,String dateData,int movieId,int cinemaId,List<SnackRequest>? snack){
+  Future<CheckoutVO?> onTpCheckoutUser(int userChooseDayTimeslotId,String seatNo,String dateData,int movieId,int cinemaId,List<SnackRequest>? snack){
     CheckOutRequest checkOut = CheckOutRequest(
         userChooseDayTimeslotId,
         seatNo,
@@ -35,7 +35,6 @@ class PaymentCardBloc extends ChangeNotifier {
         cinemaId,
         cardList?.first.id ?? 0,
         snack);
-    notifyListeners();
    return mMovieModel.checkout(checkOut).then((value) {
      print("AApi output =>>>>>>> ${value}");
      checkoutVO=value;

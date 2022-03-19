@@ -51,6 +51,10 @@ class _LoginAndSignInPageState extends State<LoginAndSignInPage>
   @override
   void dispose() {
     _tabController?.dispose();
+    nameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
@@ -87,98 +91,95 @@ class _LoginAndSignInPageState extends State<LoginAndSignInPage>
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: myTabs.length,
-      child: ChangeNotifierProvider<LoginAndSignInBloc>.value(
-        value:LoginAndSignInBloc(),
+      child: ChangeNotifierProvider(
+        create: (_) => LoginAndSignInBloc(),
         child: Scaffold(
           floatingActionButton: Container(
             margin: EdgeInsets.only(bottom: MARGIN_MEDIUM_2),
             width: MediaQuery.of(context).size.width * 0.93,
             height: FLOATING_ACTION_BUTTON_HEIGHT,
-            child: FloatingActionButton.extended(
-              backgroundColor: PRIMARY_COLOR,
-              onPressed: () {
-                print('Tab index is ${_tabController?.index}');
-                if (_tabController?.index == 0) {
-                  LoginAndSignInBloc bloc = LoginAndSignInBloc();
-                  bloc
-                      .onTapLoginWithEmail(
-                          emailController.text, passwordController.text)
-                      .then(
-                        (loginWithEmail) => navigateToHomePage(),
-                      )
-                      .catchError((error) {
-                    showAlertBox();
-                  });
-                }
-                if (_tabController?.index == 1) {
-                  if (isFacebook == true) {
-                    LoginAndSignInBloc bloc = LoginAndSignInBloc();
+            child: Builder(
+              builder: (_) => FloatingActionButton.extended(
+                backgroundColor: PRIMARY_COLOR,
+                onPressed: () {
+                  LoginAndSignInBloc bloc = Provider.of(_, listen: false);
+                  print('Tab index is ${_tabController?.index}');
+                  if (_tabController?.index == 0) {
                     bloc
-                        .onTapRegisterWithGmailAndFacebook(
-                      nameController.text,
-                      emailController.text,
-                      phoneController.text,
-                      passwordController.text,
-                      "",
-                      bloc.userDataInfo?["id"],
-                    )
-                        .then((value) {
-                      print("Login with facebook successfully");
-                      navigateToHomePage();
-                      //mMovieModel.getRegisterUserInfoDatabase();
-                    }).catchError((error) {
-                      showAlertBox();
-                    });
-                  } else if (isGoogle == true) {
-                    LoginAndSignInBloc bloc = LoginAndSignInBloc();
-                    bloc
-                        .onTapRegisterWithGmailAndFacebook(
-                      nameController.text,
-                      emailController.text,
-                      phoneController.text,
-                      passwordController.text,
-                      googleId,
-                      "",
-                    )
-                        .then((value) {
-                      print("sign with google successfully");
-                      navigateToHomePage();
-                      //  mMovieModel.getRegisterUserInfoDatabase();
-                    }).catchError((error) {
-                      showAlertBox();
-                    });
-                  } else {
-                    LoginAndSignInBloc bloc = LoginAndSignInBloc();
-                    bloc
-                        .onTapRegisterWithGmailAndFacebook(
-                      nameController.text,
-                      emailController.text,
-                      phoneController.text,
-                      passwordController.text,
-                      "",
-                      "",
-                    )
-                        .then((value) {
-                      print("Login without facebook and google successfully");
-                      navigateToHomePage();
-                      // mMovieModel.getRegisterUserInfoDatabase();
-                    }).catchError((errorr) {
+                        .onTapLoginWithEmail(
+                            emailController.text, passwordController.text)
+                        .then(
+                          (loginWithEmail) => navigateToHomePage(),
+                        )
+                        .catchError((error) {
                       showAlertBox();
                     });
                   }
-
-                  // mMovieModel.getLoginUserIfoDatabase();
-                }
-              },
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              label: Text(
-                'Confirm',
-                style: TextStyle(
-                  fontSize: TEXT_REGULAR,
-                  fontWeight: FontWeight.w500,
+                  if (_tabController?.index == 1) {
+                    if (isFacebook == true) {
+                      bloc
+                          .onTapRegisterWithGmailAndFacebook(
+                        nameController.text,
+                        emailController.text,
+                        phoneController.text,
+                        passwordController.text,
+                        "",
+                        bloc.userDataInfo?["id"],
+                      )
+                          .then((value) {
+                        print("Login with facebook successfully");
+                        navigateToHomePage();
+                        //mMovieModel.getRegisterUserInfoDatabase();
+                      }).catchError((error) {
+                        showAlertBox();
+                      });
+                    } else if (isGoogle == true) {
+                      bloc
+                          .onTapRegisterWithGmailAndFacebook(
+                        nameController.text,
+                        emailController.text,
+                        phoneController.text,
+                        passwordController.text,
+                        googleId,
+                        "",
+                      )
+                          .then((value) {
+                        print("sign with google successfully");
+                        navigateToHomePage();
+                        //  mMovieModel.getRegisterUserInfoDatabase();
+                      }).catchError((error) {
+                        showAlertBox();
+                      });
+                    } else {
+                      bloc
+                          .onTapRegisterWithGmailAndFacebook(
+                        nameController.text,
+                        emailController.text,
+                        phoneController.text,
+                        passwordController.text,
+                        "",
+                        "",
+                      )
+                          .then((value) {
+                        print("Login without facebook and google successfully");
+                        navigateToHomePage();
+                        // mMovieModel.getRegisterUserInfoDatabase();
+                      }).catchError((error) {
+                        showAlertBox();
+                      });
+                    }
+                  }
+                },
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                label: Text(
+                  'Confirm',
+                  style: TextStyle(
+                    fontSize: TEXT_REGULAR,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
@@ -203,110 +204,112 @@ class _LoginAndSignInPageState extends State<LoginAndSignInPage>
               tabs: myTabs,
             ),
           ),
-          body: TabBarView(
-            controller: _tabController,
-            children: [
-              AccountLoginAndSignInSectionView(
-                textFieldVisibility: false,
-                name: nameController.text,
-                email: emailController.text,
-                phone: phoneController.text,
-                password: passwordController.text,
-                onTapFacebook: () {
-                  LoginAndSignInBloc bloc = LoginAndSignInBloc();
-                  bloc.loginWithFacebook().then((value) {
-                    print("Facebook token ${bloc.userDataInfo?["id"]}");
-                    bloc
-                        .onTapLoginWitFacebook(bloc.userDataInfo?["id"])
-                        .then((value) {
-                      if (value != null) {
-                        print("Facebook token 2 ${bloc.userDataInfo?["id"]}");
-                        isFacebook = true;
-                        userDataInfo = bloc.userDataInfo;
-                        print("User data info $userDataInfo");
-                        navigateToHomePage();
-                      } else {
+          body: Builder(
+            builder: (_) => TabBarView(
+              controller: _tabController,
+              children: [
+                AccountLoginAndSignInSectionView(
+                  textFieldVisibility: false,
+                  name: nameController.text,
+                  email: emailController.text,
+                  phone: phoneController.text,
+                  password: passwordController.text,
+                  onTapFacebook: () {
+                    LoginAndSignInBloc bloc = Provider.of(_, listen: false);
+                    bloc.loginWithFacebook().then((value) {
+                      print("Facebook token ${bloc.userDataInfo?["id"]}");
+                      bloc
+                          .onTapLoginWitFacebook(bloc.userDataInfo?["id"])
+                          .then((value) {
+                        if (value != null) {
+                          print("Facebook token 2 ${bloc.userDataInfo?["id"]}");
+                          isFacebook = true;
+                          userDataInfo = bloc.userDataInfo;
+                          print("User data info $userDataInfo");
+                          navigateToHomePage();
+                        } else {
+                          showAlertBox();
+                        }
+                      }).catchError((error) {
                         showAlertBox();
-                      }
+                        print(error.toString());
+                      });
                     }).catchError((error) {
-                      showAlertBox();
+                      noAccountDialog(context);
+                    });
+
+                    print('This is on tap facebook in sign in page');
+                  },
+                  onTapGoogle: () {
+                    GoogleSignIn _googleSignIn = GoogleSignIn(
+                      scopes: [
+                        'email',
+                        'https://www.googleapis.com/auth/contacts.readonly',
+                      ],
+                    );
+
+                    _googleSignIn.signIn().then((googleAccount) {
+                      isGoogle = true;
+
+                      //googleId = googleAccount.id;
+                      LoginAndSignInBloc bloc = Provider.of(_, listen: false);
+                      bloc
+                          .onTapLoginWithGoogle(googleAccount?.id ?? "")
+                          .then((value) => navigateToHomePage())
+                          .catchError((error) {
+                        showAlertBox();
+                      });
+                    }).catchError((error) {
+                      noAccountDialog(context);
+                    });
+
+                    print('This is on tap google in sign in page');
+                  },
+                ),
+                AccountLoginAndSignInSectionView(
+                  name: nameController.toString(),
+                  email: emailController.toString(),
+                  phone: phoneController.toString(),
+                  password: passwordController.toString(),
+                  onTapFacebook: () {
+                    LoginAndSignInBloc bloc =
+                        Provider.of(context, listen: false);
+
+                    bloc.loginWithFacebook().then((value) {
+                      isFacebook = true;
+                      isGoogle = false;
+                      emailController.text = bloc.userDataInfo?["email"] ?? "";
+                      nameController.text = bloc.userDataInfo?["name"] ?? "";
+                    });
+
+                    print('This is on tap facebook in sign up page');
+                  },
+                  onTapGoogle: () {
+                    GoogleSignIn _googleSignIn = GoogleSignIn(
+                      scopes: [
+                        'email',
+                        'https://www.googleapis.com/auth/contacts.readonly',
+                      ],
+                    );
+                    _googleSignIn.signIn().then((googleAccount) {
+                      googleAccount?.authentication.then((authentication) {
+                        isGoogle = true;
+                        isFacebook = false;
+                        emailController.text = googleAccount.email;
+                        nameController.text = googleAccount.displayName ?? "";
+
+                        googleId = googleAccount.id;
+                        print("Google id => ${authentication.accessToken}");
+                        print("Google id state variable => $googleId");
+                      });
+                    }).catchError((error) {
                       print(error.toString());
                     });
-                  }).catchError((error) {
-                    noAccountDialog(context);
-                  });
-
-                  print('This is on tap facebook in sign in page');
-                },
-                onTapGoogle: () {
-                  GoogleSignIn _googleSignIn = GoogleSignIn(
-                    scopes: [
-                      'email',
-                      'https://www.googleapis.com/auth/contacts.readonly',
-                    ],
-                  );
-
-                  _googleSignIn.signIn().then((googleAccount) {
-                    isGoogle = true;
-
-                    //googleId = googleAccount.id;
-                    LoginAndSignInBloc bloc = LoginAndSignInBloc();
-                    bloc
-                        .onTapLoginWithGoogle(googleAccount?.id ?? "")
-                        .then((value) => navigateToHomePage())
-                        .catchError((error) {
-                      showAlertBox();
-                    });
-
-                  }).catchError((error) {
-                    noAccountDialog(context);
-                  });
-
-                  print('This is on tap google in sign in page');
-                },
-              ),
-              AccountLoginAndSignInSectionView(
-                name: nameController.toString(),
-                email: emailController.toString(),
-                phone: phoneController.toString(),
-                password: passwordController.toString(),
-                onTapFacebook: () {
-                  LoginAndSignInBloc bloc = LoginAndSignInBloc();
-
-                  bloc.loginWithFacebook().then((value) {
-                    isFacebook = true;
-                    isGoogle = false;
-                    emailController.text = bloc.userDataInfo?["email"] ?? "";
-                    nameController.text = bloc.userDataInfo?["name"] ?? "";
-                  });
-
-                  print('This is on tap facebook in sign up page');
-                },
-                onTapGoogle: () {
-                  GoogleSignIn _googleSignIn = GoogleSignIn(
-                    scopes: [
-                      'email',
-                      'https://www.googleapis.com/auth/contacts.readonly',
-                    ],
-                  );
-                  _googleSignIn.signIn().then((googleAccount) {
-                    googleAccount?.authentication.then((authentication) {
-                      isGoogle = true;
-                      isFacebook = false;
-                      emailController.text = googleAccount.email;
-                      nameController.text = googleAccount.displayName ?? "";
-
-                      googleId = googleAccount.id;
-                      print("Google id => ${authentication.accessToken}");
-                      print("Google id state variable => $googleId");
-                    });
-                  }).catchError((error) {
-                    print(error.toString());
-                  });
-                  print('This is on tap google in sign up page');
-                },
-              ),
-            ],
+                    print('This is on tap google in sign up page');
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

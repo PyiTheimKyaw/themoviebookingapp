@@ -5,6 +5,7 @@ import 'package:the_movie_booking_app/data/models/snack_request.dart';
 import 'package:the_movie_booking_app/data/vos/payment_method_vo.dart';
 import 'package:the_movie_booking_app/data/vos/snack_list_vo.dart';
 import 'package:the_movie_booking_app/data/vos/user_vo.dart';
+import 'package:collection/collection.dart';
 
 class SnackListBloc extends ChangeNotifier {
   ///State
@@ -65,16 +66,31 @@ class SnackListBloc extends ChangeNotifier {
     notifyListeners();
   }
   void selectPayment(int? pay){
-    (notify ==false) ? notify=true : notify =false;
-    print("Notify $notify");
-    notifyListeners();
-    mPaymentMethod?.forEach((element) {
-      element.isSelected = false;
-    });
-    if(pay != null) {
-      mPaymentMethod?[pay].isSelected = true;
-      notifyListeners();
-    }
+    // (notify ==false) ? notify=true : notify =false;
+    // print("Notify $notify");
+    // notifyListeners();
+
+    // mPaymentMethod?.forEach((element) {
+    //   element.isSelected = false;
+    // });
+   List<PaymentMethodVO>? paymentMethod= mPaymentMethod?.map((e) {
+      e.isSelected=false;
+      return e;
+    }).mapIndexed((index, element) {
+      if(index==pay) {
+        mPaymentMethod?[index].isSelected = true;
+      }else{
+        mPaymentMethod?[index].isSelected = false;
+      }
+      return element;
+   }).toList();
+   mPaymentMethod=paymentMethod;
+   notifyListeners();
+    // if(pay != null) {
+    //   paymentMethod?[pay].isSelected = true;
+    //   mPaymentMethod=paymentMethod;
+    //   notifyListeners();
+    // }
   }
   void onPressedPayment(){
 
