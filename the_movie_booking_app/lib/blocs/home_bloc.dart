@@ -14,6 +14,7 @@ class HomeBloc extends ChangeNotifier {
   List<UserVO>? mUserInfo;
   List<SnackListVO>? mSnackList;
   MovieModel mMovieModel = MovieModelImpl();
+  bool isDispose=false;
 
   HomeBloc() {
     ///User from database
@@ -66,5 +67,12 @@ class HomeBloc extends ChangeNotifier {
     }).catchError((error) {
       print('Google logout failed ${error.toString()}');
     });
+  }
+  bool notifySafely(){
+    if(!isDispose){
+      print("notifySafely ======> $isDispose");
+      notifyListeners();
+    }
+    return isDispose;
   }
 }

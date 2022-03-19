@@ -22,8 +22,8 @@ class MovieChooseTimePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MovieChooseTimeBloc(movieId.toString()),
+    return ChangeNotifierProvider<MovieChooseTimeBloc>.value(
+      value: MovieChooseTimeBloc(movieId.toString()),
       child: Scaffold(
         floatingActionButton:
             Selector<MovieChooseTimeBloc, List<CinemaDayTimeSlotVO>?>(

@@ -22,9 +22,17 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../data/vos/snack_list_vo.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   Map<String, dynamic>? userData;
   String googleId;
+
+  HomePage({required this.userData, required this.googleId});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   List<String> menuItem = [
     "Promotion Code",
     "Select a Language",
@@ -32,11 +40,18 @@ class HomePage extends StatelessWidget {
     "Help",
     "Rate us"
   ];
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    HomeBloc bloc=Provider.of(context,listen: false);
+    bloc.isDispose=true;
+    super.dispose();
+  }
 
-  HomePage({required this.userData, required this.googleId});
 
   @override
   Widget build(BuildContext context) {
+
     return ChangeNotifierProvider(
       create: (context) => HomeBloc(),
       child: Scaffold(
@@ -75,7 +90,7 @@ class HomePage extends StatelessWidget {
                                 onPressed: () {
                                   HomeBloc bloc =
                                       Provider.of(context, listen: false);
-                                  if (userData != null) {
+                                  if (widget.userData != null) {
                                     print('User data is not null');
                                     bloc.logOutFacebook().then((value) {
                                       Navigator.of(context).push(
@@ -85,7 +100,7 @@ class HomePage extends StatelessWidget {
                                       );
                                     });
                                   }
-                                  if (googleId != null) {
+                                  if (widget.googleId != null) {
                                     bloc
                                         .onTapGoogleLogOut()
                                         .then((googleSignIn) {
