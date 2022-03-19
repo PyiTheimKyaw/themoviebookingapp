@@ -50,7 +50,7 @@ class VoucherPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create:(context) =>  VoucherBloc(movieId),
+      create: (context) => VoucherBloc(movieId),
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -59,9 +59,9 @@ class VoucherPage extends StatelessWidget {
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
                   builder: (context) => HomePage(
-                    userData: null,
-                    googleId: "",
-                  )),
+                        userData: null,
+                        googleId: "",
+                      )),
             ),
             child: Center(
               child: Image(
@@ -104,9 +104,9 @@ class VoucherPage extends StatelessWidget {
                       selector: (context, bloc) => bloc.mMovieDetails,
                       builder: (context, movie, child) =>
                           MovieVoucherItemSectionView(
-                            movieImage: movie?.posterPath ?? "",
-                            movieName: movie?.title ?? "",
-                          ),
+                        movieImage: movie?.posterPath ?? "",
+                        movieName: movie?.title ?? "",
+                      ),
                     ),
                     SizedBox(
                       height: MARGIN_MEDIUM_2,
@@ -127,12 +127,6 @@ class VoucherPage extends StatelessWidget {
                   ],
                 ),
               ),
-
-              // QrImage(
-              //   data: "1234567890",
-              //   version: QrVersions.auto,
-              //   size: 70.0,
-              // ),
             ],
           ),
         ),
@@ -140,8 +134,6 @@ class VoucherPage extends StatelessWidget {
     );
   }
 }
-
-
 
 class VoucherHeadingTitleSectionView extends StatelessWidget {
   const VoucherHeadingTitleSectionView({

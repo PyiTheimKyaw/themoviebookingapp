@@ -42,8 +42,8 @@ class MovieSeatsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => MovieSeatsBloc(
-          userChooseDayTimeslotId, dateData.split(" ")[0]),
+      create: (context) =>
+          MovieSeatsBloc(userChooseDayTimeslotId, dateData.split(" ")[0]),
       child: Scaffold(
         floatingActionButton: Selector<MovieSeatsBloc, double>(
           selector: (context, bloc) => bloc.totalPrice,
@@ -55,23 +55,22 @@ class MovieSeatsPage extends StatelessWidget {
               backgroundColor: PRIMARY_COLOR,
               onPressed: () {
                 MovieSeatsBloc bloc =
-                Provider.of<MovieSeatsBloc>(context, listen: false);
+                    Provider.of<MovieSeatsBloc>(context, listen: false);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => SnackListPage(
-                        price: bloc.totalPrice,
-                        cinemaId: cinemaId,
-                        userChooseCinema: userChooseCinema,
-                        userChooseDayTimeslotId:
-                        userChooseDayTimeslotId,
-                        userChooseTime: userChooseTime,
-                        dateData: dateData,
-                        movieName: movieName,
-                        movieId: movieId,
-                        token: token,
-                        seatNo: bloc.pickSeat.join(','),
-                      )),
+                            price: bloc.totalPrice,
+                            cinemaId: cinemaId,
+                            userChooseCinema: userChooseCinema,
+                            userChooseDayTimeslotId: userChooseDayTimeslotId,
+                            userChooseTime: userChooseTime,
+                            dateData: dateData,
+                            movieName: movieName,
+                            movieId: movieId,
+                            token: token,
+                            seatNo: bloc.pickSeat.join(','),
+                          )),
                 );
               },
               elevation: 0,
@@ -87,21 +86,6 @@ class MovieSeatsPage extends StatelessWidget {
               ),
             ),
           ),
-
-          // FloatingActionButtonView(
-          //     'Buy Ticket for \$${totalPrice}',
-          //     SnackListPage(
-          //       price: totalPrice,
-          //       cinemaId: widget.cinemaId,
-          //       userChooseCinema: widget.userChooseCinema,
-          //       userChooseDayTimeslotId: widget.userChooseDayTimeslotId,
-          //       userChooseTime: widget.userChooseTime,
-          //       dateData: widget.dateData,
-          //       movieName: widget.movieName,
-          //       movieId: widget.movieId,
-          //       token: widget.token,
-          //       seatNo: pickSeat.join(','),
-          //     )),
         ),
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -124,8 +108,7 @@ class MovieSeatsPage extends StatelessWidget {
                 MovieNameTimeAndCinemaSectionView(
                   mName: movieName,
                   cName: userChooseCinema,
-                  dateAndTime:
-                  '${dateData.split(" ")[0]},${userChooseTime}',
+                  dateAndTime: '${dateData.split(" ")[0]},${userChooseTime}',
                 ),
                 SizedBox(
                   height: MARGIN_LARGE,
@@ -133,40 +116,17 @@ class MovieSeatsPage extends StatelessWidget {
                 Selector<MovieSeatsBloc, List<MovieSeatVO>?>(
                   selector: (context, bloc) => bloc.mMovieSeats,
                   builder: (context, movieSeats, child) =>
-                      Selector<MovieSeatsBloc,int>(
-                        selector: (context,bloc) => bloc.tickets,
-                        builder: (context,tickets,child) => MovieSeatsSectionView(
-                          movieSeats: movieSeats,
-                          onTapSeats: (seat) {
-                            // if (seat?.type == SEAT_TYPE_AVAILABLE) {
-                            //   List<MovieSeatVO>? tempSeats = movieSeats;
-                            //   tempSeats?.forEach((element) {
-                            //     if (element.id == seat?.id &&
-                            //         element.symbol == seat?.symbol) {
-                            //       element.isSelected =
-                            //       (seat?.isSelected == false) ? true : false;
-                            //     }
-                            //   });
-                            //   if (seat?.isSelected == true) {
-                            //     pickSeat.add(seat?.seatName ?? "");
-                            //     totalPrice += seat?.price ?? 0;
-                            //     tickets++;
-                            //   } else {
-                            //     pickSeat.remove(seat?.seatName ?? "");
-                            //     totalPrice -= seat?.price ?? 0;
-                            //     tickets--;
-                            //   }
-                            //   setState(() {
-                            //     movieSeats = tempSeats;
-                            //   });
-                            // }
-                            MovieSeatsBloc bloc =
+                      Selector<MovieSeatsBloc, int>(
+                    selector: (context, bloc) => bloc.tickets,
+                    builder: (context, tickets, child) => MovieSeatsSectionView(
+                      movieSeats: movieSeats,
+                      onTapSeats: (seat) {
+                        MovieSeatsBloc bloc =
                             Provider.of<MovieSeatsBloc>(context, listen: false);
-                            bloc.onChooseSeat(seat);
-                          },
-                        ),
-
-                      ),
+                        bloc.onChooseSeat(seat);
+                      },
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: MARGIN_MEDIUM_2,
@@ -183,22 +143,14 @@ class MovieSeatsPage extends StatelessWidget {
                   selector: (context, bloc) => bloc.tickets,
                   builder: (context, tickets, child) =>
                       Selector<MovieSeatsBloc, List<String>>(
-                        selector: (context, bloc) => bloc.pickSeat,
-                        builder: (context, pickSeat, child) =>
-                            NumberOfTicketsAndSeatsSectionView(
-                              tickets: tickets.toString(),
-                              row: pickSeat.join(','),
-                            ),
-                      ),
+                    selector: (context, bloc) => bloc.pickSeat,
+                    builder: (context, pickSeat, child) =>
+                        NumberOfTicketsAndSeatsSectionView(
+                      tickets: tickets.toString(),
+                      row: pickSeat.join(','),
+                    ),
+                  ),
                 ),
-                // Selector<MovieSeatsBloc,int>(
-                //   selector: (context,bloc) => bloc.tickets,
-                //   builder: (context,movieSeats,child) => NumberOfTicketsAndSeatsSectionView(
-                //     tickets: tickets.toString(),
-                //     row: pickSeat.join(','),
-                //   ),
-                //
-                // ),
                 SizedBox(
                   height: MARGIN_XXLARGE + MARGIN_XXLARGE,
                 ),
@@ -210,8 +162,6 @@ class MovieSeatsPage extends StatelessWidget {
     );
   }
 }
-
-
 
 class NumberOfTicketsAndSeatsSectionView extends StatelessWidget {
   String row;

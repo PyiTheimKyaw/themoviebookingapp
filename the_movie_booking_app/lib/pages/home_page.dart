@@ -51,12 +51,6 @@ class HomePage extends StatelessWidget {
                   SizedBox(
                     height: MARGIN_XXLARGE,
                   ),
-                  // Selector<HomeBloc, List<UserVO>?>(
-                  //   selector: (context, bloc) => bloc.mUserInfo,
-                  //   builder: (context, user, child) => DrawerHeaderSectionView(
-                  //     user: user?.first,
-                  //   ),
-                  // ),
                   Selector<HomeBloc, List<UserVO>?>(
                     selector: (context, bloc) => bloc.mUserInfo,
                     builder: (context, user, child) => DrawerHeaderSectionView(
@@ -68,92 +62,56 @@ class HomePage extends StatelessWidget {
                   ),
                   MenuItemSectionView(menuItem: menuItem),
                   Spacer(),
-
-                  LogOutButtonSectionView(
-                    onTapButton: () {
-                      HomeBloc bloc = Provider.of<HomeBloc>(context,listen: false);
-                      if (userData != null) {
-                        print('User data is not null');
-                        bloc.logOutFacebook().then((value) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    LoginAndSignInPage()),
-                          );
-                        });
-                        // mMovieModel.logoutUser(
-                        //     userInfo?.first.Authorization() ?? "");
-                        // debugPrint(
-                        //     'token in tap ${userInfo?[0].token}');
-                        // mMovieModel.logoutUserFromDatabase();
-
-                      }
-                      if (googleId != null) {
-                        bloc.onTapGoogleLogOut().then((googleSignIn) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    LoginAndSignInPage()),
-                          );
-                        });
-                      }
-                      bloc.onTapLogoutUser().then((value) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  LoginAndSignInPage()),
+                  Builder(
+                    builder: (context) => LogOutButtonSectionView(
+                      onTapButton: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            title: Text("Confirm"),
+                            content: Text("Are you sure to log out"),
+                            actions: [
+                              FlatButton(
+                                onPressed: () {
+                                  HomeBloc bloc =
+                                      Provider.of(context, listen: false);
+                                  if (userData != null) {
+                                    print('User data is not null');
+                                    bloc.logOutFacebook().then((value) {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                LoginAndSignInPage()),
+                                      );
+                                    });
+                                  }
+                                  if (googleId != null) {
+                                    bloc
+                                        .onTapGoogleLogOut()
+                                        .then((googleSignIn) {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                LoginAndSignInPage()),
+                                      );
+                                    });
+                                  }
+                                  bloc.onTapLogoutUser().then((value) {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              LoginAndSignInPage()),
+                                    );
+                                  });
+                                },
+                                child: Text("Okay"),
+                              ),
+                            ],
+                          ),
                         );
-                      });
-                      // showDialog(
-                      //   context: context,
-                      //   builder: (context) => AlertDialog(
-                      //     title: Text("Confirm"),
-                      //     content: Text("Are you sure to log out"),
-                      //     actions: [
-                      //       FlatButton(
-                      //         onPressed: () {
-                      //           HomeBloc bloc = Provider.of<HomeBloc>(context,listen: false);
-                      //           if (userData != null) {
-                      //             print('User data is not null');
-                      //             bloc.logOutFacebook().then((value) {
-                      //               Navigator.of(context).push(
-                      //                 MaterialPageRoute(
-                      //                     builder: (context) =>
-                      //                         LoginAndSignInPage()),
-                      //               );
-                      //             });
-                      //             // mMovieModel.logoutUser(
-                      //             //     userInfo?.first.Authorization() ?? "");
-                      //             // debugPrint(
-                      //             //     'token in tap ${userInfo?[0].token}');
-                      //             // mMovieModel.logoutUserFromDatabase();
-                      //
-                      //           }
-                      //           if (googleId != null) {
-                      //             bloc.onTapGoogleLogOut().then((googleSignIn) {
-                      //               Navigator.of(context).push(
-                      //                 MaterialPageRoute(
-                      //                     builder: (context) =>
-                      //                         LoginAndSignInPage()),
-                      //               );
-                      //             });
-                      //           }
-                      //           bloc.onTapLogoutUser().then((value) {
-                      //             Navigator.of(context).push(
-                      //               MaterialPageRoute(
-                      //                   builder: (context) =>
-                      //                       LoginAndSignInPage()),
-                      //             );
-                      //           });
-                      //         },
-                      //         child: Text("Okay"),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // );
-                    },
+                      },
+                    ),
                   ),
-
                   SizedBox(
                     height: MARGIN_XLARGE,
                   ),
@@ -245,100 +203,6 @@ void _navigateToMovieDetailsScreen(BuildContext context, int? movieId) {
     );
   }
 }
-// class _HomePageState extends State<HomePage> {
-//   List<String> menuItem = [
-//     "Promotion Code",
-//     "Select a Language",
-//     "Terms of Services",
-//     "Help",
-//     "Rate us"
-//   ];
-//   // MovieModel mMovieModel = MovieModelImpl();
-//   // List<MovieVO>? nowPlayingMovies;
-//   // List<MovieVO>? comingSoonMovies;
-//   // List<UserVO>? userInfo;
-//   // List<SnackListVO>? snackList;
-//   //
-//   // // AccessToken? _accessToken;
-//   //
-//   // @override
-//   // void initState() {
-//   //   ///User from database
-//   //   mMovieModel.getLoginUserIfoDatabase().listen((user) {
-//   //     if (mounted) {
-//   //       setState(() {
-//   //         userInfo = user;
-//   //       });
-//   //     }
-//   //   }).onError((error) {
-//   //     debugPrint('Error ======> ${error.toString()}');
-//   //   });
-//   //   // ///Now Playing Movies
-//   //   // mMovieModel.getNowPlayingMovies().then((movieList) {
-//   //   //   setState(() {
-//   //   //     nowPlayingMovies = movieList;
-//   //   //   });
-//   //   // }).catchError((error) {
-//   //   //   debugPrint('Error ======> ${error.toString()}');
-//   //   // });
-//   //   mMovieModel.getSnackList(userInfo?[0].Authorization() ?? "");
-//   //
-//   //   ///Now Playing Movies Database
-//   //   mMovieModel.getNowPlayingMoviesFromDatabase().listen((movieList) {
-//   //     if (mounted) {
-//   //       setState(() {
-//   //         nowPlayingMovies = movieList;
-//   //       });
-//   //     }
-//   //   }).onError((error) {
-//   //     debugPrint('Error ======> ${error.toString()}');
-//   //   });
-//   //
-//   //   // ///Coming Soon Movies
-//   //   // mMovieModel.getComingSoonMovies().then((movieList) {
-//   //   //   setState(() {
-//   //   //     comingSoonMovies = movieList;
-//   //   //   });
-//   //   // }).catchError((error) {
-//   //   //   debugPrint('Error ======> ${error.toString()}');
-//   //   // });
-//   //
-//   //   ///Coming Soon Movies Database
-//   //   mMovieModel.getComingSoonMoviesFromDatabase().listen((movieList) {
-//   //     if (mounted) {
-//   //       setState(() {
-//   //         comingSoonMovies = movieList;
-//   //       });
-//   //     }
-//   //   }).onError((error) {
-//   //     debugPrint('Error ======> ${error.toString()}');
-//   //   });
-//   //
-//   //   super.initState();
-//   // }
-//
-//   Future<void> _logOut() async {
-//     await FacebookAuth.instance.logOut();
-//     // _accessToken = null;
-//     // widget.userData = null;
-//   }
-//
-//
-//
-//   void _navigateToMovieDetailsScreen(BuildContext context, int? movieId) {
-//     if (movieId != null) {
-//       Navigator.push(
-//         context,
-//         MaterialPageRoute(
-//           builder: (context) => MovieDetailsPage(
-//             movieId: movieId,
-//             // token: userInfo?[0].token ?? "",
-//           ),
-//         ),
-//       );
-//     }
-//   }
-// }
 
 class LogOutButtonSectionView extends StatelessWidget {
   final Function onTapButton;

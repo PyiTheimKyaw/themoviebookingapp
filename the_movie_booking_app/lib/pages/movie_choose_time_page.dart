@@ -91,12 +91,6 @@ class MovieChooseTimePage extends StatelessWidget {
                         listen: false);
                     bloc.getSelectedDate(movieId.toString(), date);
                     print("UserChoose dte ${bloc.dateData}");
-
-                    // setState(() {
-                    //   print("date data check ==========> ${date}");
-                    //   dateData = date;
-                    //   getNewTimeslots(date.toString().split(" ")[0] ?? "");
-                    // });
                   },
                 ),
               ),
@@ -109,21 +103,6 @@ class MovieChooseTimePage extends StatelessWidget {
                       ChooseItemGridSectionView(
                     cinemaInfo: cinemaInfo,
                     onTap: (cIndex, index) {
-                      // setState(() {
-                      //   cinemaInfo?.forEach((outer) {
-                      //     outer.timeSlots?.forEach((inner) {
-                      //       inner.isSelected = false;
-                      //     });
-                      //   });
-                      //   cinemaInfo?[cIndex].timeSlots?[index].isSelected = true;
-                      //   userChooseTime =
-                      //       cinemaInfo?[cIndex].timeSlots?[index].startTime;
-                      //   userChooseCinema = cinemaInfo?[cIndex].cinema;
-                      //   userChoosedayTimeslotId = cinemaInfo?[cIndex]
-                      //       .timeSlots?[index]
-                      //       .cinemaDayTimeSlotId;
-                      //   cinemaId = cinemaInfo?[cIndex].cinemaId;
-                      // });
                       MovieChooseTimeBloc bloc =
                           Provider.of<MovieChooseTimeBloc>(context,
                               listen: false);
@@ -136,45 +115,6 @@ class MovieChooseTimePage extends StatelessWidget {
                   ),
                 ),
               ),
-              // Selector<MovieChooseTimeBloc,List<CinemaDayTimeSlotVO>?>(
-              //   selector: (context,bloc) => bloc.mCinemaInfo,
-              //   builder: (context,cinem,child) =>  Container(
-              //     margin: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2),
-              //     height: FLOATING_ACTION_BUTTON_HEIGHT,
-              //     decoration: BoxDecoration(
-              //       color: PRIMARY_COLOR,
-              //       borderRadius: BorderRadius.circular(MARGIN_MEDIUM_2),
-              //     ),
-              //     child: Center(
-              //       child: TextButton(
-              //         onPressed: () {
-              //           MovieChooseTimeBloc bloc =
-              //           Provider.of<MovieChooseTimeBloc>(context,
-              //               listen: false);
-              //           if (bloc.userChooseTime != "" &&
-              //               bloc.userChoosedayTimeslotId != 0 &&
-              //               bloc.userChooseCinema != "") {
-              //             _navigateToNextScreen(
-              //                 context,
-              //                 bloc.dateData ?? DateTime.now().toString(),
-              //                 bloc.userChooseTime ?? "",
-              //                 bloc.userChooseCinema ?? "",
-              //                 bloc.userChoosedayTimeslotId ?? 0,
-              //                 bloc.cinemaId ?? 0,
-              //                 movieName,
-              //                 movieId,
-              //                 "");
-              //           }
-              //         },
-              //         child: Text(
-              //           'Next',
-              //           style: TextStyle(color: Colors.white),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              //
-              // ),
             ],
           ),
         ),
@@ -244,14 +184,6 @@ class ChooseItemGridSectionView extends StatelessWidget {
               );
             },
           ),
-          // SizedBox(
-          //   height: 16,
-          // ),
-          // ChooseIemGridView(),
-          // SizedBox(
-          //   height: 16,
-          // ),
-          // ChooseIemGridView(),
         ],
       ),
     );
@@ -261,20 +193,12 @@ class ChooseItemGridSectionView extends StatelessWidget {
 class ChooseIemGridView extends StatelessWidget {
   final int cIndex;
 
-  // String? userChooseTime;
-  // String? userChooseCinema;
-  // int? userChoosedayTimeslotId;
-  // int? cinemaId;
   final List<CinemaDayTimeSlotVO>? cinemaInfo;
   final Function(int, int) onTap;
 
   ChooseIemGridView({
     required this.cIndex,
     required this.cinemaInfo,
-    // required this.userChooseTime,
-    // required this.userChooseCinema,
-    // required this.userChoosedayTimeslotId,
-    // required this.cinemaId,
     required this.onTap,
   });
 
@@ -308,27 +232,6 @@ class ChooseIemGridView extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () => onTap(cIndex, index),
-                // onTap: () {
-                //   onTap(cIndex,index);
-                //   // setState(() {
-                //   //   widget.cinemaInfo?.forEach((outer) {
-                //   //     outer.timeSlots?.forEach((inner) {
-                //   //       inner.isSelected = false;
-                //   //     });
-                //   //   });
-                //   //   widget.cinemaInfo?[widget.cIndex].timeSlots?[index]
-                //   //       .isSelected = true;
-                //   //   widget.userChooseTime = widget
-                //   //       .cinemaInfo?[widget.cIndex].timeSlots?[index].startTime;
-                //   //   widget.userChooseCinema =
-                //   //       widget.cinemaInfo?[widget.cIndex].cinema;
-                //   //   widget.userChoosedayTimeslotId = widget
-                //   //       .cinemaInfo?[widget.cIndex]
-                //   //       .timeSlots?[index]
-                //   //       .cinemaDayTimeSlotId;
-                //   //   widget.cinemaId = widget.cinemaInfo?[widget.cIndex].cinemaId;
-                //   // });
-                // },
                 child: Container(
                   margin: EdgeInsets.only(
                       left: MARGIN_MEDIUM_2,

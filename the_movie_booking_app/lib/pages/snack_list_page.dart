@@ -77,7 +77,7 @@ class SnackListPage extends StatelessWidget {
                     ),
                   ),
                 );
-                // Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => widget));
+
               },
               elevation: 0,
               shape: RoundedRectangleBorder(
@@ -153,7 +153,7 @@ class SnackListPage extends StatelessWidget {
                 Selector<SnackListBloc, List<PaymentMethodVO>?>(
                   selector: (context, bloc) => bloc.mPaymentMethod,
                   builder: (context, paymentMethod, child) =>
-                      Selector<SnackListBloc, int>(
+                      Selector<SnackListBloc, bool>(
                         selector: (context, bloc) => bloc.notify,
                         builder: (context, notify, child) =>
                             PaymentMethodSectionView(
@@ -208,9 +208,7 @@ class PaymentMethodSectionView extends StatelessWidget {
             );
           },
         ),
-        // PaymentTypeView('Credit Card', 'Visa,Master card,JCB'),
-        // PaymentTypeView('Internet Banking(ATM Card)', 'Visa,Master card,JCB'),
-        // PaymentTypeView('E-wallet', 'Paypal'),
+
       ],
     );
   }
@@ -472,13 +470,7 @@ class SnackItemAndQuantityView extends StatelessWidget {
             ],
           ),
         ),
-        // ItemCountView(
-        //   snackList: widget.snack,
-        //   index: widget.index,
-        //   quantity: widget.quantity,
-        //   decrease: widget.decrease(widget.index),
-        //   increase: widget.increase(widget.index),
-        // ),
+
       ],
     );
   }

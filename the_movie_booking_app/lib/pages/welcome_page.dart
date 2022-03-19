@@ -19,14 +19,12 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  // List<UserVO>? userList;
   MovieModel mMovieModel = MovieModelImpl();
 
   @override
   void initState() {
     ///User from database
     mMovieModel.getLoginUserIfoDatabase().listen((value) {
-
       if (value[0].token != null) {
         Navigator.push(
           context,

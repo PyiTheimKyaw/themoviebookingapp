@@ -257,20 +257,7 @@ class _LoginAndSignInPageState extends State<LoginAndSignInPage>
                         .catchError((error) {
                       showAlertBox();
                     });
-                    // googleAccount?.authentication.then((authentication) {
-                    //   isGoogle = true;
-                    //
-                    //   //googleId = googleAccount.id;
-                    //   LoginAndSignInBloc bloc = LoginAndSignInBloc();
-                    //   bloc
-                    //       .onTapLoginWithGoogle(googleAccount.id)
-                    //       .then((value) => navigateToHomePage())
-                    //       .catchError((error) {
-                    //     showAlertBox();
-                    //   });
-                    // }).catchError((error) {
-                    //   showAlertBox();
-                    // });
+
                   }).catchError((error) {
                     noAccountDialog(context);
                   });

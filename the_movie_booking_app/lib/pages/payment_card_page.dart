@@ -53,7 +53,7 @@ class PaymentCardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) =>  PaymentCardBloc(),
+      create: (context) => PaymentCardBloc(),
       child: Scaffold(
         floatingActionButton: Container(
           margin: EdgeInsets.only(bottom: MARGIN_MEDIUM_2),
@@ -68,15 +68,10 @@ class PaymentCardPage extends StatelessWidget {
                 PaymentCardBloc bloc =
                     Provider.of<PaymentCardBloc>(context, listen: false);
                 bloc
-                    .checkoutUser(
-                        userChooseDayTimeslotId,
-                        seatNo,
-                        dateData.split(" ")[0],
-                        movieId,
-                        cinemaId,
-                        snack)
+                    .checkoutUser(userChooseDayTimeslotId, seatNo,
+                        dateData.split(" ")[0], movieId, cinemaId, snack)
                     .then((value) {
-                      print("Checkout at paymentCard ${checkOutVO}");
+                  print("Checkout at paymentCard ${checkOutVO}");
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -96,41 +91,6 @@ class PaymentCardPage extends StatelessWidget {
                     ),
                   );
                 });
-                // CheckOutRequest checkout = CheckOutRequest(
-                //     widget.userChooseDayTimeslotId,
-                //     widget.seatNo,
-                //     widget.dateData.split(" ")[0],
-                //     widget.movieId,
-                //     widget.cinemaId,
-                //     cardList?.first.id ?? 0,
-                //     widget.snack);
-                // mMovieModel
-                //     .checkout(checkout)
-                //     .then((value) {
-                //   setState(() {
-                //     checkoutVO = value;
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) => VoucherPage(
-                //           price: widget.totalPrice,
-                //           cinemaId: widget.cinemaId,
-                //           userChooseCinema: widget.userChooseCinema,
-                //           userChooseDayTimeslotId: widget.userChooseDayTimeslotId,
-                //           userChooseTime: widget.userChooseTime,
-                //           dateData: widget.dateData,
-                //           movieName: widget.movieName,
-                //           movieId: widget.movieId,
-                //           token: widget.token,
-                //           cardId: chooseCard?.id ?? 0,
-                //           checkoutVO: checkoutVO,
-                //         ),
-                //       ),
-                //     );
-                //   });
-                // });
-
-                // Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => widget));
               },
               elevation: 0,
               shape: RoundedRectangleBorder(
@@ -267,10 +227,7 @@ class _PaymentCardSectionViewState extends State<PaymentCardSectionView> {
       options: CarouselOptions(
         onPageChanged: (index, reason) {
           widget.swap(index);
-          // setState(() {
-          //   cardId = widget.profile?[index].id;
-          //   print('Card id when swap ==> ${cardId}');
-          // });
+
         },
         height: PAYMENT_CARD_HEIGHT,
         aspectRatio: 16 / 9,

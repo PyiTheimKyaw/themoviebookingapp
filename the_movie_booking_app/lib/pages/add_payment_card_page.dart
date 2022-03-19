@@ -31,42 +31,16 @@ class AddPaymentCardPage extends StatelessWidget {
             builder: (context) => FloatingActionButton.extended(
               backgroundColor: PRIMARY_COLOR,
               onPressed: () {
-                // Navigator.of(context).pop(false);
-                // });
                 AddPaymentCardBloc bloc = Provider.of(context, listen: false);
-                // bloc.getProfile().then((value) {
-                //   Navigator.of(context).pop(false);
-                // });
-                // bloc.getProfile();
+
                 bloc
                     .createUserCard(numController.text, holderController.text,
                         dateController.text, cvcController.text)
                     .then((value) {
-                      // bloc.getProfile().then((value) {
-                      //   print("User Vo at card page ${value.token}");
-                        Navigator.of(context).pop(false);
-                        // bloc.getProfile();
-                      // }).catchError((error){
-                      //   print("Profile error ${error.toString()}");
-                      // });
-
-                }).catchError((error){
+                  Navigator.of(context).pop(false);
+                }).catchError((error) {
                   print("Create card error ${error.toString()}");
                 });
-                // mMovieModel
-                //     .postCreateCard(
-                //         numController.text,
-                //         holderController.text,
-                //         dateController.text,
-                //         cvcController.text)
-                //     .then((value) {
-                //      mMovieModel.getProfile().then((event) {
-                //        Navigator.of(context).pop(false);
-                //
-                //      });
-                // });
-
-                // Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => widget));
               },
               elevation: 0,
               shape: RoundedRectangleBorder(

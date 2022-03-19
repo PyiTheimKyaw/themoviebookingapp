@@ -13,7 +13,7 @@ class SnackListBloc extends ChangeNotifier {
   List<UserVO>? user;
   List<SnackRequest>? snackList = [];
   double subTotal = 0;
-  int notify=0;
+  bool notify=false;
 
   ///Model
   MovieModel mMovieModel = MovieModelImpl();
@@ -65,14 +65,16 @@ class SnackListBloc extends ChangeNotifier {
     notifyListeners();
   }
   void selectPayment(int? pay){
-    notify++;
+    (notify ==false) ? notify=true : notify =false;
     print("Notify $notify");
     notifyListeners();
     mPaymentMethod?.forEach((element) {
       element.isSelected = false;
     });
-    mPaymentMethod?[pay!].isSelected = true;
-    notifyListeners();
+    if(pay != null) {
+      mPaymentMethod?[pay].isSelected = true;
+      notifyListeners();
+    }
   }
   void onPressedPayment(){
 
