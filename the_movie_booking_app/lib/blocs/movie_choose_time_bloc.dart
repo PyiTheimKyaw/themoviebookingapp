@@ -4,6 +4,8 @@ import 'package:the_movie_booking_app/data/models/movie_model_impl.dart';
 import 'package:the_movie_booking_app/data/vos/cinema_day_time_slot_vo.dart';
 import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 
+import 'package:collection/collection.dart';
+
 class MovieChooseTimeBloc extends ChangeNotifier {
   ///State
   List<CinemaDayTimeSlotVO>? mCinemaInfo;
@@ -71,25 +73,29 @@ class MovieChooseTimeBloc extends ChangeNotifier {
     //   });
     // });
 
-   mCinemaInfo= mCinemaInfo?.map((outer) {
-      outer.timeSlots?.forEach((inner) {
+    mCinemaInfo = mCinemaInfo?.mapIndexed((i, outer) {
+      outer.timeSlots?.mapIndexed((j, inner) {
         inner.isSelected = false;
+        if (i == firstIndex && j == secIndex) {
+          inner.isSelected = true;
+          mCinemaInfo?[firstIndex].timeSlots?[secIndex].isSelected = true;
 
-      });
+          userChooseTime =
+              mCinemaInfo?[firstIndex].timeSlots?[secIndex].startTime;
+
+          userChooseCinema = mCinemaInfo?[firstIndex].cinema;
+
+          userChoosedayTimeslotId =
+              mCinemaInfo?[firstIndex].timeSlots?[secIndex].cinemaDayTimeSlotId;
+
+          cinemaId = mCinemaInfo?[firstIndex].cinemaId;
+        }
+        return inner;
+      }).toList();
       return outer;
     }).toList();
-   notifyListeners();
+    notifyListeners();
 
-    mCinemaInfo?[firstIndex].timeSlots?[secIndex].isSelected = true;
-
-    userChooseTime = mCinemaInfo?[firstIndex].timeSlots?[secIndex].startTime;
-
-    userChooseCinema = mCinemaInfo?[firstIndex].cinema;
-
-    userChoosedayTimeslotId =
-        mCinemaInfo?[firstIndex].timeSlots?[secIndex].cinemaDayTimeSlotId;
-
-    cinemaId = mCinemaInfo?[firstIndex].cinemaId;
     notifyListeners();
   }
 }

@@ -118,23 +118,20 @@ class SnackListPage extends StatelessWidget {
               children: [
                 Selector<SnackListBloc, List<SnackListVO>?>(
                   selector: (context, bloc) => bloc.mSnacksList,
+                  shouldRebuild: (previous,next) => previous !=next,
                   builder: (context, snacks, child) =>
-                      Selector<SnackListBloc, double>(
-                        selector: (context, bloc) => bloc.subTotal,
-                        builder: (context, subTotal, child) =>
-                            SnackItemListAndCountSectionView(
-                              snack: snacks,
-                              decrease: (snack) {
-                                SnackListBloc bloc =
-                                Provider.of<SnackListBloc>(context, listen: false);
-                                bloc.onTapDecreaseSnack(snack);
-                              },
-                              increase: (snack) {
-                                SnackListBloc bloc =
-                                Provider.of<SnackListBloc>(context, listen: false);
-                                bloc.onTapIncreaseSnack(snack);
-                              },
-                            ),
+                      SnackItemListAndCountSectionView(
+                        snack: snacks,
+                        decrease: (snack) {
+                          SnackListBloc bloc =
+                          Provider.of<SnackListBloc>(context, listen: false);
+                          bloc.onTapDecreaseSnack(snack);
+                        },
+                        increase: (snack) {
+                          SnackListBloc bloc =
+                          Provider.of<SnackListBloc>(context, listen: false);
+                          bloc.onTapIncreaseSnack(snack);
+                        },
                       ),
                 ),
                 SizedBox(
@@ -317,8 +314,8 @@ class PromoCodeAndSubTotalSectionView extends StatelessWidget {
 class SnackItemListAndCountSectionView extends StatelessWidget {
   final List<SnackListVO>? snack;
 
-  final Function(SnackListVO?) decrease;
-  final Function(SnackListVO?) increase;
+  final Function(int) decrease;
+  final Function(int) increase;
 
   SnackItemListAndCountSectionView(
       {required this.snack, required this.decrease, required this.increase});
@@ -382,8 +379,8 @@ class SnackItemAndQuantityView extends StatelessWidget {
   final List<SnackListVO>? snack;
   final int index;
 
-  final Function(SnackListVO?) decrease;
-  final Function(SnackListVO?) increase;
+  final Function(int) decrease;
+  final Function(int) increase;
 
   SnackItemAndQuantityView(
       {required this.snack,
@@ -420,7 +417,7 @@ class SnackItemAndQuantityView extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  decrease(snack?[index]);
+                  decrease(index);
                 },
                 child: Container(
                   width: MARGIN_MEDIUM_4,
@@ -451,7 +448,7 @@ class SnackItemAndQuantityView extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  increase(snack?[index]);
+                  increase(index);
                 },
                 child: Container(
                   width: MARGIN_MEDIUM_4,

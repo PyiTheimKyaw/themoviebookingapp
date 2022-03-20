@@ -42,27 +42,31 @@ class SnackListBloc extends ChangeNotifier {
       print("Snack list error at home page ${error.toString()}");
     });
   }
-  void onTapDecreaseSnack(SnackListVO? snack){
-    if ((snack?.quantity ?? 0) > 0) {
-      subTotal -= snack?.price ?? 0;
+  void onTapDecreaseSnack(int snack){
+    if ((mSnacksList?[snack].quantity ?? 0) > 0) {
+      subTotal -= mSnacksList?[snack].price ?? 0;
       notifyListeners();
     }
-    mSnacksList?.forEach((element) {
-      if (element.id == snack?.id) {
+    mSnacksList=mSnacksList?.map((element) {
+      if (element.id == mSnacksList?[snack].id) {
         if ((element.quantity ?? 0) > 0) {
           element.quantity = (element.quantity ?? 0) - 1;
         }
       }
-    });
+      return element;
+    }).toList();
+    notifyListeners();
   }
 
-  void onTapIncreaseSnack(SnackListVO? snack){
-    mSnacksList?.forEach((element) {
-      if (element.id == snack?.id) {
+  void onTapIncreaseSnack(int snack){
+    mSnacksList=mSnacksList?.map((element) {
+      if (element.id == mSnacksList?[snack].id) {
         element.quantity = (element.quantity ?? 0) + 1;
       }
-    });
-    subTotal += snack?.price ?? 0;
+      return element;
+    }).toList();
+    subTotal += mSnacksList
+        ?[0].price ?? 0;
     notifyListeners();
   }
   void selectPayment(int? pay){
