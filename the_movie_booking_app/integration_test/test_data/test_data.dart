@@ -1,0 +1,10 @@
+const String TEST_DATA_WELCOME="Welcome!";
+const String TEST_DATA_WELCOME_PAGE_BUTTON="Get Started";
+const String TEST_DATA_LOGIN="Login";
+const String TEST_DATA_NOW_SHOWING_MOVIES_NAME="Last Days in the Desert";
+const String TEST_DATA_Coming_soon_MOVIES_NAME="Uncharted";
+const String TEST_DATA_MOVIE_DETAILS_GET_TICKET="Get Your Ticket";
+const String TEST_DATA_CINEMA_I="Cinema I";
+const String TEST_DATA_DATE="19";
+const String TEST_DATA_TIME="9:30 AM";
+const String TEST_DATA_CHOOSE_TIME_PAGE_NEXT="Next";

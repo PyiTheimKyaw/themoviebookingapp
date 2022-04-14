@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:the_movie_booking_app/data/models/movie_model.dart';
 import 'package:the_movie_booking_app/data/models/movie_model_impl.dart';

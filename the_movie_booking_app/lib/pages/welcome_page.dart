@@ -23,21 +23,21 @@ class _WelcomePageState extends State<WelcomePage> {
 
   @override
   void initState() {
-    ///User from database
-    mMovieModel.getLoginUserIfoDatabase().listen((value) {
-      if (value[0].token != null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => HomePage(
-                    userData: null,
-                    googleId: "",
-                  )),
-        );
-      }
-    }).onError((error) {
-      print("User data error at welcome page ${error.toString()}");
-    });
+    // ///User from database
+    // mMovieModel.getLoginUserIfoDatabase().listen((value) {
+    //   if (value[0].token != null) {
+    //     Navigator.push(
+    //       context,
+    //       MaterialPageRoute(
+    //           builder: (context) => HomePage(
+    //                 userData: null,
+    //                 googleId: "",
+    //               )),
+    //     );
+    //   }
+    // }).onError((error) {
+    //   print("User data error at welcome page ${error.toString()}");
+    // });
 
     super.initState();
   }

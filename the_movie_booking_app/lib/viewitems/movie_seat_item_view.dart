@@ -23,6 +23,7 @@ class MovieSeatItemView extends StatelessWidget {
         onTap(mMovieSeatVO);
       },
       child: Container(
+        key: Key(mMovieSeatVO?.seatName ?? ""),
         margin: EdgeInsets.symmetric(horizontal: 0.5, vertical: 2),
         decoration: BoxDecoration(
             color: _getSeatColor(mMovieSeatVO),

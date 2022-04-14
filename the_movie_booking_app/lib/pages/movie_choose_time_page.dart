@@ -191,6 +191,7 @@ class ChooseItemGridSectionView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListView.builder(
+
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemCount: cinemaInfo?.length ?? 0,
@@ -251,6 +252,7 @@ class ChooseIemGridView extends StatelessWidget {
               return GestureDetector(
                 onTap: () => onTap(cIndex, index),
                 child: Container(
+                  key: Key(cinemaInfo?[cIndex].timeSlots?[index].startTime ?? ""),
                   margin: EdgeInsets.only(
                       left: MARGIN_MEDIUM_2,
                       right: MARGIN_MEDIUM_2,

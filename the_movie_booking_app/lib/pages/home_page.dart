@@ -24,7 +24,7 @@ import '../data/vos/snack_list_vo.dart';
 
 class HomePage extends StatefulWidget {
   Map<String, dynamic>? userData;
-  String googleId;
+  String? googleId;
 
   HomePage({required this.userData, required this.googleId});
 
@@ -40,13 +40,13 @@ class _HomePageState extends State<HomePage> {
     "Help",
     "Rate us"
   ];
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    HomeBloc bloc=Provider.of(context,listen: false);
-    bloc.isDispose=true;
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   HomeBloc bloc=Provider.of(context,listen: false);
+  //   bloc.isDispose=true;
+  //   super.dispose();
+  // }
 
 
   @override

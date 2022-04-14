@@ -30,7 +30,7 @@ class MovieDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<MovieDetailsBloc>.value(
-      value:MovieDetailsBloc(movieId),
+      value: MovieDetailsBloc(movieId),
       child: Scaffold(
         floatingActionButton: Container(
           margin: EdgeInsets.only(bottom: MARGIN_MEDIUM_2),
@@ -38,33 +38,32 @@ class MovieDetailsPage extends StatelessWidget {
           height: FLOATING_ACTION_BUTTON_HEIGHT,
           child: Selector<MovieDetailsBloc, MovieVO?>(
             selector: (_, bloc) => bloc.mMovieDetails,
-            builder: (_, movieDetails, child) =>
-                FloatingActionButton.extended(
-                  backgroundColor: PRIMARY_COLOR,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MovieChooseTimePage(
+            builder: (_, movieDetails, child) => FloatingActionButton.extended(
+              backgroundColor: PRIMARY_COLOR,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MovieChooseTimePage(
                             movieId: movieId,
                             // token: widget.token,
                             movieName: movieDetails?.title ?? "",
                           )),
-                    );
-                    // Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => widget));
-                  },
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  label: Text(
-                    'Get Your Ticket',
-                    style: TextStyle(
-                      fontSize: TEXT_REGULAR,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                );
+                // Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => widget));
+              },
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              label: Text(
+                'Get Your Ticket',
+                style: TextStyle(
+                  fontSize: TEXT_REGULAR,
+                  fontWeight: FontWeight.w500,
                 ),
+              ),
+            ),
           ),
         ),
         body: Selector<MovieDetailsBloc, MovieVO?>(
@@ -99,8 +98,8 @@ class MovieDetailsPage extends StatelessWidget {
                           ),
                           GenreSectionView(
                               genreList:
-                              movieDetails?.getGenreListAsStringList() ??
-                                  []),
+                                  movieDetails?.getGenreListAsStringList() ??
+                                      []),
                           SizedBox(
                             height: MARGIN_MEDIUM,
                           ),
@@ -132,8 +131,6 @@ class MovieDetailsPage extends StatelessWidget {
     );
   }
 }
-
-
 
 class MovieTitleVieww extends StatelessWidget {
   String title;
@@ -176,7 +173,9 @@ class CastSectionView extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             children: castList
                     ?.map(
-                      (cast) => ActorsImageView(cast: cast),
+                      (cast) => (cast.profilePath?.isNotEmpty ?? false)
+                          ? ActorsImageView(cast: cast)
+                          : Container(),
                     )
                     .toList() ??
                 [],
@@ -363,9 +362,11 @@ class MovieDetailsSliverAppBarView extends StatelessWidget {
             background: Stack(
               children: [
                 Positioned.fill(
-                  child: MovieDetailsImageView(
-                    imageUrl: movie?.posterPath ?? "",
-                  ),
+                  child: (movie?.posterPath?.isNotEmpty ?? false)
+                      ? MovieDetailsImageView(
+                          imageUrl: movie?.posterPath ?? "",
+                        )
+                      : Container(),
                 ),
                 Align(
                   alignment: Alignment.center,
