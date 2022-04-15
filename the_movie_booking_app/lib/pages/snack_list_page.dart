@@ -301,6 +301,7 @@ class PromoCodeAndSubTotalSectionView extends StatelessWidget {
         ),
         Text(
           'Sub Total:$total\$',
+          key: Key("$total\$"),
           style: TextStyle(
               color: Color.fromRGBO(19, 210, 26, 1.0),
               fontSize: TEXT_REGULAR,
@@ -420,6 +421,7 @@ class SnackItemAndQuantityView extends StatelessWidget {
                   decrease(index);
                 },
                 child: Container(
+                  key: Key("Minus ${index.toString()}"),
                   width: MARGIN_MEDIUM_4,
                   decoration: BoxDecoration(
                     border: Border(
@@ -451,6 +453,7 @@ class SnackItemAndQuantityView extends StatelessWidget {
                   increase(index);
                 },
                 child: Container(
+                  key: Key("Plus ${index.toString()}"),
                   width: MARGIN_MEDIUM_4,
                   child: Center(
                     child: Icon(

@@ -134,7 +134,7 @@ class PaymentCardPage extends StatelessWidget {
                 Selector<PaymentCardBloc, List<CardVO>?>(
                   selector: (context, bloc) => bloc.cardList,
                   builder: (context, cardList, child) => PaymentCardSectionView(
-                    profile: cardList ?? [],
+                    profile: cardList?.reversed.toList() ?? [],
                     swap: (index) {
                       PaymentCardBloc bloc=Provider.of(context,listen: false);
                       bloc.chooseCard=cardList?[index];

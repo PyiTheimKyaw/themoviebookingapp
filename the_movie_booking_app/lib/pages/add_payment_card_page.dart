@@ -98,6 +98,7 @@ class CardInfoSectionView extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         UserInputFields(
+          textField: 'Card Number',
           card: 'Card Number',
           inputController: numController,
         ),
@@ -105,6 +106,7 @@ class CardInfoSectionView extends StatelessWidget {
           height: MARGIN_LARGE,
         ),
         UserInputFields(
+          textField: 'Card Holder',
           card: 'Card Holder',
           inputController: holderController,
         ),
@@ -116,6 +118,7 @@ class CardInfoSectionView extends StatelessWidget {
             Expanded(
               flex: 1,
               child: UserInputFields(
+                textField: 'Expiration Date',
                 card: 'Expiration Date',
                 inputController: dateController,
               ),
@@ -126,6 +129,7 @@ class CardInfoSectionView extends StatelessWidget {
             Expanded(
               flex: 1,
               child: UserInputFields(
+                textField: 'CVC',
                 card: 'CVC',
                 inputController: cvcController,
               ),
@@ -139,13 +143,15 @@ class CardInfoSectionView extends StatelessWidget {
 
 class UserInputFields extends StatelessWidget {
   final String card;
+  final String textField;
   TextEditingController inputController = TextEditingController();
 
-  UserInputFields({required this.card, required this.inputController});
+  UserInputFields({required this.card, required this.inputController,required this.textField});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      key: Key(textField),
       controller: inputController,
       decoration: InputDecoration(
         labelText: card,

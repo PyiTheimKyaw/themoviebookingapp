@@ -63,61 +63,140 @@ void main() async {
   testWidgets("Test", (WidgetTester tester) async {
     await tester.pumpWidget(MyApp());
     await tester.pumpAndSettle(Duration(seconds: 2));
-    ///Welcome Page
-    expect((find.byType(WelcomePage)), findsOneWidget);
-    expect((find.text(TEST_DATA_WELCOME)), findsOneWidget);
-    final getStartedButton=find.text(TEST_DATA_WELCOME_PAGE_BUTTON);
-    expect(getStartedButton, findsOneWidget);
-    await tester.tap(getStartedButton);
-    await tester.pumpAndSettle(Duration(seconds: 2));
 
-    ///Login Page
-    expect((find.byType(LoginAndSignInPage)), findsOneWidget);
-    expect((find.text(TEST_DATA_LOGIN)), findsOneWidget);
-    await tester.pumpAndSettle(Duration(seconds: 2));
-    final emailFormField=find.byType(TextField).first;
-    final passwordFormField=find.byType(TextField).last;
-    final loginButton=find.byType(FloatingActionButton).first;
-    await tester.enterText(emailFormField, "tester2@gmail.com");
-    await tester.pumpAndSettle(Duration(seconds: 2));
-    await tester.enterText(passwordFormField, "10900me!");
-    await tester.pumpAndSettle(Duration(seconds: 2));
-    await tester.tap(loginButton);
-    await tester.pumpAndSettle(Duration(seconds: 3));
+    await welcomePageUITest(tester);
 
-    ///HomePage
-    // expect((find.byType(HomePage)), findsOneWidget);
-    // await tester.pumpAndSettle(Duration(seconds: 3));
-    expect((find.text(TEST_DATA_NOW_SHOWING_MOVIES_NAME)), findsOneWidget);
-    await tester.pumpAndSettle(Duration(seconds: 3));
-    expect((find.text(TEST_DATA_Coming_soon_MOVIES_NAME)), findsOneWidget);
-    await tester.pumpAndSettle(Duration(seconds: 3));
-    await tester.tap(find.text(TEST_DATA_NOW_SHOWING_MOVIES_NAME));
-    await tester.pumpAndSettle(Duration(seconds: 6));
-    expect(find.text(TEST_DATA_NOW_SHOWING_MOVIES_NAME), findsOneWidget);
-    await tester.pumpAndSettle(Duration(seconds: 3));
-    await tester.tap(find.text(TEST_DATA_MOVIE_DETAILS_GET_TICKET));
-    await tester.pumpAndSettle(Duration(seconds: 3));
+    await loginPageUITest(tester);
 
-    ///Choose Time
-    expect(find.text(TEST_DATA_CINEMA_I), findsOneWidget);
-    await tester.pumpAndSettle(Duration(seconds: 3));
-    await tester.tap(find.text(TEST_DATA_DATE));
-    await tester.pumpAndSettle(Duration(seconds: 3));
-    await tester.tap(find.byKey(Key(TEST_DATA_TIME)).first);
-    await tester.pumpAndSettle(Duration(seconds: 5));
-    await tester.tap(find.text(TEST_DATA_CHOOSE_TIME_PAGE_NEXT));
-    await tester.pumpAndSettle(Duration(seconds: 5));
+    await homePageFeatures(tester);
 
-    ///Seat Page
-    expect((find.text(TEST_DATA_NOW_SHOWING_MOVIES_NAME)), findsOneWidget);
-    await tester.pumpAndSettle(Duration(seconds: 3));
-    await tester.tap(find.byKey(Key("A-3")));
-    await tester.tap(find.byKey(Key("A-4")));
-    await tester.tap(find.byKey(Key("A-5")));
-    await tester.tap(find.byKey(Key("F-6")));
-    await tester.pumpAndSettle(Duration(seconds: 3));
-    await tester.tap(find.byType(FloatingActionButton));
-    await tester.pumpAndSettle(Duration(seconds: 3));
+    await chooseTimePageUITest(tester);
+
+    await seatPageUITest(tester);
+
+    await paymentPageUITest(tester);
+
+    await carPageUITest(tester);
+
+    await voucherPageUITest(tester);
   });
+}
+
+welcomePageUITest(WidgetTester tester) async {
+  ///Welcome Page
+  expect((find.byType(WelcomePage)), findsOneWidget);
+  expect((find.text(TEST_DATA_WELCOME)), findsOneWidget);
+  final getStartedButton = find.text(TEST_DATA_WELCOME_PAGE_BUTTON);
+  expect(getStartedButton, findsOneWidget);
+  await tester.tap(getStartedButton);
+  await tester.pumpAndSettle(Duration(seconds: 2));
+}
+
+loginPageUITest(WidgetTester tester) async {
+  ///Login Page
+  expect((find.byType(LoginAndSignInPage)), findsOneWidget);
+  expect((find.text(TEST_DATA_LOGIN)), findsOneWidget);
+  await tester.pumpAndSettle(Duration(seconds: 2));
+  final emailFormField = find.byType(TextField).first;
+  final passwordFormField = find.byType(TextField).last;
+  final loginButton = find.byType(FloatingActionButton).first;
+  await tester.enterText(emailFormField, "aa2@gmail.com");
+  await tester.pumpAndSettle(Duration(seconds: 2));
+  await tester.enterText(passwordFormField, "10900me!");
+  await tester.pumpAndSettle(Duration(seconds: 2));
+  await tester.tap(loginButton);
+  await tester.pumpAndSettle(Duration(seconds: 2));
+}
+
+homePageFeatures(WidgetTester tester) async {
+  ///HomePage
+  // expect((find.byType(HomePage)), findsOneWidget);
+  // await tester.pumpAndSettle(Duration(seconds: 3));
+  expect((find.text(TEST_DATA_NOW_SHOWING_MOVIES_NAME)), findsOneWidget);
+  await tester.pumpAndSettle(Duration(seconds: 2));
+  expect((find.text(TEST_DATA_Coming_soon_MOVIES_NAME)), findsOneWidget);
+  await tester.pumpAndSettle(Duration(seconds: 2));
+  await tester.tap(find.text(TEST_DATA_NOW_SHOWING_MOVIES_NAME));
+  await tester.pumpAndSettle(Duration(seconds: 2));
+  expect(find.text(TEST_DATA_NOW_SHOWING_MOVIES_NAME), findsOneWidget);
+  await tester.pumpAndSettle(Duration(seconds: 2));
+  await tester.tap(find.text(TEST_DATA_MOVIE_DETAILS_GET_TICKET));
+  await tester.pumpAndSettle(Duration(seconds: 4));
+}
+
+chooseTimePageUITest(WidgetTester tester) async {
+  ///Choose Time
+  expect(find.text(TEST_DATA_CINEMA_I), findsOneWidget);
+  await tester.pumpAndSettle(Duration(seconds: 3));
+  await tester.tap(find.text(TEST_DATA_DATE));
+  await tester.pumpAndSettle(Duration(seconds: 3));
+  await tester.tap(find.byKey(Key(TEST_DATA_TIME)).first);
+  await tester.pumpAndSettle(Duration(seconds: 5));
+  await tester.tap(find.text(TEST_DATA_CHOOSE_TIME_PAGE_NEXT));
+  await tester.pumpAndSettle(Duration(seconds: 5));
+}
+
+seatPageUITest(WidgetTester tester) async {
+  ///Seat Page
+  expect((find.text(TEST_DATA_NOW_SHOWING_MOVIES_NAME)), findsOneWidget);
+  await tester.pumpAndSettle(Duration(seconds: 3));
+  await tester.tap(find.byKey(Key("A-3")));
+  await tester.tap(find.byKey(Key("A-4")));
+  await tester.tap(find.byKey(Key("A-5")));
+  await tester.tap(find.byKey(Key("F-6")));
+  await tester.pumpAndSettle(Duration(seconds: 3));
+  await tester.tap(find.byType(FloatingActionButton));
+  await tester.pumpAndSettle(Duration(seconds: 3));
+}
+
+paymentPageUITest(WidgetTester tester) async {
+  ///Payment Page
+  expect(find.text(TEST_DATA_POPCORN), findsOneWidget);
+  await tester.pumpAndSettle(Duration(seconds: 3));
+  await tester.tap(find.text("Credit card"));
+  await tester.pumpAndSettle(Duration(seconds: 3));
+  await tester.tap(find.byKey(Key("Plus 1")));
+  await tester.pumpAndSettle(Duration(seconds: 1));
+  await tester.tap(find.byKey(Key("Plus 1")));
+  await tester.pumpAndSettle(Duration(seconds: 1));
+  await tester.tap(find.byKey(Key("Minus 1")));
+  await tester.pumpAndSettle(Duration(seconds: 3));
+  expect(find.byKey(Key("9.0\$")), findsOneWidget);
+  await tester.pumpAndSettle(Duration(seconds: 3));
+  await tester.tap(find.byType(FloatingActionButton));
+  await tester.pumpAndSettle(Duration(seconds: 3));
+}
+
+carPageUITest(WidgetTester tester) async {
+  ///Card Page
+  expect(find.text(TEST_DATA_CARD_PAGE_PAYMENT_AMOUNT), findsOneWidget);
+  await tester.tap(find.byIcon(Icons.add_circle_rounded));
+  await tester.pumpAndSettle(Duration(microseconds: 5));
+  await tester.enterText(
+      find.byKey(Key(TEST_DATA_CARD_NUMBER)), "12434324324324");
+  await tester.pumpAndSettle(Duration(microseconds: 5));
+  await tester.enterText(
+      find.byKey(Key(TEST_DATA_CARD_HOLDER)), "Pyi Theim Kyaw");
+  await tester.pumpAndSettle(Duration(microseconds: 5));
+  await tester.enterText(find.byKey(Key(TEST_DATA_EXPIRATION_DATE)), "12/12");
+  await tester.pumpAndSettle(Duration(microseconds: 5));
+  await tester.enterText(find.byKey(Key(TEST_DATA_CVC)), "123");
+  await tester.pumpAndSettle(Duration(seconds: 3));
+  await tester.tap(find.byType(FloatingActionButton));
+  await tester.pumpAndSettle(Duration(seconds: 5));
+  expect(find.text("Pyi Theim Kyaw"), findsNWidgets(2));
+  await tester.pumpAndSettle(Duration(seconds: 5));
+  await tester.tap(find.byType(FloatingActionButton));
+  await tester.pumpAndSettle(Duration(seconds: 7));
+}
+
+voucherPageUITest(WidgetTester tester) async {
+  expect(find.text(TEST_DATA_NOW_SHOWING_MOVIES_NAME), findsOneWidget);
+  expect(find.text("2022-04-20"), findsOneWidget);
+  expect(find.text("Cinema I"), findsOneWidget);
+  expect(find.text("2"), findsOneWidget);
+  expect(find.text("A,F"), findsOneWidget);
+  expect(find.text("A-3,A-4,A-5,F-6"), findsOneWidget);
+  expect(find.text("\$11"), findsOneWidget);
+  await tester.pumpAndSettle(Duration(seconds: 7));
 }
