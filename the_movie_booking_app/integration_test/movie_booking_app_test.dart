@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors,prefer_const_literals_to_create_immutables, sized_box_for_whitespace, prefer_final_fields
+
 // @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -60,7 +62,7 @@ void main() async {
   await Hive.openBox<CardVO>(BOX_NAME_CARD_VO);
   await Hive.openBox<PaymentMethodVO>(BOX_NAME_PAYMENT_VO);
   await Hive.openBox<CreditVO>(BOX_NAME_CREDIT_VO);
-  testWidgets("Test", (WidgetTester tester) async {
+  testWidgets("UI test of whole movie booking app", (WidgetTester tester) async {
     await tester.pumpWidget(MyApp());
     await tester.pumpAndSettle(Duration(seconds: 2));
 
@@ -100,9 +102,9 @@ loginPageUITest(WidgetTester tester) async {
   final emailFormField = find.byType(TextField).first;
   final passwordFormField = find.byType(TextField).last;
   final loginButton = find.byType(FloatingActionButton).first;
-  await tester.enterText(emailFormField, "aa2@gmail.com");
+  await tester.enterText(emailFormField, TEST_DATA_EMAIL);
   await tester.pumpAndSettle(Duration(seconds: 2));
-  await tester.enterText(passwordFormField, "10900me!");
+  await tester.enterText(passwordFormField, TEST_DATA_PASSWORD);
   await tester.pumpAndSettle(Duration(seconds: 2));
   await tester.tap(loginButton);
   await tester.pumpAndSettle(Duration(seconds: 2));
@@ -140,10 +142,10 @@ seatPageUITest(WidgetTester tester) async {
   ///Seat Page
   expect((find.text(TEST_DATA_NOW_SHOWING_MOVIES_NAME)), findsOneWidget);
   await tester.pumpAndSettle(Duration(seconds: 3));
-  await tester.tap(find.byKey(Key("A-3")));
-  await tester.tap(find.byKey(Key("A-4")));
-  await tester.tap(find.byKey(Key("A-5")));
-  await tester.tap(find.byKey(Key("F-6")));
+  await tester.tap(find.byKey(Key(TEST_DATA_SEAT_ONE)));
+  await tester.tap(find.byKey(Key(TEST_DATA_SEAT_TWO)));
+  await tester.tap(find.byKey(Key(TEST_DATA_SEAT_THREE)));
+  await tester.tap(find.byKey(Key(TEST_DATA_SEAT_FOUR)));
   await tester.pumpAndSettle(Duration(seconds: 3));
   await tester.tap(find.byType(FloatingActionButton));
   await tester.pumpAndSettle(Duration(seconds: 3));
@@ -153,15 +155,15 @@ paymentPageUITest(WidgetTester tester) async {
   ///Payment Page
   expect(find.text(TEST_DATA_POPCORN), findsOneWidget);
   await tester.pumpAndSettle(Duration(seconds: 3));
-  await tester.tap(find.text("Credit card"));
+  await tester.tap(find.text(TEST_DATA_CREDIT_CARD));
   await tester.pumpAndSettle(Duration(seconds: 3));
-  await tester.tap(find.byKey(Key("Plus 1")));
+  await tester.tap(find.byKey(Key(TEST_DATA_PLUS)));
   await tester.pumpAndSettle(Duration(seconds: 1));
-  await tester.tap(find.byKey(Key("Plus 1")));
+  await tester.tap(find.byKey(Key(TEST_DATA_PLUS)));
   await tester.pumpAndSettle(Duration(seconds: 1));
-  await tester.tap(find.byKey(Key("Minus 1")));
+  await tester.tap(find.byKey(Key(TEST_DATA_MINUS)));
   await tester.pumpAndSettle(Duration(seconds: 3));
-  expect(find.byKey(Key("9.0\$")), findsOneWidget);
+  expect(find.byKey(Key(TEST_DATA_TOTAL_AMOUNT)), findsOneWidget);
   await tester.pumpAndSettle(Duration(seconds: 3));
   await tester.tap(find.byType(FloatingActionButton));
   await tester.pumpAndSettle(Duration(seconds: 3));
