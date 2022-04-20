@@ -42,7 +42,7 @@ class UserVO {
     this.totalExpense,
     this.profileImage,
     this.cards,
-    this.token,
+  {this.token,}
   );
 
   factory UserVO.fromJson(Map<String, dynamic> json) => _$UserVOFromJson(json);

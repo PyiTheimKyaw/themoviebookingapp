@@ -43,6 +43,12 @@ class CreditVO {
   @JsonKey(name: 'order')
   @HiveField(11)
   int? order;
+  @JsonKey(name: 'department')
+  @HiveField(12)
+  String? department;
+  @JsonKey(name: 'job')
+  @HiveField(13)
+  String? job;
 
   CreditVO(
       this.adult,
@@ -56,7 +62,9 @@ class CreditVO {
       this.castId,
       this.character,
       this.creditId,
-      this.order);
+      this.order,
+      this.department,
+      this.job);
 
   factory CreditVO.fromJson(Map<String, dynamic> json) =>
       _$CreditVOFromJson(json);
@@ -79,7 +87,9 @@ class CreditVO {
           castId == other.castId &&
           character == other.character &&
           creditId == other.creditId &&
-          order == other.order;
+          order == other.order &&
+          department == other.department &&
+          job == other.job;
 
   @override
   int get hashCode =>
@@ -94,5 +104,7 @@ class CreditVO {
       castId.hashCode ^
       character.hashCode ^
       creditId.hashCode ^
-      order.hashCode;
+      order.hashCode ^
+      department.hashCode ^
+      job.hashCode;
 }

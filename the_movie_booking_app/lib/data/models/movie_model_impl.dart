@@ -18,13 +18,23 @@ import 'package:the_movie_booking_app/persistence/daos/card_dao.dart';
 import 'package:the_movie_booking_app/persistence/daos/cinema_day_timeslot_dao.dart';
 import 'package:the_movie_booking_app/persistence/daos/credit_dao.dart';
 import 'package:the_movie_booking_app/persistence/daos/genre_dao.dart';
+import 'package:the_movie_booking_app/persistence/daos/impls/card_dao_impl.dart';
+import 'package:the_movie_booking_app/persistence/daos/impls/cinema_day_timeslot_dao_impl.dart';
+import 'package:the_movie_booking_app/persistence/daos/impls/credit_dao_impl.dart';
+import 'package:the_movie_booking_app/persistence/daos/impls/genre_dao_impl.dart';
+import 'package:the_movie_booking_app/persistence/daos/impls/movie_dao_impl.dart';
+import 'package:the_movie_booking_app/persistence/daos/impls/movie_seat_dao_impl.dart';
+import 'package:the_movie_booking_app/persistence/daos/impls/payment_dao_impl.dart';
+import 'package:the_movie_booking_app/persistence/daos/impls/profile_dao_impl.dart';
+import 'package:the_movie_booking_app/persistence/daos/impls/snack_llist_dao_impl.dart';
+import 'package:the_movie_booking_app/persistence/daos/impls/user_dao_impl.dart';
+import 'package:stream_transform/stream_transform.dart';
 import 'package:the_movie_booking_app/persistence/daos/movie_dao.dart';
 import 'package:the_movie_booking_app/persistence/daos/movie_seat_dao.dart';
 import 'package:the_movie_booking_app/persistence/daos/payment_dao.dart';
 import 'package:the_movie_booking_app/persistence/daos/profile_dao.dart';
-import 'package:the_movie_booking_app/persistence/daos/snack_llist_dao.dart';
+import 'package:the_movie_booking_app/persistence/daos/snack_list_dao.dart';
 import 'package:the_movie_booking_app/persistence/daos/user_dao.dart';
-import 'package:stream_transform/stream_transform.dart';
 
 import 'movie_model.dart';
 
@@ -40,17 +50,40 @@ class MovieModelImpl extends MovieModel {
   MovieDataAgent _dataAgent = RetrofitDataAgentImpl();
 
   //Dao
-  UserDao mUserDao = UserDao();
-  MovieDao mMovieDao = MovieDao();
-  GenreDao mGenreDao = GenreDao();
-  CreditDao mCreditDao = CreditDao();
-  SnackListDao mSnackListDao = SnackListDao();
-  CinemaDayTimeslotDao mCinemaDayTimeslotDao = CinemaDayTimeslotDao();
-  MovieSeatDao mMovieSeatDao = MovieSeatDao();
+  UserDaoImpl mUserDao = UserDaoImpl();
+  MovieDao mMovieDao = MovieDaoImpl();
+  GenreDao mGenreDao = GenreDaoImpl();
+  CreditDao mCreditDao = CreditDaoImpl();
+  SnackListDao mSnackListDao = SnackListDaoImpl();
+  CinemaDayTimeslotDao mCinemaDayTimeslotDao = CinemaDayTimeslotDaoImpl();
+  MovieSeatDao mMovieSeatDao = MovieSeatDaoImpl();
 
-  ProfileDao mProfileDao = ProfileDao();
-  CardDao mCardDao = CardDao();
-  PaymentDao mPaymentDao = PaymentDao();
+  ProfileDao mProfileDao = ProfileDaoImpl();
+  CardDao mCardDao = CardDaoImpl();
+  PaymentDao mPaymentDao = PaymentDaoImpl();
+
+  void setDaosAndDataAgents(
+      MovieDao movieDao,
+      GenreDao genreDao,
+      CreditDao creditDao,
+      SnackListDao snackListDao,
+      CinemaDayTimeslotDao cinemaDayTimeslotDao,
+      MovieSeatDao movieSeatDao,
+      ProfileDao profileDao,
+      CardDao cardDao,
+      PaymentDao paymentDao,
+      MovieDataAgent movieDataAgent) {
+    mMovieDao = movieDao;
+    mGenreDao = genreDao;
+    mCreditDao = creditDao;
+    mSnackListDao = snackListDao;
+    mCinemaDayTimeslotDao = cinemaDayTimeslotDao;
+    mMovieSeatDao = movieSeatDao;
+    mProfileDao = profileDao;
+    mCardDao = cardDao;
+    mPaymentDao = paymentDao;
+    _dataAgent=movieDataAgent;
+  }
 
   String getUserToken() {
     List<UserVO> userToken = mUserDao.getUserBox().values.toList();
@@ -58,7 +91,7 @@ class MovieModelImpl extends MovieModel {
     return "Bearer $token";
   }
 
-  String getUserTokenForProfile(){
+  String getUserTokenForProfile() {
     List<UserVO> userToken = mUserDao.getUserBox().values.toList();
     String token = userToken[0].token ?? "";
     return token;
@@ -238,13 +271,12 @@ class MovieModelImpl extends MovieModel {
     //   }
     //   return Future.value(value);
     // });
-    return _dataAgent.getProfile(getUserToken())
-        .then((value) {
+    return _dataAgent.getProfile(getUserToken()).then((value) {
       print("User token at imppl ${getUserToken()}");
-      var user=mUserDao.getUserBox().values.toList();
-      String tokenData=user.first.token ?? "";
-      var profileUserData=value as UserVO;
-      profileUserData.token=tokenData;
+      var user = mUserDao.getUserBox().values.toList();
+      String tokenData = user.first.token ?? "";
+      var profileUserData = value as UserVO;
+      profileUserData.token = tokenData;
       mProfileDao.saveProfileFromDatabase(profileUserData);
       // mCardDao.saveAllCards(value?.cards ?? []);
       return Future.value(value);
@@ -320,7 +352,7 @@ class MovieModelImpl extends MovieModel {
   // }
 
   @override
-  Future<void> logoutUserFromDatabase(String authorization) {
+  Future<void> logoutUserFromDatabase() {
     logoutUser(getUserToken());
     return Future.value(mUserDao.deleteUserBox());
   }
@@ -362,7 +394,8 @@ class MovieModelImpl extends MovieModel {
   @override
   Stream<UserVO?> getProfileFromDatabase() {
     getProfile();
-    return mProfileDao.getAllProfileEventStream()
+    return mProfileDao
+        .getAllProfileEventStream()
         .startWith(mProfileDao.getAllProfileStream(getUserTokenForProfile()))
         .map((event) => mProfileDao.getProfile(getUserTokenForProfile()));
   }

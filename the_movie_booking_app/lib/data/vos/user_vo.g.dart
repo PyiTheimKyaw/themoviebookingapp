@@ -24,7 +24,7 @@ class UserVOAdapter extends TypeAdapter<UserVO> {
       fields[4] as double?,
       fields[5] as String?,
       (fields[6] as List?)?.cast<CardVO>(),
-      fields[7] as String?,
+      token: fields[7] as String?,
     );
   }
 
@@ -75,7 +75,7 @@ UserVO _$UserVOFromJson(Map<String, dynamic> json) => UserVO(
       (json['cards'] as List<dynamic>?)
           ?.map((e) => CardVO.fromJson(e as Map<String, dynamic>))
           .toList(),
-      json['token'] as String?,
+      token: json['token'] as String?,
     );
 
 Map<String, dynamic> _$UserVOToJson(UserVO instance) => <String, dynamic>{

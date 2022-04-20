@@ -107,41 +107,42 @@ class MovieVO {
   @HiveField(27)
   bool? isComingSoon;
 
-
-  MovieVO(
-      this.adult,
-      this.backDropPath,
-      this.genreIds,
-      this.id,
-      this.originalLanguage,
-      this.originalTitle,
-      this.overView,
-      this.popularity,
-      this.posterPath,
-      this.releaseDate,
-      this.title,
-      this.video,
-      this.voteAverage,
-      this.voteCount,
-      this.belongsToCollection,
-      this.budget,
-      this.genres,
-      this.homePage,
-      this.imdbId,
-      this.productionCompanies,
-      this.productionCountries,
-      this.revenue,
-      this.runTime,
-      this.spokenLanguages,
-      this.status,
-      this.tagLine,
-      this.isNowPlaying,
-      this.isComingSoon);
+  MovieVO({
+    required this.adult,
+    required this.backDropPath,
+    required this.genreIds,
+    required this.id,
+    required this.originalLanguage,
+    required this.originalTitle,
+    required this.overView,
+    required this.popularity,
+    required this.posterPath,
+    required this.releaseDate,
+    required this.title,
+    required this.video,
+    required this.voteAverage,
+    required this.voteCount,
+    this.belongsToCollection,
+    this.budget,
+    this.genres,
+    this.homePage,
+    this.imdbId,
+    this.productionCompanies,
+    this.productionCountries,
+    this.revenue,
+    this.runTime,
+    this.spokenLanguages,
+    this.status,
+    this.tagLine,
+    required this.isNowPlaying,
+    required this.isComingSoon,
+  });
 
   factory MovieVO.fromJson(Map<String, dynamic> json) =>
       _$MovieVOFromJson(json);
 
   Map<String, dynamic> toJson() => _$MovieVOToJson(this);
+
   List<String> getGenreListAsStringList() {
     return genres?.map((genre) => genre.name ?? "").toList() ?? [];
   }
@@ -211,4 +212,3 @@ class MovieVO {
       isNowPlaying.hashCode ^
       isComingSoon.hashCode;
 }
-

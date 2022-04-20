@@ -46,7 +46,7 @@ class HomeBloc extends ChangeNotifier {
 
   Future<void> onTapLogoutUser() {
     return mMovieModel
-        .logoutUserFromDatabase(mUserInfo?.first.Authorization() ?? "");
+        .logoutUserFromDatabase();
   }
 
   Future<void> logOutFacebook() async {

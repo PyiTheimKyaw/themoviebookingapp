@@ -1,10 +1,12 @@
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:the_movie_booking_app/persistence/hive_constants.dart';
+
 part 'snack_list_vo.g.dart';
+
 @JsonSerializable()
-@HiveType(typeId: HIVE_TYPE_ID_SNACK_LIST_VO,adapterName: 'SnackListVOAdapter')
-class SnackListVO{
+@HiveType(typeId: HIVE_TYPE_ID_SNACK_LIST_VO, adapterName: 'SnackListVOAdapter')
+class SnackListVO {
   @JsonKey(name: 'id')
   @HiveField(0)
   int? id;
@@ -30,9 +32,8 @@ class SnackListVO{
   @HiveField(7)
   int? quantity;
 
-
   SnackListVO(this.id, this.name, this.description, this.price, this.image,
-      this.unitPrice, this.totalPrice, this.quantity);
+  {this.unitPrice, this.totalPrice, this.quantity});
 
   factory SnackListVO.fromJson(Map<String, dynamic> json) =>
       _$SnackListVOFromJson(json);

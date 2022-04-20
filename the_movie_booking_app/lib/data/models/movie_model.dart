@@ -50,8 +50,8 @@ abstract class MovieModel {
 
   Future<UserVO> getProfile();
 
-  Future<List<CardVO>?> postCreateCard(String number,
-      String holder, String date, String cvc);
+  Future<List<CardVO>?> postCreateCard(
+      String number, String holder, String date, String cvc);
 
   Future<CheckoutVO?> checkout(CheckOutRequest checkOutRequest);
 
@@ -69,7 +69,7 @@ abstract class MovieModel {
   Stream<MovieVO?> getMovieDetailsFromDatabase(int movieId);
 
   // Future<void> logOutUser();
-  Future<void> logoutUserFromDatabase(String authorization);
+  Future<void> logoutUserFromDatabase();
 
   Stream<List<SnackListVO>?> getSnackListFromDatabase();
 

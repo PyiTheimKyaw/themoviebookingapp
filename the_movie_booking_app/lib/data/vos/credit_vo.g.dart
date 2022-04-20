@@ -29,13 +29,15 @@ class CreditVOAdapter extends TypeAdapter<CreditVO> {
       fields[9] as String?,
       fields[10] as String?,
       fields[11] as int?,
+      fields[12] as String?,
+      fields[13] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, CreditVO obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.adult)
       ..writeByte(1)
@@ -59,7 +61,11 @@ class CreditVOAdapter extends TypeAdapter<CreditVO> {
       ..writeByte(10)
       ..write(obj.creditId)
       ..writeByte(11)
-      ..write(obj.order);
+      ..write(obj.order)
+      ..writeByte(12)
+      ..write(obj.department)
+      ..writeByte(13)
+      ..write(obj.job);
   }
 
   @override
@@ -90,6 +96,8 @@ CreditVO _$CreditVOFromJson(Map<String, dynamic> json) => CreditVO(
       json['character'] as String?,
       json['credit_id'] as String?,
       json['order'] as int?,
+      json['department'] as String?,
+      json['job'] as String?,
     );
 
 Map<String, dynamic> _$CreditVOToJson(CreditVO instance) => <String, dynamic>{
@@ -105,4 +113,6 @@ Map<String, dynamic> _$CreditVOToJson(CreditVO instance) => <String, dynamic>{
       'character': instance.character,
       'credit_id': instance.creditId,
       'order': instance.order,
+      'department': instance.department,
+      'job': instance.job,
     };

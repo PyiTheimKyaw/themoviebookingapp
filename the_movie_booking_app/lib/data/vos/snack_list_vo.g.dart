@@ -22,9 +22,9 @@ class SnackListVOAdapter extends TypeAdapter<SnackListVO> {
       fields[2] as String?,
       fields[3] as double?,
       fields[4] as String?,
-      fields[5] as int?,
-      fields[6] as int?,
-      fields[7] as int?,
+      unitPrice: fields[5] as int?,
+      totalPrice: fields[6] as int?,
+      quantity: fields[7] as int?,
     );
   }
 
@@ -71,9 +71,9 @@ SnackListVO _$SnackListVOFromJson(Map<String, dynamic> json) => SnackListVO(
       json['description'] as String?,
       (json['price'] as num?)?.toDouble(),
       json['image'] as String?,
-      json['unit_price'] as int?,
-      json['total_price'] as int?,
-      json['quantity'] as int?,
+      unitPrice: json['unit_price'] as int?,
+      totalPrice: json['total_price'] as int?,
+      quantity: json['quantity'] as int?,
     );
 
 Map<String, dynamic> _$SnackListVOToJson(SnackListVO instance) =>
