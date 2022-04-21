@@ -14,9 +14,13 @@ class HomeBloc extends ChangeNotifier {
   List<UserVO>? mUserInfo;
   List<SnackListVO>? mSnackList;
   MovieModel mMovieModel = MovieModelImpl();
-  bool isDispose=false;
+  bool isDispose = false;
 
-  HomeBloc() {
+  HomeBloc([MovieModel? movieModel]) {
+    if (movieModel != null) {
+      mMovieModel = movieModel;
+    }
+
     ///User from database
     mMovieModel.getLoginUserIfoDatabase().listen((user) {
       mUserInfo = user;
@@ -45,8 +49,7 @@ class HomeBloc extends ChangeNotifier {
   }
 
   Future<void> onTapLogoutUser() {
-    return mMovieModel
-        .logoutUserFromDatabase();
+    return mMovieModel.logoutUserFromDatabase();
   }
 
   Future<void> logOutFacebook() async {
@@ -68,8 +71,9 @@ class HomeBloc extends ChangeNotifier {
       print('Google logout failed ${error.toString()}');
     });
   }
-  bool notifySafely(){
-    if(!isDispose){
+
+  bool notifySafely() {
+    if (!isDispose) {
       print("notifySafely ======> $isDispose");
       notifyListeners();
     }

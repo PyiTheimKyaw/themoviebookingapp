@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:the_movie_booking_app/data/vos/card_vo.dart';
 import 'package:the_movie_booking_app/data/vos/cinema_day_time_slot_vo.dart';
+import 'package:the_movie_booking_app/data/vos/cinema_list_for_hive_vo.dart';
 import 'package:the_movie_booking_app/data/vos/credit_vo.dart';
 import 'package:the_movie_booking_app/data/vos/genre_vo.dart';
 import 'package:the_movie_booking_app/data/vos/movie_seat_vo.dart';
@@ -14,6 +15,10 @@ import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 
 List<CinemaDayTimeSlotVO> getMockCinemaDayTimeslot() {
   return [
+    // CinemaListForHiveVO([
+    //   CinemaDayTimeSlotVO(1, "Cinema I",
+    //       [TimeSlotVO(1, "9:30 AM", true), TimeSlotVO(2, "12:00 PM", false)])
+    // ]),
     CinemaDayTimeSlotVO(1, "Cinema I",
         [TimeSlotVO(1, "9:30 AM", true), TimeSlotVO(2, "12:00 PM", false)]),
     CinemaDayTimeSlotVO(2, "Cinema II",

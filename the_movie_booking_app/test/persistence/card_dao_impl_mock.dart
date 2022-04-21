@@ -18,9 +18,7 @@ class CardDaoImplMock extends CardDao {
 
   @override
   List<CardVO> getCards() {
-    if (getMockCardList() != null &&
-        getMockCardList().isNotEmpty ??
-        false) {
+    if (getMockCardList() != null && getMockCardList().isNotEmpty ?? false) {
       return getMockCardList();
     } else {
       return [];
