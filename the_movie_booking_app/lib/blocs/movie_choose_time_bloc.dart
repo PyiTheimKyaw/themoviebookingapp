@@ -19,7 +19,11 @@ class MovieChooseTimeBloc extends ChangeNotifier {
   ///Model
   MovieModel mMovieModel = MovieModelImpl();
 
-  MovieChooseTimeBloc(String movieId) {
+  MovieChooseTimeBloc(String movieId,[MovieModel? movieModel]) {
+
+    if(movieModel!=null){
+      mMovieModel=movieModel;
+    }
     dateData = DateTime.now().toString().split(" ")[0];
 
     ///Get User

@@ -19,7 +19,10 @@ class SnackListBloc extends ChangeNotifier {
   ///Model
   MovieModel mMovieModel = MovieModelImpl();
 
-  SnackListBloc(double total) {
+  SnackListBloc(double total,[MovieModel? movieModel]) {
+    if(movieModel!=null){
+      mMovieModel=movieModel;
+    }
     subTotal=total;
     ///User
     mMovieModel.getLoginUserIfoDatabase().listen((userInfo) {

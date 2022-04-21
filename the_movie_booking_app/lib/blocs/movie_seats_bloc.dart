@@ -16,7 +16,10 @@ class MovieSeatsBloc extends ChangeNotifier {
   ///Model
   MovieModel mMovieModel = MovieModelImpl();
 
-  MovieSeatsBloc(int timeSlotId, String date) {
+  MovieSeatsBloc(int timeSlotId, String date,[MovieModel? movieModel]) {
+    if(movieModel!=null){
+      mMovieModel=movieModel;
+    }
     ///User From database
     mMovieModel.getLoginUserIfoDatabase().listen((user) {
       mUserInfo = user;

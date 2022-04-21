@@ -9,7 +9,10 @@ class VoucherBloc extends ChangeNotifier{
   MovieVO? mMovieDetails;
   ///Model
   MovieModel mMovieModel=MovieModelImpl();
-  VoucherBloc(int movieId){
+  VoucherBloc(int movieId,[MovieModel? movieModel]){
+    if(movieModel!=null){
+      mMovieModel=movieModel;
+    }
     ///Movie Details Database
     mMovieModel
         .getMovieDetailsFromDatabase(movieId)

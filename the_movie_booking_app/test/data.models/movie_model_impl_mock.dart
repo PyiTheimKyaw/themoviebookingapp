@@ -39,8 +39,7 @@ class MovieModelImplMock extends MovieModel {
   @override
   Future<List<MovieSeatVO>?> getCinemaSeatingPlan(
       int timeslotId, String bookingDate) {
-    // TODO: implement getImdbRating
-    throw UnimplementedError();
+   return Future.value(getMockCinemaSeatingPlan().first);
   }
 
   @override
