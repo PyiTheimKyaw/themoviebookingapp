@@ -49,7 +49,7 @@ class MovieDataAgentImplMock extends MovieDataAgent {
 
   @override
   Future<List<CreditVO>?> getCreditsByMovie(int movieId) {
-    return Future.value(getMOckCreditsByMovie());
+    return Future.value(getMockCreditsByMovie());
   }
 
   @override

@@ -18,9 +18,9 @@ class CreditDaoImplMock extends CreditDao {
 
   @override
   List<CreditVO> getCast() {
-    if (getMOckCreditsByMovie() != null && getMOckCreditsByMovie().isNotEmpty ??
+    if (getMockCreditsByMovie() != null && getMockCreditsByMovie().isNotEmpty ??
         false) {
-      return getMOckCreditsByMovie();
+      return getMockCreditsByMovie();
     } else {
       return [];
     }
@@ -28,7 +28,7 @@ class CreditDaoImplMock extends CreditDao {
 
   @override
   Stream<List<CreditVO>> getCastStream() {
-    return Stream.value(getMOckCreditsByMovie());
+    return Stream.value(getMockCreditsByMovie());
   }
 
   @override

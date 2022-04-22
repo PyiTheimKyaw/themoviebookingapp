@@ -20,7 +20,7 @@ void main() {
           true);
     });
     test("Fetch Snack List Test", () async* {
-      expect(homeBloc?.mSnackList?.contains(getMockSnackList()), true);
+      expect(homeBloc?.mSnackList?.contains(getMockSnackList().first), true);
     });
   });
 }

@@ -86,7 +86,7 @@ List<MovieVO> getMockMoviesForTest() {
   ];
 }
 
-List<CreditVO> getMOckCreditsByMovie() {
+List<CreditVO> getMockCreditsByMovie() {
   return [
     CreditVO(
         false,

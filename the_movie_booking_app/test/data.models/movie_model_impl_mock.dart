@@ -61,7 +61,7 @@ class MovieModelImplMock extends MovieModel {
 
   @override
   Stream<List<CreditVO>> getCreditsFromDatabase(int movieId) {
-    return Stream.value(getMOckCreditsByMovie());
+    return Stream.value(getMockCreditsByMovie());
   }
 
   @override
@@ -89,6 +89,7 @@ class MovieModelImplMock extends MovieModel {
   @override
   void getMovieDetails(int movieId) {
     // TODO: implement getMovieDetails
+    throw UnimplementedError();
   }
 
   @override

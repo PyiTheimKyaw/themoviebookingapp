@@ -118,11 +118,14 @@ void main() {
           ]));
     });
 
-    test("Get Genres", () async* {
+    test("Get Genres test ", () {
+      expect(movieModel.getGenres(), completion(equals(getMockGenreList())));
+    });
+    test("Get Genres From Database Test", () async {
+      await movieModel.getGenres();
       expect(movieModel.getGenresFromDatabase(),
           completion(equals(getMockGenreList())));
     });
-
     test("Get credits from Movies", () async* {
       expect(movieModel.getCreditsFromDatabase(1), () {
         emits([
@@ -144,7 +147,7 @@ void main() {
         ]);
       });
     });
-    test("Get Movie Details test", () async* {
+    test("Get Movie Details test ", () async* {
       expect(movieModel.getMovieDetailsFromDatabase(1),
           completion(equals(getMockMoviesForTest().first)));
     });

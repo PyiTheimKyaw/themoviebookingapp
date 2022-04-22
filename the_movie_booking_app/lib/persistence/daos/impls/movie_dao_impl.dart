@@ -54,7 +54,7 @@ class MovieDaoImpl extends MovieDao {
   List<MovieVO> getNowPlayingMovies() {
     if (getAllMovies() != null && (getAllMovies().isNotEmpty ?? false)) {
       return getAllMovies()
-          .where((element) => element?.isNowPlaying ?? false)
+          .where((element) => element.isNowPlaying ?? false)
           .toList();
     } else {
       return [];
@@ -65,7 +65,7 @@ class MovieDaoImpl extends MovieDao {
   List<MovieVO> getComingSoonMovies() {
     if (getAllMovies() != null && (getAllMovies().isNotEmpty ?? false)) {
       return getAllMovies()
-          .where((element) => element?.isComingSoon ?? false)
+          .where((element) => element.isComingSoon ?? false)
           .toList();
     } else {
       return [];

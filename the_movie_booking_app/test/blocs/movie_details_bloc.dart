@@ -14,7 +14,7 @@ void main() {
       expect(movieDetailsBloc?.mMovieDetails, getMockMoviesForTest().first);
     });
     test("Fetch Credits Test", () async*{
-      expect(movieDetailsBloc?.mCast?.contains(getMOckCreditsByMovie()), true);
+      expect(movieDetailsBloc?.mCast?.contains(getMockCreditsByMovie()), true);
     });
   });
 }

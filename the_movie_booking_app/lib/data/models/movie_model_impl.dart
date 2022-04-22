@@ -47,7 +47,7 @@ class MovieModelImpl extends MovieModel {
 
   MovieModelImpl._internal();
 
-  MovieDataAgent _dataAgent = RetrofitDataAgentImpl();
+  MovieDataAgent dataAgent = RetrofitDataAgentImpl();
 
   //Dao
   UserDaoImpl mUserDao = UserDaoImpl();
@@ -82,7 +82,7 @@ class MovieModelImpl extends MovieModel {
     mProfileDao = profileDao;
     mCardDao = cardDao;
     mPaymentDao = paymentDao;
-    _dataAgent=movieDataAgent;
+    dataAgent = movieDataAgent;
   }
 
   String getUserToken() {
@@ -100,7 +100,7 @@ class MovieModelImpl extends MovieModel {
   @override
   Future<UserVO> loginWithEmail(String email, String password) {
     debugPrint("Data Login =========> $email and $password");
-    return _dataAgent.loginWithEmail(email, password).then((userInfo) {
+    return dataAgent.loginWithEmail(email, password).then((userInfo) {
       var user = userInfo?[0] as UserVO;
       user.token = userInfo?[1] as String;
       mUserDao.saveUserInfo(user);
@@ -110,7 +110,7 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Future<UserVO> loginWithFacebook(String accessToken) {
-    return _dataAgent.loginWithFacebook(accessToken).then((userInfo) {
+    return dataAgent.loginWithFacebook(accessToken).then((userInfo) {
       var user = userInfo?[0] as UserVO;
       user.token = userInfo?[1] as String;
       mUserDao.saveUserInfo(user);
@@ -120,7 +120,7 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Future<UserVO> loginWithGoogle(String accessToken) {
-    return _dataAgent.loginWithGoogle(accessToken).then((userInfo) {
+    return dataAgent.loginWithGoogle(accessToken).then((userInfo) {
       var user = userInfo?[0] as UserVO;
       user.token = userInfo?[1] as String;
       mUserDao.saveUserInfo(user);
@@ -132,7 +132,7 @@ class MovieModelImpl extends MovieModel {
   Future<UserVO> registerWithEmail(String name, String email, String phone,
       String password, String? googleAccessToken, String? facebookAccessToken) {
     debugPrint("Data Login =========> $email and $password");
-    return _dataAgent
+    return dataAgent
         .registerWithEmail(name, email, phone, password, googleAccessToken,
             facebookAccessToken)
         .then((userInfo) {
@@ -146,7 +146,7 @@ class MovieModelImpl extends MovieModel {
 
   @override
   void getNowPlayingMovies(int page) {
-    _dataAgent.getNowPlayingMovies(page).then((movies) async {
+    dataAgent.getNowPlayingMovies(page).then((movies) async {
       List<MovieVO> nowPlaying = movies?.map((movie) {
             movie.isNowPlaying = true;
             movie.isComingSoon = false;
@@ -159,7 +159,7 @@ class MovieModelImpl extends MovieModel {
 
   @override
   void getComingSoonMovies(int page) {
-    _dataAgent.getComingSoonMovies(page).then((movies) async {
+    dataAgent.getComingSoonMovies(page).then((movies) async {
       List<MovieVO> nowPlaying = movies?.map((movie) {
             movie.isNowPlaying = false;
             movie.isComingSoon = true;
@@ -172,7 +172,7 @@ class MovieModelImpl extends MovieModel {
 
   @override
   void getCreditsByMovie(int movieId) {
-    _dataAgent.getCreditsByMovie(movieId).then((value) {
+    dataAgent.getCreditsByMovie(movieId).then((value) {
       if (value != null) {
         mCreditDao.saveAllCasts(value);
       }
@@ -181,7 +181,7 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Future<List<GenreVO>?> getGenres() {
-    return _dataAgent.getGenres().then((genres) async {
+    return dataAgent.getGenres().then((genres) async {
       mGenreDao.saveAllGenres(genres ?? []);
       return Future.value(genres);
     });
@@ -189,7 +189,7 @@ class MovieModelImpl extends MovieModel {
 
   @override
   void getMovieDetails(int movieId) {
-    _dataAgent.getMovieDetails(movieId).then((movie) async {
+    dataAgent.getMovieDetails(movieId).then((movie) {
       if (movie != null) {
         mMovieDao.saveSingleMovie(movie);
       }
@@ -198,20 +198,20 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Future<List<MovieVO>?> getImdbRating(String externalId) {
-    return _dataAgent.getImdbRating(externalId);
+    return dataAgent.getImdbRating(externalId);
   }
 
   @override
   Future<void> logoutUser(String authorization) {
     debugPrint("UserCode =========> $authorization");
-    return Future.value(_dataAgent.logoutUser(getUserToken()));
+    return Future.value(dataAgent.logoutUser(getUserToken()));
   }
 
   @override
   void getCinemaDayTimeslot(String authorization, String movieId, String date) {
     print(
         '"Cinema day time Slot data layer ======> $authorization $movieId $date');
-    _dataAgent
+    dataAgent
         .getCinemaDayTimeslot(getUserToken(), movieId.toString(), date)
         .then((result) {
       CinemaListForHiveVO cListHiveVO = CinemaListForHiveVO(result);
@@ -231,7 +231,7 @@ class MovieModelImpl extends MovieModel {
   @override
   Future<List<MovieSeatVO>?> getCinemaSeatingPlan(
       int timeslotId, String bookingDate) {
-    return _dataAgent
+    return dataAgent
         .getCinemaSeatingPlan(getUserToken(), timeslotId, bookingDate)
         .then((data) {
       List<MovieSeatVO> seatingPlan =
@@ -247,14 +247,14 @@ class MovieModelImpl extends MovieModel {
 
   @override
   void getSnackList() {
-    _dataAgent.getSnackList(getUserToken()).then((value) async {
+    dataAgent.getSnackList(getUserToken()).then((value) async {
       mSnackListDao.saveSnacks(value!);
     });
   }
 
   @override
   void getPaymentMethodList(String authorization) {
-    _dataAgent.getPaymentMethodList(getUserToken()).then((value) {
+    dataAgent.getPaymentMethodList(getUserToken()).then((value) {
       mPaymentDao.savePayment(value!);
     });
   }
@@ -271,7 +271,7 @@ class MovieModelImpl extends MovieModel {
     //   }
     //   return Future.value(value);
     // });
-    return _dataAgent.getProfile(getUserToken()).then((value) {
+    return dataAgent.getProfile(getUserToken()).then((value) {
       print("User token at imppl ${getUserToken()}");
       var user = mUserDao.getUserBox().values.toList();
       String tokenData = user.first.token ?? "";
@@ -287,14 +287,14 @@ class MovieModelImpl extends MovieModel {
   Future<List<CardVO>?> postCreateCard(
       String number, String holder, String date, String cvc) {
     print("Create card token ");
-    return _dataAgent.postCreateCard(getUserToken(), number, holder, date, cvc);
+    return dataAgent.postCreateCard(getUserToken(), number, holder, date, cvc);
   }
 
   @override
   Future<CheckoutVO?> checkout(CheckOutRequest checkOutRequest) {
     print(
         'Checkout request ======>  ${checkOutRequest.snacks} ${checkOutRequest.cardId} ${checkOutRequest.cinemaId} ${checkOutRequest.movieId}  ${checkOutRequest.cinemaDayTimeSlotId} ${checkOutRequest.bookingDate} ${checkOutRequest.seatNumber}');
-    return _dataAgent.checkout(getUserToken(), checkOutRequest);
+    return dataAgent.checkout(getUserToken(), checkOutRequest);
   }
 
   ///Database
@@ -319,8 +319,8 @@ class MovieModelImpl extends MovieModel {
     getComingSoonMovies(1);
     return mMovieDao
         .getAllMoviesEventStream()
-        .startWith(mMovieDao.getNowPlayingMoviesStream())
-        .map((event) => mMovieDao.getNowPlayingMovies());
+        .startWith(mMovieDao.getComingSoonMoviesStream())
+        .map((event) => mMovieDao.getComingSoonMovies());
   }
 
   @override
@@ -328,8 +328,8 @@ class MovieModelImpl extends MovieModel {
     getNowPlayingMovies(1);
     return mMovieDao
         .getAllMoviesEventStream()
-        .startWith(mMovieDao.getComingSoonMoviesStream())
-        .map((event) => mMovieDao.getComingSoonMovies());
+        .startWith(mMovieDao.getNowPlayingMoviesStream())
+        .map((event) => mMovieDao.getNowPlayingMovies());
   }
 
   @override

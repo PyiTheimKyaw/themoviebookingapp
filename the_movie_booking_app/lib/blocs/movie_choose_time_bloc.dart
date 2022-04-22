@@ -45,7 +45,7 @@ class MovieChooseTimeBloc extends ChangeNotifier {
       notifyListeners();
     }).onError((error) {
       print(
-          "Cinema dau time slot error default date at choose time page ${error.toString()}");
+          "Cinema day time slot error default date at choose time page ${error.toString()}");
     });
   }
 

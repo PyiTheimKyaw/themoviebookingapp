@@ -122,7 +122,7 @@ homePageFeatures(WidgetTester tester) async {
   await tester.pumpAndSettle(Duration(seconds: 2));
   expect(find.text(TEST_DATA_NOW_SHOWING_MOVIES_NAME), findsOneWidget);
   await tester.pumpAndSettle(Duration(seconds: 2));
-  await tester.tap(find.text(TEST_DATA_MOVIE_DETAILS_GET_TICKET));
+  await tester.tap(find.byType(FloatingActionButton));
   await tester.pumpAndSettle(Duration(seconds: 4));
 }
 
@@ -187,14 +187,14 @@ carPageUITest(WidgetTester tester) async {
   await tester.tap(find.byType(FloatingActionButton));
   await tester.pumpAndSettle(Duration(seconds: 5));
   expect(find.text("Pyi Theim Kyaw"), findsNWidgets(2));
-  await tester.pumpAndSettle(Duration(seconds: 5));
+  await tester.pumpAndSettle(Duration(seconds: 3));
   await tester.tap(find.byType(FloatingActionButton));
-  await tester.pumpAndSettle(Duration(seconds: 7));
+  await tester.pumpAndSettle(Duration(seconds: 3));
 }
 
 voucherPageUITest(WidgetTester tester) async {
   expect(find.text(TEST_DATA_NOW_SHOWING_MOVIES_NAME), findsOneWidget);
-  expect(find.text("2022-04-20"), findsOneWidget);
+  expect(find.text("2022-04-24"), findsOneWidget);
   expect(find.text("Cinema I"), findsOneWidget);
   expect(find.text("2"), findsOneWidget);
   expect(find.text("A,F"), findsOneWidget);
