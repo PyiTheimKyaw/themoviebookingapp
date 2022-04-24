@@ -20,7 +20,7 @@ List<CinemaDayTimeSlotVO> getMockCinemaDayTimeslot() {
     //       [TimeSlotVO(1, "9:30 AM", true), TimeSlotVO(2, "12:00 PM", false)])
     // ]),
     CinemaDayTimeSlotVO(1, "Cinema I",
-        [TimeSlotVO(1, "9:30 AM", true), TimeSlotVO(2, "12:00 PM", false)]),
+        [TimeSlotVO(1, "9:30 AM", false), TimeSlotVO(2, "12:00 PM", false)]),
     CinemaDayTimeSlotVO(2, "Cinema II",
         [TimeSlotVO(15, "10:00 AM", false), TimeSlotVO(16, "1:30 PM", false)]),
     CinemaDayTimeSlotVO(3, "Cinema III", [

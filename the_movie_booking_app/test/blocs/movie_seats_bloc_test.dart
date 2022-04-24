@@ -27,23 +27,25 @@ void main() {
           movieSeatsBloc?.mMovieSeats?.contains(getMockCinemaSeatingPlan().first.first),
           true);
     });
-    test("Fetch total picked seats test", () async {
+    test("Fetch total picked seats,total price and tickets test", () async {
       movieSeatsBloc
           ?.onChooseSeat(MovieSeatVO(3, "available", "B-2", "B", 2, true));
       await Future.delayed(Duration(seconds: 6));
       expect(movieSeatsBloc?.pickSeat,["B-2"]);
-    });
-    test("Fetch Total price test", () async {
-      movieSeatsBloc
-          ?.onChooseSeat(MovieSeatVO(3, "available", "B-2", "B", 2, true));
-      await Future.delayed(Duration(seconds: 5));
       expect(movieSeatsBloc?.totalPrice, 2.0);
-    });
-    test("Fetch Total tickets test", ()async{
-      movieSeatsBloc
-          ?.onChooseSeat(MovieSeatVO(3, "available", "B-2", "B", 2, true));
-      await Future.delayed(Duration(seconds: 2));
       expect(movieSeatsBloc?.tickets, 1);
     });
+    // test("Fetch Total price test", () async {
+    //   movieSeatsBloc
+    //       ?.onChooseSeat(MovieSeatVO(3, "available", "B-2", "B", 2, true));
+    //   await Future.delayed(Duration(seconds: 5));
+    //   expect(movieSeatsBloc?.totalPrice, 2.0);
+    // });
+    // test("Fetch Total tickets test", ()async{
+    //   movieSeatsBloc
+    //       ?.onChooseSeat(MovieSeatVO(3, "available", "B-2", "B", 2, true));
+    //   await Future.delayed(Duration(seconds: 2));
+    //   expect(movieSeatsBloc?.tickets, 1);
+    // });
   });
 }

@@ -10,11 +10,13 @@ void main() {
     setUp(() {
       snackListBloc = SnackListBloc(12, MovieModelImplMock());
     });
-    test("Fetch snack List test", ()  {
-      expect(snackListBloc?.mSnacksList?.contains(getMockSnackList().first), true);
+    test("Fetch snack List test", () {
+      expect(
+          snackListBloc?.mSnacksList?.contains(getMockSnackList().first), true);
     });
-    test("Fetch Payment List test", ()  {
-      expect(snackListBloc?.mPaymentMethod?.contains(getMockPaymentMethod().first),
+    test("Fetch Payment List test", () {
+      expect(
+          snackListBloc?.mPaymentMethod?.contains(getMockPaymentMethod().first),
           true);
     });
 
@@ -31,8 +33,7 @@ void main() {
     test("Fetch User choose payment test", () async {
       snackListBloc?.selectPayment(1);
       await Future.delayed(Duration(seconds: 3));
-      expect(snackListBloc?.mPaymentMethod?.contains(getMockPaymentMethod().first),
-          true);
+      expect(snackListBloc?.mPaymentMethod?[1].isSelected == true, true);
     });
   });
 }
