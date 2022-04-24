@@ -41,7 +41,10 @@ List<List<MovieSeatVO>> getMockCinemaSeatingPlan() {
     [
       MovieSeatVO(1, "text", "", "B", 0, false),
       MovieSeatVO(2, "taken", "B-1", "B", 2, true),
-      MovieSeatVO(3, "available", "B-2", "B", 2, false),
+      MovieSeatVO(3, "available", "B-2", "B", 2, true),
+    ],
+    [
+      MovieSeatVO(9, "available", "B-8", "B", 2, false),
     ],
   ];
 }
@@ -188,7 +191,7 @@ List<SnackListVO> getMockSnackList() {
 
 List<PaymentMethodVO> getMockPaymentMethod() {
   return [
-    PaymentMethodVO(1, "Credit card", "Visa, Master Card, JCB", true),
+    PaymentMethodVO(1, "Credit card", "Visa, Master Card, JCB", false),
     PaymentMethodVO(
         2, "Internet Banking (ATM card)", "Visa, Master Card, JCB", false),
     PaymentMethodVO(3, "E-Wallet", "AyaPay, KbzPay, WavePay", false),

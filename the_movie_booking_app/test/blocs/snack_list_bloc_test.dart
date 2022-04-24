@@ -10,28 +10,28 @@ void main() {
     setUp(() {
       snackListBloc = SnackListBloc(12, MovieModelImplMock());
     });
-    test("Fetch snack List test", () async* {
-      expect(snackListBloc?.mSnacksList?.contains(getMockSnackList()), true);
+    test("Fetch snack List test", ()  {
+      expect(snackListBloc?.mSnacksList?.contains(getMockSnackList().first), true);
     });
-    test("Fetch Payment List test", () async* {
-      expect(snackListBloc?.mPaymentMethod?.contains(getMockPaymentMethod()),
+    test("Fetch Payment List test", ()  {
+      expect(snackListBloc?.mPaymentMethod?.contains(getMockPaymentMethod().first),
           true);
     });
 
-    test("Fetch User choose increase test", () async* {
+    test("Fetch User choose increase test", () async {
       snackListBloc?.onTapIncreaseSnack(1);
       await Future.delayed(Duration(seconds: 3));
-      expect(snackListBloc?.mSnacksList?.contains(getMockSnackList()), true);
+      expect(snackListBloc?.subTotal, 14.0);
     });
-    test("Fetch User choose decrease test", () async* {
+    test("Fetch User choose decrease test", () async {
       snackListBloc?.onTapDecreaseSnack(1);
       await Future.delayed(Duration(seconds: 3));
-      expect(snackListBloc?.mSnacksList?.contains(getMockSnackList()), true);
+      expect(snackListBloc?.subTotal, 12.0);
     });
-    test("Fetch User choose payment test", () async* {
-      snackListBloc?.onPressedPayment();
+    test("Fetch User choose payment test", () async {
+      snackListBloc?.selectPayment(1);
       await Future.delayed(Duration(seconds: 3));
-      expect(snackListBloc?.mPaymentMethod?.contains(getMockPaymentMethod()),
+      expect(snackListBloc?.mPaymentMethod?.contains(getMockPaymentMethod().first),
           true);
     });
   });

@@ -14,16 +14,36 @@ void main() {
       movieSeatsBloc = MovieSeatsBloc(1, "2021-6-28", MovieModelImplMock());
     });
 
-    test("Fetch Seats Test", () async* {
-      expect(movieSeatsBloc?.mMovieSeats?.contains(getMockCinemaSeatingPlan()),
+    test("Fetch Seats Test", ()  {
+      expect(movieSeatsBloc?.mMovieSeats?.contains(getMockCinemaSeatingPlan().first.first),
           true);
     });
 
-    test("Fetch choose seat test", () async* {
-      movieSeatsBloc?.onChooseSeat(movieSeat);
-      await Future.delayed(Duration(seconds: 2));
-      expect(movieSeatsBloc?.mMovieSeats?.contains(getMockCinemaSeatingPlan()),
+    test("Fetch choose seat test", () async {
+      movieSeatsBloc
+          ?.onChooseSeat(MovieSeatVO(3, "available", "B-2", "B", 2, true));
+      await Future.delayed(Duration(seconds: 6));
+      expect(
+          movieSeatsBloc?.mMovieSeats?.contains(getMockCinemaSeatingPlan().first.first),
           true);
+    });
+    test("Fetch total picked seats test", () async {
+      movieSeatsBloc
+          ?.onChooseSeat(MovieSeatVO(3, "available", "B-2", "B", 2, true));
+      await Future.delayed(Duration(seconds: 6));
+      expect(movieSeatsBloc?.pickSeat,["B-2"]);
+    });
+    test("Fetch Total price test", () async {
+      movieSeatsBloc
+          ?.onChooseSeat(MovieSeatVO(3, "available", "B-2", "B", 2, true));
+      await Future.delayed(Duration(seconds: 5));
+      expect(movieSeatsBloc?.totalPrice, 2.0);
+    });
+    test("Fetch Total tickets test", ()async{
+      movieSeatsBloc
+          ?.onChooseSeat(MovieSeatVO(3, "available", "B-2", "B", 2, true));
+      await Future.delayed(Duration(seconds: 2));
+      expect(movieSeatsBloc?.tickets, 1);
     });
   });
 }
