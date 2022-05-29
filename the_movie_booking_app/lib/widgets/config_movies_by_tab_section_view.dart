@@ -7,7 +7,6 @@ import 'package:the_movie_booking_app/rescources/dimens.dart';
 import 'package:the_movie_booking_app/rescources/strings.dart';
 import 'package:the_movie_booking_app/viewitems/movie_view.dart';
 import 'package:the_movie_booking_app/widgets/config_now_showing_and_coming_soon_movies_section_view.dart';
-import 'package:the_movie_booking_app/widgets/movie_view_title_text_view.dart';
 
 class ConfigMoviesByTabSectionView extends StatefulWidget {
   const ConfigMoviesByTabSectionView({
@@ -41,7 +40,7 @@ class _ConfigMoviesByTabSectionViewState
           unselectedLabelColor: Colors.black38,
           indicatorSize: TabBarIndicatorSize.label,
           indicatorColor: PRIMARY_COLOR,
-          tabs: [
+          tabs: const [
             Tab(
               text: "Now Showing",
             ),
@@ -50,82 +49,91 @@ class _ConfigMoviesByTabSectionViewState
             ),
           ],
         ),
-        SizedBox(height: MARGIN_MEDIUM_4,),
-        Expanded(
-          child: TabBarView(
-              controller: tabController,
-              children: [
-                Selector<HomeBloc, List<MovieVO>?>(
-                  selector: (context, bloc) => bloc.mNowPlayingMovies,
-                  builder: (context, nowPlayingMovies, child) =>
-                      NowShowingAndComingSoonMovieByGridSectionView(
-                        title: HOME_PAGE_NOW_SHOWING_TEXT,
-                        onTapMovie: (movieId) {
-                          navigateToMovieDetailsScreen(context, movieId);
-                        },
-                        movie: nowPlayingMovies,
-                      ),
-                ),
-                Selector<HomeBloc, List<MovieVO>?>(
-                  selector: (context, bloc) => bloc.mComingSoonMovies,
-                  builder: (context, comingSoonMovies, child) =>
-                      NowShowingAndComingSoonMovieByGridSectionView(
-                        title: HOME_PAGE_COMING_SOON_TEXT,
-                        onTapMovie: (movieId) {
-                          navigateToMovieDetailsScreen(context, movieId);
-                        },
-                        movie: comingSoonMovies,
-                      ),
-                ),
-          ])
+        const SizedBox(
+          height: MARGIN_MEDIUM_4,
         ),
+        Expanded(
+            child: TabBarView(controller: tabController, children: [
+          Selector<HomeBloc, List<MovieVO>?>(
+            selector: (context, bloc) => bloc.mNowPlayingMovies,
+            builder: (context, nowPlayingMovies, child) =>
+                NowShowingAndComingSoonMovieByGridSectionView(
+              title: HOME_PAGE_NOW_SHOWING_TEXT,
+              onTapMovie: (movieId) {
+                navigateToMovieDetailsScreen(context, movieId);
+              },
+              movie: nowPlayingMovies,
+            ),
+          ),
+          Selector<HomeBloc, List<MovieVO>?>(
+            selector: (context, bloc) => bloc.mComingSoonMovies,
+            builder: (context, comingSoonMovies, child) =>
+                NowShowingAndComingSoonMovieByGridSectionView(
+              title: HOME_PAGE_COMING_SOON_TEXT,
+              onTapMovie: (movieId) {
+                navigateToMovieDetailsScreen(context, movieId);
+              },
+              movie: comingSoonMovies,
+            ),
+          ),
+        ])),
       ],
     );
   }
 }
+
 class NowShowingAndComingSoonMovieByGridSectionView extends StatelessWidget {
   final String title;
   final Function(int?) onTapMovie;
   final List<MovieVO>? movie;
 
-  NowShowingAndComingSoonMovieByGridSectionView(
-      {required this.title, required this.onTapMovie, required this.movie});
+  const NowShowingAndComingSoonMovieByGridSectionView(
+      {Key? key,
+      required this.title,
+      required this.onTapMovie,
+      required this.movie})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return VerticalMovieListView(
-      onTapMovie: (movieId) => this.onTapMovie(movieId),
+      onTapMovie: (movieId) => onTapMovie(movieId),
       movieList: movie,
     );
   }
 }
+
 class VerticalMovieListView extends StatelessWidget {
   final Function(int?) onTapMovie;
   final List<MovieVO>? movieList;
 
-  VerticalMovieListView({required this.onTapMovie, required this.movieList});
+  const VerticalMovieListView(
+      {Key? key, required this.onTapMovie, required this.movieList})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: MOVIE_LIST_HEIGHT,
       child: (movieList != null)
           ? GridView.builder(
-        padding: EdgeInsets.only(left: MARGIN_MEDIUM_2),
-        scrollDirection: Axis.vertical,
-        itemCount: movieList?.length ?? 0,
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () => onTapMovie(movieList?[index].id),
-            child: MovieView(
-              movie: movieList?[index],
-            ),
-          );
-        }, gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,childAspectRatio: 0.43),
-      )
+              padding: const EdgeInsets.only(left: MARGIN_MEDIUM_2),
+              scrollDirection: Axis.vertical,
+              itemCount: movieList?.length ?? 0,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () => onTapMovie(movieList?[index].id),
+                  child: MovieView(
+                    movie: movieList?[index],
+                  ),
+                );
+              },
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3, childAspectRatio: 0.43),
+            )
           : Center(
-        child: Container(),
-      ),
+              child: Container(),
+            ),
     );
   }
 }

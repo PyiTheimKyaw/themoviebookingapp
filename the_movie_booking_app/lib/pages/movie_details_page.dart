@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:the_movie_booking_app/blocs/movie_details_bloc.dart';
+import 'package:the_movie_booking_app/config/config_values.dart';
+import 'package:the_movie_booking_app/config/environment_config.dart';
 import 'package:the_movie_booking_app/data/models/movie_model.dart';
 import 'package:the_movie_booking_app/data/models/movie_model_impl.dart';
 import 'package:the_movie_booking_app/data/vos/credit_vo.dart';
@@ -78,47 +80,45 @@ class MovieDetailsPage extends StatelessWidget {
                   [
                     Container(
                       color: Colors.white,
+                      // height:double.infinity,
                       padding: EdgeInsets.only(
                         left: MARGIN_MEDIUM_2,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          MovieTitleVieww(
-                            title: movieDetails?.title ?? "",
-                          ),
-                          SizedBox(
-                            height: MARGIN_MEDIUM_2,
-                          ),
-                          DurationAndRatingView(
-                            rating: movieDetails?.voteAverage.toString() ?? "",
-                          ),
-                          SizedBox(
-                            height: MARGIN_MEDIUM_2,
-                          ),
-                          GenreSectionView(
-                              genreList:
-                                  movieDetails?.getGenreListAsStringList() ??
-                                      []),
-                          SizedBox(
-                            height: MARGIN_MEDIUM,
-                          ),
-                          PlotSummarySectionView(
-                            plot: movieDetails?.overView ?? "",
-                          ),
-                          SizedBox(
-                            height: MARGIN_LARGE,
-                          ),
-                          Selector<MovieDetailsBloc, List<CreditVO>?>(
-                            selector: (context, bloc) => bloc.mCast,
-                            builder: (context, cast, child) => CastSectionView(
-                              castList: cast,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            MovieTitleVieww(
+                              title: movieDetails?.title ?? "",
                             ),
-                          ),
-                          SizedBox(
-                            height: 100,
-                          ),
-                        ],
+                            SizedBox(
+                              height: MARGIN_MEDIUM_2,
+                            ),
+                            DurationAndRatingView(
+                              rating: movieDetails?.voteAverage.toString() ?? "",
+                            ),
+                            SizedBox(
+                              height: MARGIN_MEDIUM_2,
+                            ),
+                            GenreSectionView(
+                                genreList:
+                                    movieDetails?.getGenreListAsStringList() ??
+                                        []),
+                            SizedBox(
+                              height: MARGIN_MEDIUM,
+                            ),
+                            PlotSummarySectionView(
+                              plot: movieDetails?.overView ?? "",
+                            ),
+                            SizedBox(
+                              height: MARGIN_LARGE,
+                            ),
+                            CAST_VIEW[EnvironmentConfig.CONFIG_CAST_VIEW],
+                            SizedBox(
+                              height: 600,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -150,63 +150,7 @@ class MovieTitleVieww extends StatelessWidget {
   }
 }
 
-class CastSectionView extends StatelessWidget {
-  final List<CreditVO>? castList;
 
-  CastSectionView({required this.castList});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          CAST_TITLE_TEXT,
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: TEXT_REGULAR_1X,
-          ),
-        ),
-        Container(
-          height: CAST_SECTION_HEIGHT,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: castList
-                    ?.map(
-                      (cast) => (cast.profilePath?.isNotEmpty ?? false)
-                          ? ActorsImageView(cast: cast)
-                          : Container(),
-                    )
-                    .toList() ??
-                [],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class ActorsImageView extends StatelessWidget {
-  final CreditVO? cast;
-
-  ActorsImageView({required this.cast});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(right: MARGIN_MEDIUM_2),
-      width: PROFILE_IMAGE_SIZE,
-      height: PROFILE_IMAGE_SIZE,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        image: DecorationImage(
-          image: NetworkImage('$IMAGE_BASE_URL${cast?.profilePath ?? ""}'),
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
-}
 
 class PlotSummarySectionView extends StatelessWidget {
   String plot;
