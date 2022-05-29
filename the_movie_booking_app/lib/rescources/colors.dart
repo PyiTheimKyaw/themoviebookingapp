@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:the_movie_booking_app/config/config_values.dart';
+import 'package:the_movie_booking_app/config/environment_config.dart';
 
-const PRIMARY_COLOR = Color.fromRGBO(98, 62, 234, 1.0);
+Color PRIMARY_COLOR = THEME_COLORS[EnvironmentConfig.CONFIG_THEME_COLOR];
 const WELCOME_SCREEN_TEXT_COLOR = Color.fromRGBO(216, 208, 249, 1.0);
 const LOGIN_SIGNIN_PAGE_TEXT_COLOR = Color.fromRGBO(153, 166, 193, 1.0);
 const DURATION_AND_RATING_TEXT_COLOR = Color.fromRGBO(96, 96, 96, 1.0);

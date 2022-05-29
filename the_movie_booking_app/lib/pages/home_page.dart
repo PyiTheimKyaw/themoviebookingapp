@@ -3,36 +3,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:the_movie_booking_app/blocs/home_bloc.dart';
-import 'package:the_movie_booking_app/data/models/movie_model.dart';
-import 'package:the_movie_booking_app/data/models/movie_model_impl.dart';
-import 'package:the_movie_booking_app/data/vos/movie_vo.dart';
+import 'package:the_movie_booking_app/config/config_values.dart';
+import 'package:the_movie_booking_app/config/environment_config.dart';
 import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 import 'package:the_movie_booking_app/pages/login_and_sign_in_page.dart';
-import 'package:the_movie_booking_app/pages/movie_details_page.dart';
 import 'package:the_movie_booking_app/rescources/colors.dart';
 import 'package:the_movie_booking_app/rescources/dimens.dart';
-import 'package:the_movie_booking_app/rescources/strings.dart';
-import 'package:the_movie_booking_app/viewitems/movie_view.dart';
-import 'package:the_movie_booking_app/widgets/movie_view_title_text_view.dart';
 import 'package:the_movie_booking_app/widgets/title_text_view.dart';
 
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-
-import 'package:google_sign_in/google_sign_in.dart';
-
-import '../data/vos/snack_list_vo.dart';
-
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   Map<String, dynamic>? userData;
   String? googleId;
 
-  HomePage({required this.userData, required this.googleId});
+  HomePage({Key? key, required this.userData, required this.googleId})
+      : super(key: key);
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   List<String> menuItem = [
     "Promotion Code",
     "Select a Language",
@@ -40,18 +25,9 @@ class _HomePageState extends State<HomePage> {
     "Help",
     "Rate us"
   ];
-  // @override
-  // void dispose() {
-  //   // TODO: implement dispose
-  //   HomeBloc bloc=Provider.of(context,listen: false);
-  //   bloc.isDispose=true;
-  //   super.dispose();
-  // }
-
 
   @override
   Widget build(BuildContext context) {
-
     return ChangeNotifierProvider(
       create: (context) => HomeBloc(),
       child: Scaffold(
@@ -90,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                                 onPressed: () {
                                   HomeBloc bloc =
                                       Provider.of(context, listen: false);
-                                  if (widget.userData != null) {
+                                  if (userData != null) {
                                     print('User data is not null');
                                     bloc.logOutFacebook().then((value) {
                                       Navigator.of(context).push(
@@ -100,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                                       );
                                     });
                                   }
-                                  if (widget.googleId != null) {
+                                  if (googleId != null) {
                                     bloc
                                         .onTapGoogleLogOut()
                                         .then((googleSignIn) {
@@ -156,63 +132,32 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         body: Container(
+          height: MediaQuery.of(context).size.height,
           padding: EdgeInsets.symmetric(vertical: MARGIN_MEDIUM_2),
           color: Colors.white,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: MARGIN_MEDIUM,
-                ),
-                Selector<HomeBloc, List<UserVO>?>(
-                  selector: (context, bloc) => bloc.mUserInfo,
-                  builder: (context, user, child) =>
-                      ProfileImageAndNameSectionView(
-                    name: user,
+          child: NestedScrollView(
+            scrollDirection: Axis.vertical,
+            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+              return[
+                SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      Selector<HomeBloc, List<UserVO>?>(
+                        selector: (context, bloc) => bloc.mUserInfo,
+                        builder: (context, user, child) =>
+                            ProfileImageAndNameSectionView(
+                              name: user,
+                            ),
+                      ),
+                      SizedBox(height: MARGIN_MEDIUM_4,),
+                    ],
                   ),
-                ),
-                SizedBox(
-                  height: MARGIN_LARGE,
-                ),
-                Selector<HomeBloc, List<MovieVO>?>(
-                  selector: (context, bloc) => bloc.mNowPlayingMovies,
-                  builder: (context, nowPlayingMovies, child) =>
-                      NowShowingAndComingSoonMovieSectionView(
-                    title: HOME_PAGE_NOW_SHOWING_TEXT,
-                    onTapMovie: (movieId) {
-                      _navigateToMovieDetailsScreen(context, movieId);
-                    },
-                    movie: nowPlayingMovies,
-                  ),
-                ),
-                Selector<HomeBloc, List<MovieVO>?>(
-                  selector: (context, bloc) => bloc.mComingSoonMovies,
-                  builder: (context, comingSoonMovies, child) =>
-                      NowShowingAndComingSoonMovieSectionView(
-                    title: HOME_PAGE_COMING_SOON_TEXT,
-                    onTapMovie: (movieId) {
-                      _navigateToMovieDetailsScreen(context, movieId);
-                    },
-                    movie: comingSoonMovies,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+                )
+              ];
+            },
+            body: MOVIES_VIEW[EnvironmentConfig.CONFIG_MOVIES_VIEW],
 
-void _navigateToMovieDetailsScreen(BuildContext context, int? movieId) {
-  if (movieId != null) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MovieDetailsPage(
-          movieId: movieId,
-          // token: userInfo?[0].token ?? "",
+          ),
         ),
       ),
     );
@@ -347,66 +292,6 @@ class DrawerHeaderSectionView extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class NowShowingAndComingSoonMovieSectionView extends StatelessWidget {
-  final String title;
-  final Function(int?) onTapMovie;
-  final List<MovieVO>? movie;
-
-  NowShowingAndComingSoonMovieSectionView(
-      {required this.title, required this.onTapMovie, required this.movie});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: EdgeInsets.only(left: MARGIN_MEDIUM_2),
-          child: MovieViewTitleTextView(title),
-        ),
-        SizedBox(
-          height: MARGIN_MEDIUM_2,
-        ),
-        HorizontalMovieListView(
-          onTapMovie: (movieId) => this.onTapMovie(movieId),
-          movieList: movie,
-        ),
-      ],
-    );
-  }
-}
-
-class HorizontalMovieListView extends StatelessWidget {
-  final Function(int?) onTapMovie;
-  final List<MovieVO>? movieList;
-
-  HorizontalMovieListView({required this.onTapMovie, required this.movieList});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: MOVIE_LIST_HEIGHT,
-      child: (movieList != null)
-          ? ListView.builder(
-              padding: EdgeInsets.only(left: MARGIN_MEDIUM_2),
-              scrollDirection: Axis.horizontal,
-              itemCount: movieList?.length ?? 0,
-              itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: () => onTapMovie(movieList?[index].id),
-                  child: MovieView(
-                    movie: movieList?[index],
-                  ),
-                );
-              },
-            )
-          : Center(
-              child: Container(),
-            ),
     );
   }
 }

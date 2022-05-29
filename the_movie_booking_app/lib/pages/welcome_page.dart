@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors,prefer_const_literals_to_create_immutables, sized_box_for_whitespace, prefer_final_fields
 
 import 'package:flutter/material.dart';
+import 'package:the_movie_booking_app/config/config_values.dart';
+import 'package:the_movie_booking_app/config/environment_config.dart';
 import 'package:the_movie_booking_app/data/models/movie_model.dart';
 import 'package:the_movie_booking_app/data/models/movie_model_impl.dart';
 import 'package:the_movie_booking_app/data/vos/snack_list_vo.dart';
@@ -115,7 +117,7 @@ class WelcomePageImageSectionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image.asset(
-      'images/welome.png',
+      WELCOME_IMAGE[EnvironmentConfig.CONFIG_WELCOME_IMAGE] ?? "",
     );
   }
 }

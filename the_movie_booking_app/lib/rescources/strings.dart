@@ -1,5 +1,8 @@
+import 'package:the_movie_booking_app/config/config_values.dart';
+import 'package:the_movie_booking_app/config/environment_config.dart';
+
 const WELCOME_SCREEN_WELCOME_TEXT = "Welcome!";
-const WELCOME_TO_GALAXY_APP_TEXT = "Hello! Welome to Galaxy App.";
+String WELCOME_TO_GALAXY_APP_TEXT = "Hello! Welome to ${WELCOME_TITLE[EnvironmentConfig.CONFIG_WELCOME_TITLE]} App.";
 const WELCOME_SCREEN_GET_STARTED_TEXT = "Get Started";
 const LOGIN_SIGN_IN_PAGE_TEXT = "Welcome back,login to continue";
 const LOGIN_SIGN_IN_PAGE_BUTTON_TEXT = "Confirm";
