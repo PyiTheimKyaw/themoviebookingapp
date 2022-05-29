@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:the_movie_booking_app/data/models/checkout_request.dart';
 import 'package:the_movie_booking_app/data/models/movie_model.dart';
@@ -22,24 +23,41 @@ class PaymentCardBloc extends ChangeNotifier {
   PaymentCardBloc() {
     ///Profile
     mMovieModel.getProfileFromDatabase().listen((profile) {
-      cardList = profile?.cards ?? [];
+      cardList = profile?.cards?.reversed.toList() ?? [];
       notifyListeners();
     });
   }
-  Future<CheckoutVO?> onTpCheckoutUser(int userChooseDayTimeslotId,String seatNo,String dateData,int movieId,int cinemaId,List<SnackRequest>? snack){
-    CheckOutRequest checkOut = CheckOutRequest(
-        userChooseDayTimeslotId,
-        seatNo,
-        dateData,
-        movieId,
-        cinemaId,
-        cardList?.first.id ?? 0,
-        snack);
-   return mMovieModel.checkout(checkOut).then((value) {
-     print("AApi output =>>>>>>> ${value}");
-     checkoutVO=value;
-     notifyListeners();
+
+  Future<CheckoutVO?> onTpCheckoutUser(
+      int userChooseDayTimeslotId,
+      String seatNo,
+      String dateData,
+      int movieId,
+      int cinemaId,
+      List<SnackRequest>? snack) {
+    CheckOutRequest checkOut = CheckOutRequest(userChooseDayTimeslotId, seatNo,
+        dateData, movieId, cinemaId, cardList?.first.id ?? 0, snack);
+    return mMovieModel.checkout(checkOut).then((value) {
+      print("AApi output =>>>>>>> ${value}");
+      checkoutVO = value;
+      notifyListeners();
       return checkoutVO;
-   });
+    });
+  }
+
+  void choosePaymentCard(int? index) {
+    List<CardVO>? tempCardList=cardList?.map((allCards) {
+      allCards.isSelected=false;
+      return allCards;
+    }).mapIndexed((cardIndex,element){
+      if(cardIndex==index){
+        cardList?[cardIndex].isSelected=true;
+      }else{
+        cardList?[cardIndex].isSelected=false;
+      }
+      return element;
+    }).toList();
+    cardList=tempCardList;
+    notifyListeners();
   }
 }

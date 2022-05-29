@@ -55,9 +55,9 @@ void main() {
               357,
               "https://tmba.padc.com.mm/img/lady.png",
               [
-                CardVO(1, "Aung Kaung", "8765456789", "08/12", "JCB"),
-                CardVO(144, "Aung Kaung", "8765456789", "08/12", "JCB"),
-                CardVO(145, "Aung Kaung", "8765456789", "08/12", "JCB"),
+                CardVO(1, "Aung Kaung", "8765456789", "08/12", "JCB", false),
+                CardVO(144, "Aung Kaung", "8765456789", "08/12", "JCB", false),
+                CardVO(145, "Aung Kaung", "8765456789", "08/12", "JCB", false),
               ],
             ),
           ]));
@@ -195,7 +195,7 @@ void main() {
       expect(
           movieModel.getCardsFromDatabase(),
           emits([
-            CardVO(1, "Aung Kaung", "8765456789", "08/12", "JCB"),
+            CardVO(1, "Aung Kaung", "8765456789", "08/12", "JCB", false),
           ]));
     });
 
@@ -211,9 +211,9 @@ void main() {
               357,
               "https://tmba.padc.com.mm/img/lady.png",
               [
-                CardVO(1, "Aung Kaung", "8765456789", "08/12", "JCB"),
-                CardVO(144, "Aung Kaung", "8765456789", "08/12", "JCB"),
-                CardVO(145, "Aung Kaung", "8765456789", "08/12", "JCB"),
+                CardVO(1, "Aung Kaung", "8765456789", "08/12", "JCB", false),
+                CardVO(144, "Aung Kaung", "8765456789", "08/12", "JCB", false),
+                CardVO(145, "Aung Kaung", "8765456789", "08/12", "JCB", false),
               ],
             )
           ]));

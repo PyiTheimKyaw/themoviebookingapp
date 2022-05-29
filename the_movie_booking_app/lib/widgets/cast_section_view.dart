@@ -24,6 +24,7 @@ class CastSectionView extends StatelessWidget {
         Container(
           height: CAST_SECTION_HEIGHT,
           child: ListView(
+            padding: EdgeInsets.only(bottom: 100),
             scrollDirection: Axis.horizontal,
             children: castList
                 ?.map(

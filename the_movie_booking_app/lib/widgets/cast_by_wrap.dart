@@ -23,6 +23,7 @@ class CastByWrapSectionView extends StatelessWidget {
         ),
         Container(
           height: CAST_SECTION_HEIGHT,
+          margin: EdgeInsets.only(bottom: 1200),
           child: Wrap(
 
             children: castList

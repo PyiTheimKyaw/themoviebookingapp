@@ -4,6 +4,8 @@ import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:the_movie_booking_app/blocs/movie_choose_time_bloc.dart';
+import 'package:the_movie_booking_app/config/config_values.dart';
+import 'package:the_movie_booking_app/config/environment_config.dart';
 import 'package:the_movie_booking_app/data/vos/cinema_day_time_slot_vo.dart';
 import 'package:the_movie_booking_app/pages/movie_seats_page.dart';
 import 'package:the_movie_booking_app/rescources/colors.dart';
@@ -117,21 +119,21 @@ class MovieChooseTimePage extends StatelessWidget {
               // ),
               Selector<MovieChooseTimeBloc, List<CinemaDayTimeSlotVO>?>(
                 selector: (context, bloc) => bloc.mCinemaInfo,
-                shouldRebuild: (previous,next) => previous != next,
+                shouldRebuild: (previous, next) => previous != next,
                 builder: (context, cinemaInfo, child) =>
                     ChooseItemGridSectionView(
-                      cinemaInfo: cinemaInfo,
-                      onTap: (cIndex, index) {
-                        MovieChooseTimeBloc bloc =
-                        Provider.of<MovieChooseTimeBloc>(context,
-                            listen: false);
-                        bloc.onTapChooseTime(cIndex, index);
-                        print("UserChoose time ${bloc.userChooseTime}");
-                        print("UserChoose cinema ${bloc.userChooseCinema}");
-                        print("UserChoose day ${bloc.userChoosedayTimeslotId}");
-                        print("UserChoose dte ${bloc.dateData}");
-                      },
-                    ),
+                  cinemaInfo: cinemaInfo,
+                  onTap: (cIndex, index) {
+                    MovieChooseTimeBloc bloc = Provider.of<MovieChooseTimeBloc>(
+                        context,
+                        listen: false);
+                    bloc.onTapChooseTime(cIndex, index);
+                    print("UserChoose time ${bloc.userChooseTime}");
+                    print("UserChoose cinema ${bloc.userChooseCinema}");
+                    print("UserChoose day ${bloc.userChoosedayTimeslotId}");
+                    print("UserChoose dte ${bloc.dateData}");
+                  },
+                ),
               ),
             ],
           ),
@@ -191,7 +193,6 @@ class ChooseItemGridSectionView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListView.builder(
-
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemCount: cinemaInfo?.length ?? 0,
@@ -252,7 +253,8 @@ class ChooseIemGridView extends StatelessWidget {
               return GestureDetector(
                 onTap: () => onTap(cIndex, index),
                 child: Container(
-                  key: Key(cinemaInfo?[cIndex].timeSlots?[index].startTime ?? ""),
+                  key: Key(
+                      cinemaInfo?[cIndex].timeSlots?[index].startTime ?? ""),
                   margin: EdgeInsets.only(
                       left: MARGIN_MEDIUM_2,
                       right: MARGIN_MEDIUM_2,
@@ -307,6 +309,10 @@ class MovieChooseDateView extends StatelessWidget {
                 DatePicker(
                   DateTime.now(),
                   daysCount: 14,
+                  dayTextStyle: TextStyle(color: DATES_THEME_COLOR[EnvironmentConfig.CONFIG_DATES_THEME_COLOR]),
+                  dateTextStyle: TextStyle(color: DATES_THEME_COLOR[EnvironmentConfig.CONFIG_DATES_THEME_COLOR]),
+                  monthTextStyle: TextStyle(color: DATES_THEME_COLOR[EnvironmentConfig.CONFIG_DATES_THEME_COLOR]),
+
                   initialSelectedDate: DateTime.now(),
                   selectionColor: PRIMARY_COLOR,
                   selectedTextColor: Colors.white,

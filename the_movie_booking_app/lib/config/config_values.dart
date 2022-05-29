@@ -25,22 +25,20 @@ const Map<String, String> WELCOME_IMAGE = {
   "DEFAULT_WELCOME_IMAGE": 'images/welome.png',
   "CONFIG_WELCOME_SCREEN_IMAGE": "images/welcome2.png",
 };
-Map<String, dynamic> MOVIES_VIEW = {
-  "DEFAULT_MOVIES_VIEW": const ConfigNowShowingAndComingSoonMoviesSectionView(),
-  "CONFIG_MOVIES_VIEW_BY_TAB": const ConfigMoviesByTabSectionView(),
+Map<String, bool> MOVIES_VIEW = {
+  "DEFAULT_MOVIES_VIEW": false,
+  "CONFIG_MOVIES_VIEW_BY_TAB": true,
 };
 
-Map<String, dynamic> CAST_VIEW = {
-  "DEFAULT_CAST_VIEW": Selector<MovieDetailsBloc, List<CreditVO>?>(
-    selector: (context, bloc) => bloc.mCast,
-    builder: (context, cast, child) => CastSectionView(
-      castList: cast,
-    ),
-  ),
-  "CONFIG_CAST_BY_WRAP": Selector<MovieDetailsBloc, List<CreditVO>?>(
-    selector: (context, bloc) => bloc.mCast,
-    builder: (context, cast, child) => CastByWrapSectionView(
-      castList: cast,
-    ),
-  ),
+Map<String, bool> CAST_VIEW = {
+  "DEFAULT_CAST_VIEW": false,
+  "CONFIG_CAST_BY_WRAP": true,
+};
+Map<String,dynamic> DATES_THEME_COLOR={
+  "DEFAULT_DATES_THEME" :Colors.white,
+  "CONFIG_DATES_COLOR" : Colors.yellow,
+};
+Map<String,bool> PAYMENT_CARD_VIEW={
+  "DEFAULT_PAYMENT_CARD" : false,
+  "CONFIG_PAYMENT_CARD" : true,
 };

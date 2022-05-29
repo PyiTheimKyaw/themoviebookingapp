@@ -9,6 +9,8 @@ import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 import 'package:the_movie_booking_app/pages/login_and_sign_in_page.dart';
 import 'package:the_movie_booking_app/rescources/colors.dart';
 import 'package:the_movie_booking_app/rescources/dimens.dart';
+import 'package:the_movie_booking_app/widgets/config_movies_by_tab_section_view.dart';
+import 'package:the_movie_booking_app/widgets/config_now_showing_and_coming_soon_movies_section_view.dart';
 import 'package:the_movie_booking_app/widgets/title_text_view.dart';
 
 class HomePage extends StatelessWidget {
@@ -137,8 +139,9 @@ class HomePage extends StatelessWidget {
           color: Colors.white,
           child: NestedScrollView(
             scrollDirection: Axis.vertical,
-            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-              return[
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return [
                 SliverToBoxAdapter(
                   child: Column(
                     children: [
@@ -146,17 +149,20 @@ class HomePage extends StatelessWidget {
                         selector: (context, bloc) => bloc.mUserInfo,
                         builder: (context, user, child) =>
                             ProfileImageAndNameSectionView(
-                              name: user,
-                            ),
+                          name: user,
+                        ),
                       ),
-                      SizedBox(height: MARGIN_MEDIUM_4,),
+                      SizedBox(
+                        height: MARGIN_MEDIUM_4,
+                      ),
                     ],
                   ),
                 )
               ];
             },
-            body: MOVIES_VIEW[EnvironmentConfig.CONFIG_MOVIES_VIEW],
-
+            body: (MOVIES_VIEW[EnvironmentConfig.CONFIG_MOVIES_VIEW] ?? false)
+                ? ConfigMoviesByTabSectionView()
+                : ConfigNowShowingAndComingSoonMoviesSectionView(),
           ),
         ),
       ),

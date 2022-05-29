@@ -15,6 +15,8 @@ import 'package:the_movie_booking_app/rescources/colors.dart';
 import 'package:the_movie_booking_app/rescources/dimens.dart';
 import 'package:the_movie_booking_app/rescources/strings.dart';
 import 'package:the_movie_booking_app/widgets/blur_title_text_view.dart';
+import 'package:the_movie_booking_app/widgets/cast_by_wrap.dart';
+import 'package:the_movie_booking_app/widgets/cast_section_view.dart';
 import 'package:the_movie_booking_app/widgets/floating_action_button_view.dart';
 import 'package:the_movie_booking_app/widgets/title_text_view.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -95,7 +97,8 @@ class MovieDetailsPage extends StatelessWidget {
                               height: MARGIN_MEDIUM_2,
                             ),
                             DurationAndRatingView(
-                              rating: movieDetails?.voteAverage.toString() ?? "",
+                              rating:
+                                  movieDetails?.voteAverage.toString() ?? "",
                             ),
                             SizedBox(
                               height: MARGIN_MEDIUM_2,
@@ -113,10 +116,17 @@ class MovieDetailsPage extends StatelessWidget {
                             SizedBox(
                               height: MARGIN_LARGE,
                             ),
-                            CAST_VIEW[EnvironmentConfig.CONFIG_CAST_VIEW],
-                            SizedBox(
-                              height: 600,
+                            Selector<MovieDetailsBloc, List<CreditVO>?>(
+                              selector: (context, bloc) => bloc.mCast,
+                              builder: (context, cast, child) => (CAST_VIEW[
+                                          EnvironmentConfig.CONFIG_CAST_VIEW] ??
+                                      false)
+                                  ? CastByWrapSectionView(
+                                      castList: cast,
+                                    )
+                                  : CastSectionView(castList: cast),
                             ),
+
                           ],
                         ),
                       ),
@@ -149,8 +159,6 @@ class MovieTitleVieww extends StatelessWidget {
     );
   }
 }
-
-
 
 class PlotSummarySectionView extends StatelessWidget {
   String plot;

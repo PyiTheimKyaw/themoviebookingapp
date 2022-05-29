@@ -134,9 +134,9 @@ List<UserVO> getMockProfile() {
       357,
       "https://tmba.padc.com.mm/img/lady.png",
       [
-        CardVO(1, "Aung Kaung", "8765456789", "08/12", "JCB"),
-        CardVO(144, "Aung Kaung", "8765456789", "08/12", "JCB"),
-        CardVO(145, "Aung Kaung", "8765456789", "08/12", "JCB"),
+        CardVO(1, "Aung Kaung", "8765456789", "08/12", "JCB", false),
+        CardVO(144, "Aung Kaung", "8765456789", "08/12", "JCB", false),
+        CardVO(145, "Aung Kaung", "8765456789", "08/12", "JCB", false),
       ],
     ),
     UserVO(
@@ -147,9 +147,9 @@ List<UserVO> getMockProfile() {
       102,
       "/img/avatar4.png",
       [
-        CardVO(769, "aa", "12312312312", "12/12", "JCB"),
-        CardVO(770, "cc", "12312312312", "12/12", "JCB"),
-        CardVO(773, "Pyi Theim Kyaw", "12434324324324", "12/12", "JCB"),
+        CardVO(769, "aa", "12312312312", "12/12", "JCB", false),
+        CardVO(770, "cc", "12312312312", "12/12", "JCB", false),
+        CardVO(773, "Pyi Theim Kyaw", "12434324324324", "12/12", "JCB", false),
       ],
     ),
   ];
@@ -157,9 +157,9 @@ List<UserVO> getMockProfile() {
 
 List<CardVO> getMockCardList() {
   return [
-    CardVO(1, "Aung Kaung", "8765456789", "08/12", "JCB"),
-    CardVO(144, "Aung Kaung", "8765456789", "08/12", "JCB"),
-    CardVO(145, "Aung Kaung", "8765456789", "08/12", "JCB"),
+    CardVO(1, "Aung Kaung", "8765456789", "08/12", "JCB", false),
+    CardVO(144, "Aung Kaung", "8765456789", "08/12", "JCB", false),
+    CardVO(145, "Aung Kaung", "8765456789", "08/12", "JCB", false),
   ];
 }
 

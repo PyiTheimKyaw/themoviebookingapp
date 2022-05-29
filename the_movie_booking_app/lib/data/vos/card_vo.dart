@@ -20,9 +20,11 @@ class CardVO{
   @JsonKey(name: 'card_type')
   @HiveField(4)
   String? cardType;
+  @HiveField(5)
+  bool? isSelected;
 
   CardVO(this.id, this.cardHolder, this.cardNumber, this.expirationDate,
-      this.cardType);
+      this.cardType, this.isSelected);
 
   factory CardVO.fromJson(Map<String,dynamic> json) => _$CardVOFromJson(json);
   Map<String,dynamic> toJson() => _$CardVOToJson(this);
@@ -36,7 +38,8 @@ class CardVO{
           cardHolder == other.cardHolder &&
           cardNumber == other.cardNumber &&
           expirationDate == other.expirationDate &&
-          cardType == other.cardType;
+          cardType == other.cardType &&
+          isSelected == other.isSelected;
 
   @override
   int get hashCode =>
@@ -44,5 +47,6 @@ class CardVO{
       cardHolder.hashCode ^
       cardNumber.hashCode ^
       expirationDate.hashCode ^
-      cardType.hashCode;
+      cardType.hashCode ^
+      isSelected.hashCode;
 }

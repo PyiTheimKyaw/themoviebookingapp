@@ -4,6 +4,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:the_movie_booking_app/blocs/payment_card_bloc.dart';
+import 'package:the_movie_booking_app/config/config_values.dart';
+import 'package:the_movie_booking_app/config/environment_config.dart';
 import 'package:the_movie_booking_app/data/models/checkout_request.dart';
 import 'package:the_movie_booking_app/data/models/movie_model.dart';
 import 'package:the_movie_booking_app/data/models/movie_model_impl.dart';
@@ -133,16 +135,30 @@ class PaymentCardPage extends StatelessWidget {
                 ),
                 Selector<PaymentCardBloc, List<CardVO>?>(
                   selector: (context, bloc) => bloc.cardList,
-                  builder: (context, cardList, child) => PaymentCardSectionView(
-                    profile: cardList?.reversed.toList() ?? [],
-                    swap: (index) {
-                      PaymentCardBloc bloc=Provider.of(context,listen: false);
-                      bloc.chooseCard=cardList?[index];
-                      // setState(() {
-                      //   cardId = cardList?[index].id;
-                      // });
-                    },
-                  ),
+                  shouldRebuild: (previous, next) => previous != next,
+                  builder: (context, cardList, child) => (PAYMENT_CARD_VIEW[
+                              EnvironmentConfig.CONFIG_PAYMENT_CARD_VIEW] ??
+                          false)
+                      ? PaymentCardHorizontalListSectionView(
+                          onTapCard: (index) {
+                            PaymentCardBloc bloc =
+                                Provider.of(context, listen: false);
+                            bloc.chooseCard = cardList?[index];
+                            bloc.choosePaymentCard(index);
+                          },
+                          profile: cardList ?? [],
+                        )
+                      : PaymentCardSectionView(
+                          profile: cardList?.reversed.toList() ?? [],
+                          swap: (index) {
+                            PaymentCardBloc bloc =
+                                Provider.of(context, listen: false);
+                            bloc.chooseCard = cardList?[index];
+                            // setState(() {
+                            //   cardId = cardList?[index].id;
+                            // });
+                          },
+                        ),
                 ),
                 SizedBox(
                   height: MARGIN_MEDIUM_2,
@@ -171,6 +187,117 @@ class PaymentCardPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class PaymentCardHorizontalListSectionView extends StatelessWidget {
+  PaymentCardHorizontalListSectionView(
+      {required this.profile, required this.onTapCard});
+
+  final List<CardVO>? profile;
+  final Function(int) onTapCard;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // width: 700,
+      height: PAYMENT_CARD_HEIGHT,
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: profile?.length ?? 0,
+          itemBuilder: (BuildContext context, int index) => GestureDetector(
+                onTap: () {
+                  onTapCard(index);
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width / 1.4,
+                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: (profile?[index].isSelected ?? false)
+                            ? Colors.yellow
+                            : Colors.white,
+                        width: (profile?[index].isSelected ?? false) ? 5 : 0),
+                    color: PRIMARY_COLOR,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Container(
+                    margin: EdgeInsets.symmetric(
+                        horizontal: MARGIN_MEDIUM_2, vertical: MARGIN_MEDIUM_2),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Text(
+                                profile?[index].cardType ?? "",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: TEXT_REGULAR_1X,
+                                ),
+                              ),
+                              Spacer(),
+                              Icon(
+                                Icons.more_horiz,
+                                color: Colors.white,
+                              )
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            profile?[index].cardNumber ?? "",
+                            style: TextStyle(color: Colors.white, fontSize: 29),
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'CARD HOLDER',
+                                    style: TextStyle(
+                                      color: MOVIE_CINEMA_COLOR,
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Text(
+                                    'EXPIRES',
+                                    style: TextStyle(color: MOVIE_CINEMA_COLOR),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: MARGIN_MEDIUM,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    profile?[index].cardHolder ?? "",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: TEXT_REGULAR),
+                                  ),
+                                  Spacer(),
+                                  Text(
+                                    profile?[index].expirationDate ?? "",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: TEXT_REGULAR),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )),
     );
   }
 }
@@ -229,7 +356,6 @@ class _PaymentCardSectionViewState extends State<PaymentCardSectionView> {
       options: CarouselOptions(
         onPageChanged: (index, reason) {
           widget.swap(index);
-
         },
         height: PAYMENT_CARD_HEIGHT,
         aspectRatio: 16 / 9,
