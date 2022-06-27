@@ -4,7 +4,6 @@ import 'package:the_movie_booking_app/blocs/home_bloc.dart';
 import 'package:the_movie_booking_app/blocs/movie_details_bloc.dart';
 import 'package:the_movie_booking_app/data/vos/credit_vo.dart';
 import 'package:the_movie_booking_app/data/vos/movie_vo.dart';
-import 'package:the_movie_booking_app/pages/home_page.dart';
 import 'package:the_movie_booking_app/rescources/strings.dart';
 import 'package:the_movie_booking_app/widgets/cast_by_wrap.dart';
 import 'package:the_movie_booking_app/widgets/cast_section_view.dart';
@@ -35,7 +34,7 @@ Map<String, bool> CAST_VIEW = {
   "CONFIG_CAST_BY_WRAP": true,
 };
 Map<String,dynamic> DATES_THEME_COLOR={
-  "DEFAULT_DATES_THEME" :Colors.white,
+  "DEFAULT_DATES_THEME" :Colors.black,
   "CONFIG_DATES_COLOR" : Colors.yellow,
 };
 Map<String,bool> PAYMENT_CARD_VIEW={

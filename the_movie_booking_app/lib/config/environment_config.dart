@@ -11,9 +11,15 @@ class EnvironmentConfig {
   static const String CONFIG_MOVIES_VIEW = String.fromEnvironment(
       "CONFIG_MOVIES_VIEW",
       defaultValue: "DEFAULT_MOVIES_VIEW");
-  static const String CONFIG_CAST_VIEW=String.fromEnvironment("CONFIG_CAST_VIEW",defaultValue: "DEFAULT_CAST_VIEW");
-  static const String CONFIG_DATES_THEME_COLOR=String.fromEnvironment("CONFIG_DATES_THEME_COLOR",defaultValue: "DEFAULT_DATES_THEME");
-  static const String CONFIG_PAYMENT_CARD_VIEW=String.fromEnvironment("CONFIG_PAYMENT_CARD_VIEW",defaultValue: "DEFAULT_PAYMENT_CARD");
+  static const String CONFIG_CAST_VIEW = String.fromEnvironment(
+      "CONFIG_CAST_VIEW",
+      defaultValue: "DEFAULT_CAST_VIEW");
+  static const String CONFIG_DATES_THEME_COLOR = String.fromEnvironment(
+      "CONFIG_DATES_THEME_COLOR",
+      defaultValue: "DEFAULT_DATES_THEME");
+  static const String CONFIG_PAYMENT_CARD_VIEW = String.fromEnvironment(
+      "CONFIG_PAYMENT_CARD_VIEW",
+      defaultValue: "DEFAULT_PAYMENT_CARD");
 }
 
 ///flavors

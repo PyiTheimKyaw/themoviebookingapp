@@ -7,7 +7,6 @@ import 'package:the_movie_booking_app/data/models/movie_model.dart';
 import 'package:the_movie_booking_app/data/models/movie_model_impl.dart';
 import 'package:the_movie_booking_app/data/vos/snack_list_vo.dart';
 import 'package:the_movie_booking_app/data/vos/user_vo.dart';
-import 'package:the_movie_booking_app/pages/home_page.dart';
 import 'package:the_movie_booking_app/pages/login_and_sign_in_page.dart';
 import 'package:the_movie_booking_app/rescources/colors.dart';
 import 'package:the_movie_booking_app/rescources/dimens.dart';

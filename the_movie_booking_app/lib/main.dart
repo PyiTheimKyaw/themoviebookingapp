@@ -9,7 +9,6 @@ import 'package:the_movie_booking_app/data/vos/movie_vo.dart';
 import 'package:the_movie_booking_app/data/vos/payment_method_vo.dart';
 import 'package:the_movie_booking_app/data/vos/snack_list_vo.dart';
 import 'package:the_movie_booking_app/data/vos/user_vo.dart';
-import 'package:the_movie_booking_app/pages/home_page.dart';
 import 'package:the_movie_booking_app/pages/welcome_page.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:the_movie_booking_app/persistence/hive_constants.dart';

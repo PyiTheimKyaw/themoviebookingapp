@@ -22,22 +22,29 @@ class CastSectionView extends StatelessWidget {
           ),
         ),
         Container(
-          height: CAST_SECTION_HEIGHT,
-          child: ListView(
-            padding: EdgeInsets.only(bottom: 100),
-            scrollDirection: Axis.horizontal,
-            children: castList
-                ?.map(
-                  (cast) => (cast.profilePath?.isNotEmpty ?? false)
-                  ? ActorsImageView(cast: cast)
-                  : Container(),
-            )
-                .toList() ??
-                [],
-          ),
+            height: CAST_SECTION_HEIGHT,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (BuildContext context, int index) =>
+                  ActorsImageView(cast: castList?[index]),
+            ),
+            // ListView(
+            //   padding: EdgeInsets.only(bottom: 100),
+            //   scrollDirection: Axis.horizontal,
+            //   children: castList
+            //           ?.map(
+            //             (cast) => (cast.profilePath?.isNotEmpty ?? false)
+            //                 ? ActorsImageView(cast: cast)
+            //                 : Container(),
+            //           )
+            //           .toList() ??
+            //       [],
+            // ),
+            ),
+        SizedBox(
+          height: 200,
         ),
       ],
     );
   }
 }
-

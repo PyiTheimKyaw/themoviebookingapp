@@ -22,7 +22,6 @@ import 'package:the_movie_booking_app/data/vos/spoken_language_vo.dart';
 import 'package:the_movie_booking_app/data/vos/timeslot_vo.dart';
 import 'package:the_movie_booking_app/data/vos/user_vo.dart';
 import 'package:the_movie_booking_app/main.dart';
-import 'package:the_movie_booking_app/pages/home_page.dart';
 import 'package:the_movie_booking_app/pages/login_and_sign_in_page.dart';
 import 'package:the_movie_booking_app/pages/movie_details_page.dart';
 import 'package:the_movie_booking_app/pages/welcome_page.dart';
@@ -100,6 +99,7 @@ loginPageUITest(WidgetTester tester) async {
   expect((find.byType(LoginAndSignInPage)), findsOneWidget);
   expect((find.text(TEST_DATA_LOGIN)), findsOneWidget);
   await tester.pumpAndSettle(Duration(seconds: 2));
+
   ///enter email and password
   final emailFormField = find.byType(TextField).first;
   final passwordFormField = find.byType(TextField).last;
@@ -108,6 +108,7 @@ loginPageUITest(WidgetTester tester) async {
   await tester.pumpAndSettle(Duration(seconds: 2));
   await tester.enterText(passwordFormField, TEST_DATA_PASSWORD);
   await tester.pumpAndSettle(Duration(seconds: 2));
+
   ///tap button
   await tester.tap(loginButton);
   await tester.pumpAndSettle(Duration(seconds: 2));
@@ -121,12 +122,15 @@ homePageFeatures(WidgetTester tester) async {
   await tester.pumpAndSettle(Duration(seconds: 2));
   expect((find.text(TEST_DATA_Coming_soon_MOVIES_NAME)), findsOneWidget);
   await tester.pumpAndSettle(Duration(seconds: 2));
+
   ///tap movie
   await tester.tap(find.text(TEST_DATA_NOW_SHOWING_MOVIES_NAME));
   await tester.pumpAndSettle(Duration(seconds: 2));
+
   ///fetch movie
   expect(find.text(TEST_DATA_NOW_SHOWING_MOVIES_NAME), findsOneWidget);
   await tester.pumpAndSettle(Duration(seconds: 2));
+
   ///tap button
   await tester.tap(find.byType(FloatingActionButton));
   await tester.pumpAndSettle(Duration(seconds: 4));
@@ -136,12 +140,15 @@ chooseTimePageUITest(WidgetTester tester) async {
   ///Choose Time
   expect(find.text(TEST_DATA_CINEMA_I), findsOneWidget);
   await tester.pumpAndSettle(Duration(seconds: 3));
+
   ///tap date
   await tester.tap(find.text(TEST_DATA_DATE));
   await tester.pumpAndSettle(Duration(seconds: 3));
+
   ///tap time
   await tester.tap(find.byKey(Key(TEST_DATA_TIME)).first);
   await tester.pumpAndSettle(Duration(seconds: 5));
+
   ///tap button
   await tester.tap(find.byType(FloatingActionButton));
   await tester.pumpAndSettle(Duration(seconds: 5));
