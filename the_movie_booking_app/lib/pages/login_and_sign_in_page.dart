@@ -273,7 +273,7 @@ class _LoginAndSignInPageState extends State<LoginAndSignInPage>
                   password: passwordController.toString(),
                   onTapFacebook: () {
                     LoginAndSignInBloc bloc =
-                        Provider.of(context, listen: false);
+                        Provider.of(_, listen: false);
 
                     bloc.loginWithFacebook().then((value) {
                       isFacebook = true;

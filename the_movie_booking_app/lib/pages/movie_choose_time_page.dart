@@ -305,6 +305,7 @@ class MovieChooseDateView extends StatelessWidget {
                 DatePicker(
                   DateTime.now(),
                   daysCount: 14,
+                  height: 90,
                   initialSelectedDate: DateTime.now(),
                   selectionColor: PRIMARY_COLOR,
                   selectedTextColor: Colors.white,
