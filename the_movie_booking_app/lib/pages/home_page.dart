@@ -64,7 +64,7 @@ class HomePage extends StatelessWidget {
                             title: Text("Confirm"),
                             content: Text("Are you sure to log out"),
                             actions: [
-                              FlatButton(
+                              MaterialButton(
                                 onPressed: () {
                                   HomeBloc bloc =
                                       Provider.of(context, listen: false);
